@@ -1,0 +1,2326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Paytm My Bills - Prototype</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Screen 01: Recharge & Bills Landing -->
+        <div id="screen-recharge-bills" class="screen active">
+            <div class="header">
+                <div class="profile-icon">SP</div>
+                <div class="search-bar">
+                    <span class="search-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                            <circle cx="11" cy="11" r="6.5" />
+                            <path d="M16 16l4 4" />
+                        </svg>
+                    </span>
+                    <span class="search-text">Search for contacts to pay</span>
+                </div>
+            </div>
+
+            <div class="home-pending-invite" id="home-pending-invite" hidden>
+                <div class="home-pending-invite-head">
+                    <span class="home-pending-invite-icon">🫂</span>
+                    <div class="home-pending-invite-body">
+                        <p class="home-pending-invite-eyebrow">Pending invitation</p>
+                        <h3 id="home-pending-invite-name">Friends apartment</h3>
+                        <p class="home-pending-invite-reason" id="home-pending-invite-reason">Shared rent &amp; utilities for the flat</p>
+                    </div>
+                </div>
+                <div class="home-pending-invite-actions">
+                    <button class="primary-btn" onclick="acceptHomeInvite('Friends apartment')">Accept</button>
+                    <button class="secondary-btn" onclick="declineHomeInvite('Friends apartment')">Decline</button>
+                </div>
+                <button class="link-btn home-pending-invite-all" onclick="switchHomeTab('invitations'); navigateTo('screen-home-selection')">See all invitations →</button>
+            </div>
+
+            <div class="section landing-card">
+                <h2 class="section-title">UPI Money Transfer</h2>
+                <div class="icon-grid">
+                    <div class="icon-item">
+                        <div class="icon-circle navy">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8" />
+                                <path d="M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8" />
+                                <path d="M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16" />
+                                <path d="M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16" />
+                                <rect x="8" y="8" width="3" height="3" rx=".6" />
+                                <rect x="13" y="8" width="3" height="3" rx=".6" />
+                                <rect x="8" y="13" width="3" height="3" rx=".6" />
+                                <rect x="13" y="13" width="3" height="3" rx=".6" />
+                            </svg>
+                        </div>
+                        <span class="icon-label">Scan any QR</span>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle navy">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <circle cx="10" cy="8" r="3" />
+                                <path d="M4.5 20c0-3 2.5-5.5 5.5-5.5s5.5 2.5 5.5 5.5" />
+                                <path d="M18 9v6" />
+                                <path d="M15 12l3-3 3 3" />
+                            </svg>
+                        </div>
+                        <span class="icon-label">Pay Anyone</span>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle navy">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M3.5 10L12 5l8.5 5" />
+                                <path d="M5.5 10v7.5M9.5 10v7.5M14.5 10v7.5M18.5 10v7.5" />
+                                <path d="M3 20h18" />
+                            </svg>
+                        </div>
+                        <span class="icon-label">To Bank & Self A/c</span>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle navy">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="5.5" y="3.5" width="13" height="17" rx="2" />
+                                <path d="M8.5 8h6M8.5 12h6M8.5 16h3.5" />
+                            </svg>
+                        </div>
+                        <span class="icon-label">Balance & History</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section landing-card">
+                <div class="section-header">
+                    <h2 class="section-title">Recharge & Bills</h2>
+                    <button type="button" class="view-all" onclick="showAllBillsSheet()">View All →</button>
+                </div>
+                <div class="icon-grid icon-grid-five">
+                    <div class="icon-item" onclick="navigateTo('screen-add-bill')">
+                        <div class="icon-outline">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <circle cx="12" cy="12" r="8.5" />
+                                <path d="M12 8v8M8 12h8" />
+                            </svg>
+                        </div>
+                        <span class="icon-label">Add New Bill</span>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-outline">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="4" y="5.5" width="16" height="15" rx="2.5" />
+                                <path d="M8 3.5v4M16 3.5v4M4 9.5h16" />
+                                <text x="12" y="16.8" text-anchor="middle" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" fill="currentColor" stroke="none">EMI</text>
+                            </svg>
+                        </div>
+                        <span class="icon-label">Loan EMI payment</span>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-outline">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="7" y="3" width="10" height="18" rx="2.5" />
+                                <path d="M10.5 17.5h3" />
+                                <text x="12" y="13" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" font-weight="700" fill="currentColor" stroke="none">₹</text>
+                            </svg>
+                        </div>
+                        <span class="icon-label">Mobile Postpaid</span>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-outline">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M4 10a7.3 7.3 0 0 0 10 10z" />
+                                <path d="M9 15l3-3" />
+                                <path d="M17 13a6 6 0 0 0-6-6" />
+                                <path d="M21 13A10 10 0 0 0 11 3" />
+                            </svg>
+                        </div>
+                        <span class="icon-label">DTH Recharge</span>
+                    </div>
+                    <div class="icon-item" onclick="showAllBillsSheet()">
+                        <div class="icon-outline">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <circle cx="12" cy="12" r="8.5" />
+                                <path d="M8.5 12h6.5" />
+                                <path d="M12.5 8.5L16 12l-3.5 3.5" />
+                            </svg>
+                        </div>
+                        <span class="icon-label">All Bill Payments</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Bills Entry Card -->
+            <div class="my-bills-card">
+                <div class="my-bills-header">
+                    <h3>My Bills</h3>
+                    <div class="tab-toggle card-toggle" role="tablist" aria-label="Bill view">
+                        <button type="button" class="tab-btn active" data-mode="me" onclick="setLandingMode('me')">Me</button>
+                        <button type="button" class="tab-btn" data-mode="home" onclick="setLandingMode('home')">Home</button>
+                    </div>
+                </div>
+                <p class="my-bills-subtitle">Keep track of bills you pay every month</p>
+                <div class="my-bills-status-row" id="landing-status-row">
+                    <span class="badge" id="landing-badge">2 bills need attention</span>
+                </div>
+                <div class="my-bills-preview" id="landing-preview">
+                    <div class="bill-preview-item">
+                        <span class="bill-preview-name">Electricity</span>
+                        <span class="bill-preview-amount">₹1,840</span>
+                    </div>
+                    <div class="bill-preview-item">
+                        <span class="bill-preview-name">Credit Card</span>
+                        <span class="bill-preview-amount">₹6,250</span>
+                    </div>
+                </div>
+                <button type="button" class="my-bills-open" onclick="openLandingBills()">
+                    <span id="landing-open-label">View my bills</span>
+                    <span aria-hidden="true">→</span>
+                </button>
+            </div>
+
+            <!-- Rewards / Voucher section on home screen -->
+            <div class="home-rewards-section">
+                <div class="home-rewards-head-row">
+                    <h3 class="home-rewards-title">Rewards you can win</h3>
+                    <button type="button" class="link-btn" onclick="navigateTo('screen-voucher-details')">View all →</button>
+                </div>
+                <div class="home-rewards-progress-card" onclick="openHomeReward()">
+                    <div class="home-rewards-progress-icon">🎁</div>
+                    <div class="home-rewards-progress-info">
+                        <p class="home-rewards-progress-title">Pay 3 bills to unlock a reward</p>
+                        <p class="home-rewards-progress-status" id="home-rewards-status">In progress · 1 of 3 qualifying payments</p>
+                    </div>
+                    <span class="home-rewards-arrow">→</span>
+                </div>
+                <div class="voucher-progress-bar home-rewards-bar">
+                    <div class="progress-fill" id="home-rewards-fill" style="width: 33%"></div>
+                </div>
+                <div class="home-rewards-list" id="home-rewards-list"></div>
+                <button type="button" class="home-rewards-expand" id="home-rewards-toggle" onclick="toggleRewardsExpand()" aria-label="Show more rewards"><span class="home-rewards-expand-arrow">↓</span></button>
+            </div>
+
+            <div class="section">
+                <div class="promo-card">
+                    <h4>Credit Score</h4>
+                    <p>Free, 1-tap check: no impact on score</p>
+                </div>
+            </div>
+
+            <button class="scan-qr-btn">
+                <span class="scan-icon">📷</span>
+                Scan QR
+            </button>
+        </div>
+
+        <!-- Screen 02: My Bills Dashboard (Me Tab) -->
+        <div id="screen-my-bills" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-recharge-bills')">←</button>
+                <div class="tab-toggle">
+                    <button class="tab-btn active" onclick="switchTab('me')">Me</button>
+                    <button class="tab-btn" onclick="switchTab('home')">Home</button>
+                </div>
+                <button class="icon-btn" onclick="navigateTo('screen-calendar')">📅</button>
+            </div>
+
+            <div class="dashboard-summary">
+                <span class="summary-count">2 bills need attention</span>
+            </div>
+
+            <!-- Voucher Progress Card -->
+            <div class="voucher-progress-card" onclick="navigateTo('screen-voucher-details')">
+                <div class="voucher-header">
+                    <div class="voucher-icon">🎁</div>
+                    <div class="voucher-info">
+                        <h4>Bill payment reward</h4>
+                        <p class="voucher-status" id="me-voucher-status">In progress</p>
+                    </div>
+                </div>
+                <div class="voucher-progress-bar">
+                    <div class="progress-fill" id="me-voucher-fill" style="width: 33%"></div>
+                </div>
+                <p class="voucher-text" id="me-voucher-text">1 of 3 qualifying bill payments completed</p>
+            </div>
+
+            <div class="bill-section">
+                <h3 class="bill-section-title">Needs attention</h3>
+
+                <div class="bill-card" onclick="navigateTo('screen-bill-detail')">
+                    <div class="bill-card-header">
+                        <div class="bill-icon">⚡</div>
+                        <div class="bill-info">
+                            <h4>Electricity</h4>
+                            <span class="bill-account">XXXX1234</span>
+                        </div>
+                        <div class="bill-amount">₹1,840</div>
+                    </div>
+                    <div class="bill-card-footer">
+                        <span class="bill-due">Due 18 Nov</span>
+                        <span class="bill-status confirmed">Confirmed pending</span>
+                    </div>
+                </div>
+
+                <div class="bill-card" onclick="navigateTo('screen-bill-detail')">
+                    <div class="bill-card-header">
+                        <div class="bill-icon">💳</div>
+                        <div class="bill-info">
+                            <h4>Credit Card</h4>
+                            <span class="bill-account">XXXX5678</span>
+                        </div>
+                        <div class="bill-amount">₹6,250</div>
+                    </div>
+                    <div class="bill-card-footer">
+                        <span class="bill-due">Due 21 Nov</span>
+                        <span class="bill-status marked-paid">Marked paid elsewhere</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bill-section">
+                <h3 class="bill-section-title">Upcoming</h3>
+
+                <div class="bill-card" onclick="navigateTo('screen-bill-detail')">
+                    <div class="bill-card-header">
+                        <div class="bill-icon">🌐</div>
+                        <div class="bill-info">
+                            <h4>Broadband</h4>
+                            <span class="bill-account">XXXX9012</span>
+                        </div>
+                        <div class="bill-amount">₹999</div>
+                    </div>
+                    <div class="bill-card-footer">
+                        <span class="bill-due">Due 25 Nov</span>
+                        <span class="bill-status estimated">Upcoming · estimated</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bill-section">
+                <h3 class="bill-section-title">Recently paid</h3>
+
+                <div class="bill-card paid" onclick="navigateTo('screen-bill-detail')">
+                    <div class="bill-card-header">
+                        <div class="bill-icon">🛡️</div>
+                        <div class="bill-info">
+                            <h4 class="strike-through">Insurance</h4>
+                            <span class="bill-account">XXXX3456</span>
+                        </div>
+                        <div class="bill-amount strike-through">₹2,400</div>
+                    </div>
+                    <div class="bill-card-footer">
+                        <span class="bill-due">Paid 28 Oct</span>
+                        <span class="bill-status paid">Paid · verified</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email discovery status / entry point -->
+            <div class="email-status-card" id="my-bills-email-card">
+                <div class="email-status-icon" id="my-bills-email-icon">📧</div>
+                <div class="email-status-body">
+                    <h4 id="my-bills-email-title">Bills hiding in your inbox?</h4>
+                    <p id="my-bills-email-copy">Paytm can find bill emails and add the details for you, after you approve them.</p>
+                    <button class="link-btn" id="my-bills-email-action" onclick="openEmailConsent()">Find my bills →</button>
+                </div>
+                <button class="email-status-dismiss" id="my-bills-email-dismiss" aria-label="Dismiss email suggestion" onclick="dismissMyBillsEmailCard()">×</button>
+            </div>
+
+            <button class="add-bill-btn" onclick="navigateTo('screen-add-bill')">
+                <span class="add-icon">+</span>
+                Add a bill
+            </button>
+        </div>
+
+        <!-- Screen 02b: Home Selection (when Home tab is clicked) -->
+        <div id="screen-home-selection" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-my-bills')">←</button>
+                <h1>Select Home</h1>
+            </div>
+
+            <div class="home-tab-toggle" role="tablist">
+                <button class="home-tab-btn active" data-home-tab="homes" onclick="switchHomeTab('homes')">Homes</button>
+                <button class="home-tab-btn" data-home-tab="invitations" onclick="switchHomeTab('invitations')">Invitations <span class="home-tab-badge" id="home-invite-badge">1</span></button>
+            </div>
+
+            <div class="home-list" id="home-list-homes">
+                <div class="home-card" onclick="navigateTo('screen-personal-home')">
+                    <div class="home-icon">🏠</div>
+                    <div class="home-info">
+                        <h3>Personal Home</h3>
+                        <p>Your personal bills</p>
+                        <span class="home-badge">3 bills need attention</span>
+                    </div>
+                    <button type="button" class="home-rename-btn" onclick="event.stopPropagation(); openRenameHome('Personal Home')" aria-label="Rename Personal Home">Rename</button>
+                    <div class="home-arrow">→</div>
+                </div>
+
+                <div class="home-card" onclick="navigateTo('screen-flatmates-home')">
+                    <div class="home-icon">👥</div>
+                    <div class="home-info">
+                        <h3>Flatmates</h3>
+                        <p>Shared household bills</p>
+                        <span class="home-badge">2 bills need attention</span>
+                    </div>
+                    <button type="button" class="home-rename-btn" onclick="event.stopPropagation(); openRenameHome('Flatmates')" aria-label="Rename Flatmates">Rename</button>
+                    <div class="home-arrow">→</div>
+                </div>
+
+                <div class="home-card" onclick="navigateTo('screen-home-details')">
+                    <div class="home-icon">🫂</div>
+                    <div class="home-info">
+                        <h3>Friends apartment</h3>
+                        <p>Shared rent &amp; utilities</p>
+                        <span class="home-badge">2 members · invite open</span>
+                    </div>
+                    <button type="button" class="home-rename-btn" onclick="event.stopPropagation(); openRenameHome('Friends apartment')" aria-label="Rename Friends apartment">Rename</button>
+                    <div class="home-arrow">→</div>
+                </div>
+
+                <div class="home-card add-home" onclick="showAddHomeModal()">
+                    <div class="home-icon add">+</div>
+                    <div class="home-info">
+                        <h3>Add new home</h3>
+                        <p>Create a new household</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="home-invite-list" id="home-list-invitations" hidden>
+                <div class="home-invite-card">
+                    <div class="home-invite-icon">🫂</div>
+                    <div class="home-invite-info">
+                        <h3>Friends apartment</h3>
+                        <p class="home-invite-reason">Shared rent &amp; utilities for the flat</p>
+                        <span class="home-invite-from">Invited by Shinjan · up to 5 people</span>
+                    </div>
+                    <div class="home-invite-actions">
+                        <button class="primary-btn" onclick="acceptHomeInvite('Friends apartment')">Accept &amp; join</button>
+                        <button class="secondary-btn" onclick="declineHomeInvite('Friends apartment')">Decline</button>
+                    </div>
+                </div>
+                <p class="home-invite-empty" id="home-invite-empty" hidden>No pending invitations right now.</p>
+            </div>
+        </div>
+
+        <!-- Screen 02c: Home Details / Invite (Paytm home details) -->
+        <div id="screen-home-details" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-home-selection')">←</button>
+                <h1>Home details</h1>
+            </div>
+
+            <div class="home-detail-card">
+                <div class="home-detail-icon">🫂</div>
+                <h2 class="home-detail-name">Friends apartment</h2>
+                <p class="home-detail-reason">Shared rent &amp; utilities for the flat</p>
+                <p class="home-detail-meta">Up to 5 people can join this home.</p>
+            </div>
+
+            <div class="home-detail-members">
+                <div class="home-detail-members-head">
+                    <h3>Members</h3>
+                    <span class="home-detail-count" id="home-detail-count">2 of 5</span>
+                </div>
+                <div class="home-detail-member-list" id="home-detail-member-list">
+                    <div class="home-detail-member">
+                        <span class="home-detail-avatar">SP</span>
+                        <div class="home-detail-member-info">
+                            <span class="home-detail-member-name">Shinjan (you)</span>
+                            <span class="home-detail-member-role">Creator</span>
+                        </div>
+                    </div>
+                    <div class="home-detail-member">
+                        <span class="home-detail-avatar">AK</span>
+                        <div class="home-detail-member-info">
+                            <span class="home-detail-member-name">Amit K.</span>
+                            <span class="home-detail-member-role">Member</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="home-detail-invite">
+                <h3>Invite link</h3>
+                <p class="home-detail-invite-link"><span id="home-detail-invite-link-text">paytm://join/hm-7Q2K9P</span> <button type="button" class="copy-link-btn" onclick="copyInviteLink('home-detail-invite-link-text')">Copy link</button></p>
+                <p class="home-detail-invite-note">Share this link. When someone accepts, their Paytm username is added automatically.</p>
+            </div>
+
+            <div class="home-detail-actions">
+                <button class="primary-btn" onclick="acceptHomeInvite('Friends apartment')">Accept &amp; join</button>
+                <button class="secondary-btn" onclick="declineHomeInvite('Friends apartment')">Decline</button>
+            </div>
+            <p class="home-detail-footnote">Your Paytm username is fetched automatically when you accept. Nothing is added without your consent.</p>
+        </div>
+
+        <!-- Screen 02c: Personal Home Dashboard -->
+        <div id="screen-personal-home" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-home-selection')">←</button>
+                <div class="tab-toggle">
+                    <button class="tab-btn" onclick="switchTab('me')">Me</button>
+                    <button class="tab-btn active" onclick="switchTab('home')">Home</button>
+                </div>
+                <button class="icon-btn" onclick="navigateTo('screen-personal-calendar')">📅</button>
+            </div>
+
+            <div class="home-indicator clickable" onclick="showHomeSelector()">
+                <span class="home-name">🏠 Personal Home</span>
+                <span class="home-chevron">▼</span>
+            </div>
+
+            <div class="dashboard-summary">
+                <span class="summary-count">3 bills need attention</span>
+            </div>
+
+            <!-- Voucher Progress Card -->
+            <div class="voucher-progress-card" onclick="navigateTo('screen-voucher-details')">
+                <div class="voucher-header">
+                    <div class="voucher-icon">🎁</div>
+                    <div class="voucher-info">
+                        <h4>Bill payment reward</h4>
+                        <p class="voucher-status">In progress</p>
+                    </div>
+                </div>
+                <div class="voucher-progress-bar">
+                    <div class="progress-fill" style="width: 66%"></div>
+                </div>
+                <p class="voucher-text">2 of 3 qualifying bill payments completed</p>
+            </div>
+
+            <div class="bill-section">
+                <h3 class="bill-section-title">Needs attention</h3>
+
+                <div class="bill-card" onclick="navigateTo('screen-bill-detail')">
+                    <div class="bill-card-header">
+                        <div class="bill-icon">⚡</div>
+                        <div class="bill-info">
+                            <h4>Electricity</h4>
+                            <span class="bill-account">XXXX1234</span>
+                        </div>
+                        <div class="bill-amount">₹2,150</div>
+                    </div>
+                    <div class="bill-card-footer">
+                        <span class="bill-due">Due 18 Nov</span>
+                        <span class="bill-status confirmed">Confirmed pending</span>
+                    </div>
+                </div>
+
+                <div class="bill-card" onclick="navigateTo('screen-bill-detail')">
+                    <div class="bill-card-header">
+                        <div class="bill-icon">🌐</div>
+                        <div class="bill-info">
+                            <h4>Broadband</h4>
+                            <span class="bill-account">XXXX5678</span>
+                        </div>
+                        <div class="bill-amount">₹1,299</div>
+                    </div>
+                    <div class="bill-card-footer">
+                        <span class="bill-due">Due 20 Nov</span>
+                        <span class="bill-status confirmed">Confirmed pending</span>
+                    </div>
+                </div>
+
+                <div class="bill-card" onclick="navigateTo('screen-bill-detail')">
+                    <div class="bill-card-header">
+                        <div class="bill-icon">🏠</div>
+                        <div class="bill-info">
+                            <h4>Gas</h4>
+                            <span class="bill-account">XXXX9012</span>
+                        </div>
+                        <div class="bill-amount">₹850</div>
+                    </div>
+                    <div class="bill-card-footer">
+                        <span class="bill-due">Due 22 Nov</span>
+                        <span class="bill-status estimated">Upcoming · estimated</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bill-section">
+                <h3 class="bill-section-title">Recently paid</h3>
+
+                <div class="bill-card paid" onclick="navigateTo('screen-bill-detail')">
+                    <div class="bill-card-header">
+                        <div class="bill-icon">💧</div>
+                        <div class="bill-info">
+                            <h4 class="strike-through">Water</h4>
+                            <span class="bill-account">XXXX3456</span>
+                        </div>
+                        <div class="bill-amount strike-through">₹450</div>
+                    </div>
+                    <div class="bill-card-footer">
+                        <span class="bill-due">Paid 10 Nov</span>
+                        <span class="bill-status paid">Paid · verified</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="add-bill-btn" onclick="navigateTo('screen-add-bill')">
+                <span class="add-icon">+</span>
+                Add a bill
+            </button>
+        </div>
+
+        <!-- Screen 02d: Flatmates Home Dashboard -->
+        <div id="screen-flatmates-home" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-home-selection')">←</button>
+                <div class="tab-toggle">
+                    <button class="tab-btn" onclick="switchTab('me')">Me</button>
+                    <button class="tab-btn active" onclick="switchTab('home')">Home</button>
+                </div>
+                <button class="icon-btn" onclick="navigateTo('screen-flatmates-calendar')">📅</button>
+            </div>
+
+            <div class="home-indicator clickable" onclick="showHomeSelector()">
+                <span class="home-name">👥 Flatmates</span>
+                <span class="home-chevron">▼</span>
+            </div>
+
+            <div class="dashboard-summary">
+                <span class="summary-count">2 bills need attention</span>
+            </div>
+
+            <!-- Voucher Progress Card -->
+            <div class="voucher-progress-card" onclick="navigateTo('screen-voucher-details')">
+                <div class="voucher-header">
+                    <div class="voucher-icon">🎁</div>
+                    <div class="voucher-info">
+                        <h4>Bill payment reward</h4>
+                        <p class="voucher-status">In progress</p>
+                    </div>
+                </div>
+                <div class="voucher-progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                </div>
+                <p class="voucher-text">0 of 3 qualifying bill payments completed</p>
+            </div>
+
+            <div class="bill-section">
+                <h3 class="bill-section-title">Needs attention</h3>
+
+                <div class="bill-card" onclick="navigateTo('screen-bill-detail')">
+                    <div class="bill-card-header">
+                        <div class="bill-icon">🌐</div>
+                        <div class="bill-info">
+                            <h4>Shared Broadband</h4>
+                            <span class="bill-account">XXXX7890</span>
+                        </div>
+                        <div class="bill-amount">₹2,499</div>
+                    </div>
+                    <div class="bill-card-footer">
+                        <span class="bill-due">Due 19 Nov</span>
+                        <span class="bill-status confirmed">Confirmed pending</span>
+                    </div>
+                </div>
+
+                <div class="bill-card" onclick="navigateTo('screen-bill-detail')">
+                    <div class="bill-card-header">
+                        <div class="bill-icon">📺</div>
+                        <div class="bill-info">
+                            <h4>Netflix (Shared)</h4>
+                            <span class="bill-account">Family Plan</span>
+                        </div>
+                        <div class="bill-amount">₹649</div>
+                    </div>
+                    <div class="bill-card-footer">
+                        <span class="bill-due">Due 25 Nov</span>
+                        <span class="bill-status estimated">Upcoming · estimated</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bill-section">
+                <h3 class="bill-section-title">Recently paid</h3>
+
+                <div class="bill-card paid" onclick="navigateTo('screen-bill-detail')">
+                    <div class="bill-card-header">
+                        <div class="bill-icon">🏠</div>
+                        <div class="bill-info">
+                            <h4 class="strike-through">Rent (Nov)</h4>
+                            <span class="bill-account">Apartment 4B</span>
+                        </div>
+                        <div class="bill-amount strike-through">₹25,000</div>
+                    </div>
+                    <div class="bill-card-footer">
+                        <span class="bill-due">Paid 1 Nov</span>
+                        <span class="bill-status paid">Paid · verified</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="add-bill-btn" onclick="navigateTo('screen-add-bill')">
+                <span class="add-icon">+</span>
+                Add a bill
+            </button>
+        </div>
+
+        <!-- Screen 03: Add Bill Chooser -->
+        <div id="screen-add-bill" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="backFromAddBill()">←</button>
+                <h1>Add a bill</h1>
+            </div>
+
+            <div class="add-bill-options">
+                <div class="add-bill-option" onclick="navigateTo('screen-camera')">
+                    <div class="option-icon">📷</div>
+                    <h3>Take a photo</h3>
+                    <p>Capture a paper bill</p>
+                </div>
+
+                <div class="add-bill-option" onclick="navigateTo('screen-upload')">
+                    <div class="option-icon">📁</div>
+                    <h3>Upload a bill</h3>
+                    <p>Choose an image or PDF</p>
+                </div>
+
+                <div class="add-bill-option" onclick="navigateTo('screen-biller-search')">
+                    <div class="option-icon">🔍</div>
+                    <h3>Find biller</h3>
+                    <p>Search and enter account details</p>
+                </div>
+            </div>
+
+            <!-- Optional email bill discovery invitation -->
+            <div class="email-invitation" id="add-bill-email-invite">
+                <div class="email-invite-head">
+                    <div class="email-invite-icon">📧</div>
+                    <div>
+                        <p class="email-invite-eyebrow">Optional · read-only</p>
+                        <h4>Find bills already in your inbox</h4>
+                    </div>
+                </div>
+                <p class="email-invite-copy">Skip typing amounts and due dates. Paytm looks for bill emails, then shows you what it found.</p>
+                <ul class="email-invite-points">
+                    <li><span>✓</span> Catch monthly bills you'd otherwise miss</li>
+                    <li><span>✓</span> You approve every bill before it's added</li>
+                    <li><span>✓</span> Disconnect anytime · we never ask for your password</li>
+                </ul>
+                <button class="primary-btn" onclick="openEmailConsent()">Connect email</button>
+                <button class="text-btn" onclick="dismissAddBillInvite()">Not now</button>
+            </div>
+
+            <div class="email-invite-compact" id="email-invite-compact" hidden>
+                <span class="email-invite-compact-icon">📧</span>
+                <span>Bills in your inbox can be added for you.</span>
+                <button class="link-btn" onclick="openEmailConsent()">Connect →</button>
+            </div>
+        </div>
+
+        <!-- Screen 04: Camera Capture -->
+        <div id="screen-camera" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-add-bill')">←</button>
+                <h1>Scan bill</h1>
+            </div>
+
+            <div class="camera-view">
+                <div class="camera-frame">
+                    <div class="frame-guide">
+                        <p class="frame-instruction">Position bill within frame</p>
+                        <p class="frame-detail">Capture biller name, account number, amount and due date</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="camera-controls">
+                <button class="camera-btn">Capture</button>
+                <button class="secondary-btn" onclick="navigateTo('screen-add-bill')">Cancel</button>
+            </div>
+
+            <p class="privacy-note">Your photo is processed securely and not stored</p>
+        </div>
+
+        <!-- Screen 05: File Upload -->
+        <div id="screen-upload" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-add-bill')">←</button>
+                <h1>Upload bill</h1>
+            </div>
+
+            <div class="upload-area">
+                <div class="upload-icon">📄</div>
+                <p>Tap to select an image or PDF</p>
+                <p class="upload-hint">Supported: JPG, PNG, PDF (max 5MB)</p>
+            </div>
+
+            <button class="primary-btn">Choose file</button>
+            <button class="secondary-btn" onclick="navigateTo('screen-add-bill')">Cancel</button>
+        </div>
+
+        <!-- Screen 06: Biller Search -->
+        <div id="screen-biller-search" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-add-bill')">←</button>
+                <h1>Find biller</h1>
+            </div>
+
+            <div class="search-input">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="biller-search-input" placeholder="Search for biller (e.g., Electricity, Mobile)">
+            </div>
+
+            <div class="biller-categories">
+                <h3>Popular categories</h3>
+                <div class="category-list">
+                    <div class="category-item">⚡ Electricity</div>
+                    <div class="category-item">📱 Mobile Postpaid</div>
+                    <div class="category-item">🌐 Broadband</div>
+                    <div class="category-item">📡 DTH</div>
+                    <div class="category-item">🚗 FASTag</div>
+                    <div class="category-item">💳 Credit Card</div>
+                    <div class="category-item">🏠 Gas</div>
+                    <div class="category-item">💧 Water</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 08: Verification State -->
+        <div id="screen-verification" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-ocr-review')">←</button>
+                <h1>Verification Result</h1>
+            </div>
+
+            <div class="verification-card verified">
+                <div class="verification-icon">
+                    <span class="check-circle">✓</span>
+                </div>
+                <h2>Bill verified successfully</h2>
+                <p class="verification-subtitle">Your bill details have been confirmed with the biller</p>
+
+                <div class="verification-details">
+                    <div class="verification-row">
+                        <span class="v-label">Biller</span>
+                        <span class="v-value">Electricity Board</span>
+                    </div>
+                    <div class="verification-row">
+                        <span class="v-label">Account number</span>
+                        <span class="v-value">XXXX1234</span>
+                    </div>
+                    <div class="verification-row">
+                        <span class="v-label">Amount</span>
+                        <span class="v-value">₹1,840</span>
+                    </div>
+                    <div class="verification-row">
+                        <span class="v-label">Due date</span>
+                        <span class="v-value">18 Nov 2026</span>
+                    </div>
+                </div>
+
+                <div class="verification-meta">
+                    <div class="meta-row">
+                        <span class="meta-label">Verified with</span>
+                        <span class="meta-value">Biller (BBPS)</span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Last updated</span>
+                        <span class="meta-value">Just now</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="verification-actions">
+                <button class="primary-btn" onclick="navigateTo('screen-my-bills')">Add to My Bills</button>
+                <button class="secondary-btn" onclick="navigateTo('screen-ocr-review')">Edit details</button>
+            </div>
+        </div>
+
+        <!-- Screen 07: OCR Review -->
+        <div id="screen-ocr-review" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-camera')">←</button>
+                <h1>Review bill details</h1>
+            </div>
+
+            <div class="status-badge source">
+                <span class="status-icon">📄</span>
+                Read from bill
+            </div>
+
+            <div class="form-field">
+                <label>Biller</label>
+                <input type="text" value="Electricity Board" class="editable">
+                <span class="field-status">Please check</span>
+            </div>
+
+            <div class="form-field">
+                <label>Account number</label>
+                <input type="text" value="1234567890" class="editable">
+            </div>
+
+            <div class="form-field">
+                <label>Amount</label>
+                <input type="text" value="₹1,840" class="editable">
+            </div>
+
+            <div class="form-field">
+                <label>Due date</label>
+                <input type="text" value="18 Nov 2026" class="editable">
+            </div>
+
+            <div class="form-field">
+                <label>Billing period</label>
+                <input type="text" value="Oct 2026" class="editable">
+            </div>
+
+            <div class="form-actions">
+                <button class="primary-btn" onclick="navigateTo('screen-my-bills')">Confirm & add bill</button>
+                <button class="secondary-btn" onclick="navigateTo('screen-biller-search')">Edit manually</button>
+            </div>
+        </div>
+
+        <!-- Screen 08: Bill Detail -->
+        <div id="screen-bill-detail" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-my-bills')">←</button>
+                <h1>Electricity</h1>
+            </div>
+
+            <div class="bill-detail-header">
+                <div class="bill-icon-large">⚡</div>
+                <div class="bill-detail-info">
+                    <h2>Electricity</h2>
+                    <span class="bill-account">XXXX1234</span>
+                </div>
+            </div>
+
+            <div class="bill-amount-large">₹1,840</div>
+            <div class="bill-due-large">Due 18 Nov 2026</div>
+
+            <div class="status-badge confirmed">
+                <span class="status-icon">✓</span>
+                Confirmed pending
+            </div>
+
+            <div class="bill-meta">
+                <div class="meta-row">
+                    <span class="meta-label">Last refreshed</span>
+                    <span class="meta-value">2 hours ago</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">Source</span>
+                    <span class="meta-value">Verified with biller</span>
+                </div>
+            </div>
+
+            <div class="voucher-hint-card">
+                <div class="voucher-hint-icon">🎁</div>
+                <div class="voucher-hint-body">
+                    <h4>This payment earns reward progress</h4>
+                    <p>This eligible Paytm payment counts toward your 3 qualifying payments for the bill payment reward.</p>
+                    <button type="button" class="link-btn" onclick="navigateTo('screen-voucher-details')">View reward →</button>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="primary-btn large" onclick="openPayBill()">Pay through Paytm</button>
+                <button class="secondary-btn" onclick="navigateTo('screen-smart-insight')">View bill insight</button>
+                <button class="secondary-btn" onclick="navigateTo('screen-bill-history')">View bill history</button>
+                <button class="secondary-btn" onclick="showMarkPaidModal()">I paid elsewhere</button>
+                <button class="secondary-btn" onclick="snoozeBillReminder()">Remind me later</button>
+                <button class="secondary-btn" onclick="refreshBillStatus()">Refresh status</button>
+                <button class="secondary-btn" onclick="navigateTo('screen-ocr-review')">Edit bill details</button>
+                <button class="danger-btn" onclick="removeBill()">Remove bill</button>
+            </div>
+        </div>
+
+        <!-- Screen 10b: Pay Bill -->
+        <div id="screen-pay-bill" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-bill-detail')">←</button>
+                <h1>Pay bill</h1>
+            </div>
+
+            <div class="pay-bill-summary">
+                <div class="bill-icon-large">⚡</div>
+                <div class="bill-detail-info">
+                    <h2>Electricity</h2>
+                    <span class="bill-account">XXXX1234 · Due 18 Nov 2026</span>
+                </div>
+                <div class="pay-bill-amount">₹1,840</div>
+            </div>
+
+            <!-- Pre-payment voucher eligibility hint -->
+            <div class="voucher-hint-card prominent">
+                <div class="voucher-hint-icon">🎁</div>
+                <div class="voucher-hint-body">
+                    <h4>Bill payment reward</h4>
+                    <p id="pay-voucher-copy">This eligible payment takes you from 1 of 3 to 2 of 3 qualifying payments.</p>
+                    <div class="voucher-hint-bar">
+                        <div class="voucher-hint-fill" id="pay-voucher-fill" style="width: 33%"></div>
+                    </div>
+                    <p class="voucher-hint-meta" id="pay-voucher-meta">1 of 3 completed · only successful Paytm payments count</p>
+                    <button type="button" class="link-btn" onclick="navigateTo('screen-voucher-details')">View reward →</button>
+                </div>
+            </div>
+
+            <div class="pay-section">
+                <h3>Pay using</h3>
+                <div class="payment-methods">
+                    <label class="payment-method">
+                        <input type="radio" name="pay-method" value="upi" checked>
+                        <span>Paytm UPI</span>
+                    </label>
+                    <label class="payment-method">
+                        <input type="radio" name="pay-method" value="wallet">
+                        <span>Paytm Wallet</span>
+                    </label>
+                    <label class="payment-method">
+                        <input type="radio" name="pay-method" value="bank">
+                        <span>Bank account</span>
+                    </label>
+                </div>
+            </div>
+
+            <button class="primary-btn large" onclick="payBill()">Pay ₹1,840</button>
+            <p class="pay-note">Only successful Paytm payments count toward the reward. Payments marked paid offline or on another app do not qualify.</p>
+        </div>
+
+        <!-- Screen 10c: Payment Success -->
+        <div id="screen-payment-success" class="screen">
+            <div class="payment-success">
+                <div class="success-icon">✓</div>
+                <h1>Payment successful</h1>
+                <p class="success-amount">₹1,840 paid to Electricity</p>
+
+                <!-- Post-success voucher progress cue -->
+                <div class="voucher-hint-card success">
+                    <div class="voucher-hint-icon">🎁</div>
+                    <div class="voucher-hint-body">
+                        <h4>Reward progress updated</h4>
+                        <p id="success-voucher-text">2 of 3 qualifying payments completed. One more to unlock your bill payment reward.</p>
+                        <div class="voucher-hint-bar">
+                            <div class="voucher-hint-fill" id="success-voucher-fill" style="width: 66%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="success-actions">
+                    <button class="primary-btn" onclick="navigateTo('screen-my-bills')">Back to My Bills</button>
+                    <button class="secondary-btn" onclick="navigateTo('screen-voucher-details')">View reward</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 11: Smart Bill Insight -->
+        <div id="screen-smart-insight" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-bill-detail')">←</button>
+                <h1>Bill Insight</h1>
+            </div>
+
+            <div class="insight-header">
+                <div class="insight-icon">⚡</div>
+                <div class="insight-info">
+                    <h2>Electricity</h2>
+                    <span class="insight-account">XXXX1234</span>
+                </div>
+            </div>
+
+            <div class="insight-state-tabs" role="tablist">
+                <button class="insight-state-tab active" data-state="anomaly" onclick="switchInsightState('anomaly')">Anomaly</button>
+                <button class="insight-state-tab" data-state="insufficient" onclick="switchInsightState('insufficient')">Insufficient history</button>
+                <button class="insight-state-tab" data-state="noncomparable" onclick="switchInsightState('noncomparable')">Non-comparable</button>
+                <button class="insight-state-tab" data-state="stale" onclick="switchInsightState('stale')">Stale data</button>
+            </div>
+
+            <div class="insight-panel" data-panel="anomaly">
+            <div class="insight-summary">
+                <div class="insight-alert">
+                    <span class="insight-icon-alert">📈</span>
+                    <h3>Your electricity bill is 71% higher than last month</h3>
+                </div>
+                <div class="insight-comparison">
+                    <div class="comparison-item current">
+                        <span class="comparison-label">This month</span>
+                        <span class="comparison-amount">₹3,150</span>
+                    </div>
+                    <div class="comparison-item previous">
+                        <span class="comparison-label">Last month</span>
+                        <span class="comparison-amount">₹1,840</span>
+                    </div>
+                    <div class="comparison-delta">
+                        <span class="delta-label">Difference</span>
+                        <span class="delta-amount increase">+₹1,310 (+71%)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="insight-context">
+                <p class="comparison-basis">Compared with your previous bill</p>
+                <p class="data-coverage">Based on 4 bill cycles</p>
+            </div>
+
+            <div class="insight-chart">
+                <h3>Bill history</h3>
+                <div class="chart-bars">
+                    <div class="chart-bar">
+                        <div class="bar-label">Aug</div>
+                        <div class="bar" style="height: 60%"></div>
+                        <div class="bar-value">₹1,780</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="bar-label">Sep</div>
+                        <div class="bar" style="height: 55%"></div>
+                        <div class="bar-value">₹1,650</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="bar-label">Oct</div>
+                        <div class="bar" style="height: 50%"></div>
+                        <div class="bar-value">₹1,840</div>
+                    </div>
+                    <div class="chart-bar current">
+                        <div class="bar-label">Nov</div>
+                        <div class="bar" style="height: 85%"></div>
+                        <div class="bar-value">₹3,150</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="insight-explanation">
+                <h3>What may have changed?</h3>
+                <div class="explanation-item">
+                    <span class="explanation-label">Units consumed</span>
+                    <span class="explanation-value">320 kWh (was 180 kWh)</span>
+                </div>
+                <div class="explanation-item">
+                    <span class="explanation-label">Tariff rate</span>
+                    <span class="explanation-value">₹6.50/unit (was ₹6.20/unit)</span>
+                </div>
+                <div class="explanation-item">
+                    <span class="explanation-label">Fixed charges</span>
+                    <span class="explanation-value">₹150 (unchanged)</span>
+                </div>
+                <div class="explanation-item">
+                    <span class="explanation-label">Taxes & duties</span>
+                    <span class="explanation-value">₹320 (was ₹180)</span>
+                </div>
+            </div>
+
+            <div class="insight-actions">
+                <button class="primary-btn" onclick="navigateTo('screen-bill-detail')">View current bill</button>
+                <button class="secondary-btn">Compare previous bill</button>
+                <button class="secondary-btn" onclick="openPayBill()">Pay bill</button>
+                <button class="secondary-btn">Contact biller</button>
+            </div>
+
+            <div class="insight-footer">
+                <button class="text-btn" onclick="navigateTo('screen-bill-detail')">This looks normal</button>
+                <button class="text-btn">Notification settings</button>
+            </div>
+            </div>
+
+            <!-- Suppressed states -->
+            <div class="insight-panel" data-panel="insufficient" hidden>
+                <div class="insight-suppressed">
+                    <div class="insight-suppressed-icon">📊</div>
+                    <h3>Not enough history yet</h3>
+                    <p>We need at least 3 comparable bill cycles before we can flag an unusual change. Keep paying and we'll start comparing from next cycle.</p>
+                    <p class="insight-suppressed-meta">Data coverage: 1 of 3 cycles · Source: biller-verified</p>
+                </div>
+            </div>
+
+            <div class="insight-panel" data-panel="noncomparable" hidden>
+                <div class="insight-suppressed">
+                    <div class="insight-suppressed-icon">⚖️</div>
+                    <h3>Comparison not available</h3>
+                    <p>This bill's period or amount isn't comparable with the previous one (different billing cycle or estimated amount). We've held back the alert to avoid a false signal.</p>
+                    <p class="insight-suppressed-meta">Comparison basis: not comparable · Source: estimated</p>
+                </div>
+            </div>
+
+            <div class="insight-panel" data-panel="stale" hidden>
+                <div class="insight-suppressed">
+                    <div class="insight-suppressed-icon">⏳</div>
+                    <h3>Status data is stale</h3>
+                    <p>We couldn't confirm the latest bill amount. The comparison is paused until fresh biller data arrives. Last refreshed 2 days ago.</p>
+                    <p class="insight-suppressed-meta">Source: stale · Last refreshed: 2 days ago</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 09: Bills Calendar (paper wall calendar) -->
+        <div id="screen-calendar" class="screen calendar-screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-my-bills')">←</button>
+                <h1>Bills calendar</h1>
+            </div>
+
+            <div class="paper-calendar">
+                <div class="paper-coils" aria-hidden="true"></div>
+                <div class="paper-sheet">
+                    <div class="paper-head">
+                        <div>
+                            <p class="paper-imprint">Paytm · My Bills</p>
+                            <h2 class="paper-month">November <span class="paper-year">2026</span></h2>
+                        </div>
+                        <div class="month-nav paper-month-nav">
+                            <button class="icon-btn" type="button" aria-label="Previous month">‹</button>
+                            <button class="icon-btn" type="button" aria-label="Next month">›</button>
+                        </div>
+                    </div>
+
+                    <div class="paper-summary" aria-label="November totals">
+                        <div class="paper-summary-item">
+                            <span class="paper-summary-label">Tracked</span>
+                            <span class="paper-summary-value" data-summary-total="screen-calendar">₹9,089</span>
+                        </div>
+                        <div class="paper-summary-item">
+                            <span class="paper-summary-label">Crossed off</span>
+                            <span class="paper-summary-value" data-summary-crossed="screen-calendar">₹6,250</span>
+                        </div>
+                        <div class="paper-summary-item">
+                            <span class="paper-summary-label">Left to pay</span>
+                            <span class="paper-summary-value" data-summary-left="screen-calendar">₹2,839</span>
+                        </div>
+                    </div>
+
+                    <p class="paper-progress" data-paper-progress="screen-calendar">1 of 3 bills crossed off this month</p>
+                    <p class="paper-margin-note">only electricity is left this week ↘</p>
+
+                    <div class="calendar-grid paper-grid" data-calendar-grid="screen-calendar" role="grid" aria-label="November 2026 bills calendar"></div>
+
+                    <div class="paper-legend" aria-label="What the pen marks mean">
+                        <span class="paper-legend-title">Pen marks</span>
+                        <span class="legend-item"><i class="ink-swatch due" aria-hidden="true"></i>due date</span>
+                        <span class="legend-item"><i class="ink-swatch star" aria-hidden="true"></i>important</span>
+                        <span class="legend-item"><i class="ink-swatch highlight" aria-hidden="true"></i>today / payday</span>
+                        <span class="legend-item"><i class="ink-swatch crossed" aria-hidden="true"></i>crossed off</span>
+                        <span class="legend-item"><i class="ink-swatch unconfirmed" aria-hidden="true"></i>unconfirmed</span>
+                    </div>
+
+                    <div class="paper-curl" aria-hidden="true"></div>
+                </div>
+            </div>
+
+            <div class="calendar-filters" role="group" aria-label="Filter calendar days">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="attention">Needs attention</button>
+                <button class="filter-btn" data-filter="paid">Paid</button>
+            </div>
+
+            <div class="calendar-agenda paper-agenda" data-agenda="screen-calendar" aria-live="polite"></div>
+
+            <div class="sticky-note">
+                <span class="sticky-tape" aria-hidden="true"></span>
+                <p>Broadband auto-pay is ON — don't pay it twice.</p>
+            </div>
+        </div>
+
+        <!-- Screen 10: Personal Home Calendar (paper wall calendar) -->
+        <div id="screen-personal-calendar" class="screen calendar-screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-personal-home')">←</button>
+                <h1>Home calendar</h1>
+            </div>
+
+            <div class="paper-calendar">
+                <div class="paper-coils" aria-hidden="true"></div>
+                <div class="paper-sheet">
+                    <div class="paper-head">
+                        <div>
+                            <p class="paper-imprint">Paytm · Personal Home</p>
+                            <h2 class="paper-month">November <span class="paper-year">2026</span></h2>
+                        </div>
+                        <div class="month-nav paper-month-nav">
+                            <button class="icon-btn" type="button" aria-label="Previous month">‹</button>
+                            <button class="icon-btn" type="button" aria-label="Next month">›</button>
+                        </div>
+                    </div>
+
+                    <div class="paper-summary" aria-label="November totals">
+                        <div class="paper-summary-item">
+                            <span class="paper-summary-label">Tracked</span>
+                            <span class="paper-summary-value" data-summary-total="screen-personal-calendar">₹4,749</span>
+                        </div>
+                        <div class="paper-summary-item">
+                            <span class="paper-summary-label">Crossed off</span>
+                            <span class="paper-summary-value" data-summary-crossed="screen-personal-calendar">₹450</span>
+                        </div>
+                        <div class="paper-summary-item">
+                            <span class="paper-summary-label">Left to pay</span>
+                            <span class="paper-summary-value" data-summary-left="screen-personal-calendar">₹4,299</span>
+                        </div>
+                    </div>
+
+                    <p class="paper-progress" data-paper-progress="screen-personal-calendar">1 of 4 bills crossed off this month</p>
+                    <p class="paper-margin-note">gas is an estimate — check the meter ↘</p>
+
+                    <div class="calendar-grid paper-grid" data-calendar-grid="screen-personal-calendar" role="grid" aria-label="November 2026 personal home bills calendar"></div>
+
+                    <div class="paper-legend" aria-label="What the pen marks mean">
+                        <span class="paper-legend-title">Pen marks</span>
+                        <span class="legend-item"><i class="ink-swatch due" aria-hidden="true"></i>due date</span>
+                        <span class="legend-item"><i class="ink-swatch star" aria-hidden="true"></i>important</span>
+                        <span class="legend-item"><i class="ink-swatch highlight" aria-hidden="true"></i>today / payday</span>
+                        <span class="legend-item"><i class="ink-swatch crossed" aria-hidden="true"></i>crossed off</span>
+                        <span class="legend-item"><i class="ink-swatch unconfirmed" aria-hidden="true"></i>unconfirmed</span>
+                    </div>
+
+                    <div class="paper-curl" aria-hidden="true"></div>
+                </div>
+            </div>
+
+            <div class="calendar-filters" role="group" aria-label="Filter calendar days">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="attention">Needs attention</button>
+                <button class="filter-btn" data-filter="paid">Paid</button>
+            </div>
+
+            <div class="calendar-agenda paper-agenda" data-agenda="screen-personal-calendar" aria-live="polite"></div>
+
+            <div class="sticky-note">
+                <span class="sticky-tape" aria-hidden="true"></span>
+                <p>Water receipt is in the kitchen drawer. Gas figure is usually ₹100 high.</p>
+            </div>
+        </div>
+
+        <!-- Screen 11: Flatmates Home Calendar (paper wall calendar) -->
+        <div id="screen-flatmates-calendar" class="screen calendar-screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-flatmates-home')">←</button>
+                <h1>Flat calendar</h1>
+            </div>
+
+            <div class="paper-calendar">
+                <div class="paper-coils" aria-hidden="true"></div>
+                <div class="paper-sheet">
+                    <div class="paper-head">
+                        <div>
+                            <p class="paper-imprint">Paytm · Flatmates</p>
+                            <h2 class="paper-month">November <span class="paper-year">2026</span></h2>
+                        </div>
+                        <div class="month-nav paper-month-nav">
+                            <button class="icon-btn" type="button" aria-label="Previous month">‹</button>
+                            <button class="icon-btn" type="button" aria-label="Next month">›</button>
+                        </div>
+                    </div>
+
+                    <div class="paper-summary" aria-label="November totals">
+                        <div class="paper-summary-item">
+                            <span class="paper-summary-label">Tracked</span>
+                            <span class="paper-summary-value" data-summary-total="screen-flatmates-calendar">₹28,148</span>
+                        </div>
+                        <div class="paper-summary-item">
+                            <span class="paper-summary-label">Crossed off</span>
+                            <span class="paper-summary-value" data-summary-crossed="screen-flatmates-calendar">₹25,000</span>
+                        </div>
+                        <div class="paper-summary-item">
+                            <span class="paper-summary-label">Left to pay</span>
+                            <span class="paper-summary-value" data-summary-left="screen-flatmates-calendar">₹3,148</span>
+                        </div>
+                    </div>
+
+                    <p class="paper-progress" data-paper-progress="screen-flatmates-calendar">1 of 3 bills crossed off this month</p>
+                    <p class="paper-margin-note">rent done ✓ now chase the Netflix split ↘</p>
+
+                    <div class="calendar-grid paper-grid" data-calendar-grid="screen-flatmates-calendar" role="grid" aria-label="November 2026 flatmates bills calendar"></div>
+
+                    <div class="paper-legend" aria-label="What the pen marks mean">
+                        <span class="paper-legend-title">Pen marks</span>
+                        <span class="legend-item"><i class="ink-swatch due" aria-hidden="true"></i>due date</span>
+                        <span class="legend-item"><i class="ink-swatch star" aria-hidden="true"></i>important</span>
+                        <span class="legend-item"><i class="ink-swatch highlight" aria-hidden="true"></i>today / payday</span>
+                        <span class="legend-item"><i class="ink-swatch crossed" aria-hidden="true"></i>crossed off</span>
+                        <span class="legend-item"><i class="ink-swatch unconfirmed" aria-hidden="true"></i>unconfirmed</span>
+                    </div>
+
+                    <div class="paper-curl" aria-hidden="true"></div>
+                </div>
+            </div>
+
+            <div class="calendar-filters" role="group" aria-label="Filter calendar days">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="attention">Needs attention</button>
+                <button class="filter-btn" data-filter="paid">Paid</button>
+            </div>
+
+            <div class="calendar-agenda paper-agenda" data-agenda="screen-flatmates-calendar" aria-live="polite"></div>
+
+            <div class="sticky-note">
+                <span class="sticky-tape" aria-hidden="true"></span>
+                <p>Netflix splits 3 ways = ₹216 each. Collect before the 25th.</p>
+            </div>
+        </div>
+
+        <!-- Screen 12: Reminder Settings -->
+        <div id="screen-reminder" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-bill-detail')">←</button>
+                <h1>Reminder settings</h1>
+            </div>
+
+            <div class="reminder-options">
+                <div class="reminder-option">
+                    <div class="reminder-info">
+                        <h3>Reminders enabled</h3>
+                        <p>Get notified before due date</p>
+                    </div>
+                    <label class="toggle">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div class="reminder-option">
+                    <div class="reminder-info">
+                        <h3>Reminder timing</h3>
+                        <p>When to remind you</p>
+                    </div>
+                    <select class="reminder-select">
+                        <option>1 day before</option>
+                        <option>2 days before</option>
+                        <option>3 days before</option>
+                        <option>1 week before</option>
+                    </select>
+                </div>
+
+                <div class="reminder-option">
+                    <div class="reminder-info">
+                        <h3>Snooze</h3>
+                        <p>Reminder after snooze</p>
+                    </div>
+                    <select class="reminder-select">
+                        <option>1 hour</option>
+                        <option>3 hours</option>
+                        <option>1 day</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="primary-btn" onclick="saveReminderPreferences()">Save preferences</button>
+        </div>
+
+        <!-- Screen 13: Voucher Details -->
+        <div id="screen-voucher-details" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-my-bills')">←</button>
+                <h1>Reward Details</h1>
+            </div>
+
+            <div class="voucher-card-large">
+                <div class="voucher-icon-large">🎁</div>
+                <h2>Bill Payment Reward</h2>
+                <p class="voucher-subtitle">Illustrative reward</p>
+
+                <div class="voucher-progress-large">
+                    <div class="progress-label">Progress</div>
+                    <div class="progress-bar-large">
+                        <div class="progress-fill-large" id="voucher-progress-fill" style="width: 33%"></div>
+                    </div>
+                    <p class="progress-text" id="voucher-progress-text">1 of 3 qualifying payments completed</p>
+                </div>
+
+                <div class="voucher-status-badge in-progress" id="voucher-status-badge">
+                    In progress
+                </div>
+            </div>
+
+            <div class="voucher-details-section">
+                <h3>Qualifying transactions</h3>
+
+                <div class="transaction-item completed">
+                    <div class="transaction-info">
+                        <h4>Water</h4>
+                        <span class="transaction-date">28 Oct 2026</span>
+                    </div>
+                    <div class="transaction-amount">₹450</div>
+                    <span class="transaction-badge counted">Counted</span>
+                </div>
+
+                <div class="transaction-item pending" id="voucher-electricity-item">
+                    <div class="transaction-info">
+                        <h4>Electricity</h4>
+                        <span class="transaction-date" id="voucher-electricity-date">Due 18 Nov 2026</span>
+                    </div>
+                    <div class="transaction-amount">₹1,840</div>
+                    <span class="transaction-badge pending" id="voucher-electricity-badge">Pending</span>
+                </div>
+
+                <div class="transaction-item pending">
+                    <div class="transaction-info">
+                        <h4>Credit Card</h4>
+                        <span class="transaction-date">Not yet paid</span>
+                    </div>
+                    <div class="transaction-amount">₹6,250</div>
+                    <span class="transaction-badge pending">Pending</span>
+                </div>
+
+                <div class="transaction-item pending">
+                    <div class="transaction-info">
+                        <h4>Broadband</h4>
+                        <span class="transaction-date">Not yet paid</span>
+                    </div>
+                    <div class="transaction-amount">₹999</div>
+                    <span class="transaction-badge pending">Pending</span>
+                </div>
+            </div>
+
+            <div class="voucher-terms">
+                <h3>Terms & conditions</h3>
+                <ul class="terms-list">
+                    <li>Complete 3 qualifying bill payments</li>
+                    <li>Payments must be in different categories</li>
+                    <li>Minimum payment amount: ₹500</li>
+                    <li>Only successful Paytm transactions count</li>
+                    <li>Reward valid for 30 days after unlocking</li>
+                </ul>
+            </div>
+
+            <div class="voucher-info-note">
+                <p><strong>Note:</strong> This is an illustrative reward for prototype demonstration. Actual rewards, eligibility, and terms are subject to validation.</p>
+            </div>
+        </div>
+
+        <!-- Screen 14b: Reward Chooser (pick one of up to 4 rewards) -->
+        <div id="screen-reward-chooser" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-recharge-bills')">←</button>
+                <h1>Choose your reward</h1>
+            </div>
+
+            <div class="reward-chooser-hero">
+                <div class="reward-chooser-icon">🎉</div>
+                <h2>You earned a reward!</h2>
+                <p>You've completed 3 qualifying bill payments. Pick one reward to claim.</p>
+            </div>
+
+            <div class="reward-chooser-list" id="reward-chooser-list"></div>
+
+            <p class="reward-chooser-note">Rewards are illustrative for this prototype. Only one reward can be claimed per cycle.</p>
+        </div>
+
+        <!-- Screen 15: Empty State - No Bills -->
+        <div id="screen-empty-bills" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-my-bills')">←</button>
+                <h1>My Bills</h1>
+            </div>
+
+            <div class="empty-state">
+                <div class="empty-icon">🧾</div>
+                <h2>No bills yet</h2>
+                <p>Keep track of bills you pay every month</p>
+                <button class="primary-btn" onclick="navigateTo('screen-add-bill')">Add your first bill</button>
+            </div>
+        </div>
+
+        <!-- Screen 16: Loading State - OCR Processing -->
+        <div id="screen-ocr-loading" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-camera')">←</button>
+                <h1>Scanning bill</h1>
+            </div>
+
+            <div class="loading-state">
+                <div class="loading-spinner"></div>
+                <h2>Processing your bill...</h2>
+                <p>Extracting bill details with OCR</p>
+            </div>
+        </div>
+
+        <!-- Screen 17: Loading State - Bill Fetch -->
+        <div id="screen-bill-loading" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-bill-detail')">←</button>
+                <h1>Refreshing bill status</h1>
+            </div>
+
+            <div class="loading-state">
+                <div class="loading-spinner"></div>
+                <h2>Checking bill status...</h2>
+                <p>Fetching latest information from biller</p>
+            </div>
+        </div>
+
+        <!-- Screen 18: Error State - Bill Fetch Failed -->
+        <div id="screen-bill-error" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-bill-detail')">←</button>
+                <h1>Error</h1>
+            </div>
+
+            <div class="error-state">
+                <div class="error-icon">⚠️</div>
+                <h2>Unable to fetch bill status</h2>
+                <p>We couldn't connect to the biller. Please try again later.</p>
+                <button class="primary-btn" onclick="navigateTo('screen-bill-detail')">Retry</button>
+                <button class="secondary-btn">Contact support</button>
+            </div>
+        </div>
+
+        <!-- Screen 19: Offline State -->
+        <div id="screen-offline" class="screen">
+            <div class="offline-banner">
+                <span class="offline-icon">📶</span>
+                <span>You're offline. Some features may be unavailable.</span>
+            </div>
+
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-my-bills')">←</button>
+                <h1>My Bills</h1>
+            </div>
+
+            <div class="dashboard-summary offline-summary">
+                <span class="summary-count">Last synced: 2 hours ago</span>
+            </div>
+
+            <div class="bill-section">
+                <h3 class="bill-section-title">Needs attention</h3>
+
+                <div class="bill-card offline" onclick="navigateTo('screen-bill-detail')">
+                    <div class="bill-card-header">
+                        <div class="bill-icon">⚡</div>
+                        <div class="bill-info">
+                            <h4>Electricity</h4>
+                            <span class="bill-account">XXXX1234</span>
+                        </div>
+                        <div class="bill-amount">₹1,840</div>
+                    </div>
+                    <div class="bill-card-footer">
+                        <span class="bill-due">Due 18 Nov</span>
+                        <span class="bill-status stale">Status unavailable</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="offline-notice">
+                <p>Bill amounts and due dates may have changed. Refresh when you're back online.</p>
+            </div>
+        </div>
+
+        <!-- Screen 20: Stale Data State -->
+        <div id="screen-stale-data" class="screen">
+            <div class="stale-banner">
+                <span class="stale-icon">⏰</span>
+                <span>This information is from 3 days ago</span>
+            </div>
+
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-my-bills')">←</button>
+                <h1>My Bills</h1>
+            </div>
+
+            <div class="dashboard-summary stale-summary">
+                <span class="summary-count">Data may be outdated</span>
+            </div>
+
+            <div class="bill-section">
+                <h3 class="bill-section-title">Needs attention</h3>
+
+                <div class="bill-card stale" onclick="navigateTo('screen-bill-detail')">
+                    <div class="bill-card-header">
+                        <div class="bill-icon">⚡</div>
+                        <div class="bill-info">
+                            <h4>Electricity</h4>
+                            <span class="bill-account">XXXX1234</span>
+                        </div>
+                        <div class="bill-amount">₹1,840</div>
+                    </div>
+                    <div class="bill-card-footer">
+                        <span class="bill-due">Due 18 Nov</span>
+                        <span class="bill-status stale">Status unavailable</span>
+                    </div>
+                </div>
+
+                <div class="bill-card stale" onclick="navigateTo('screen-bill-detail')">
+                    <div class="bill-card-header">
+                        <div class="bill-icon">💳</div>
+                        <div class="bill-info">
+                            <h4>Credit Card</h4>
+                            <span class="bill-account">XXXX5678</span>
+                        </div>
+                        <div class="bill-amount">₹6,250</div>
+                    </div>
+                    <div class="bill-card-footer">
+                        <span class="bill-due">Due 21 Nov</span>
+                        <span class="bill-status stale">Status unavailable</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="primary-btn refresh-btn" onclick="navigateTo('screen-bill-loading')">
+                Refresh all bills
+            </button>
+
+            <div class="stale-notice">
+                <p>Bill information is refreshed automatically when you're online. Some statuses may be outdated.</p>
+            </div>
+        </div>
+
+        <!-- Screen 20a: Email Discovery Consent -->
+        <div id="screen-email-consent" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="backFromEmailConsent()">←</button>
+                <h1>Connect email</h1>
+            </div>
+
+            <div class="email-hero">
+                <div class="email-hero-icon">📧</div>
+                <p class="email-eyebrow">Optional · read-only</p>
+                <h2>Bills in your inbox, added in a tap</h2>
+                <p>Paytm finds bill emails and attachments, then shows you what it found. You choose what goes into My Bills.</p>
+            </div>
+
+            <div class="email-benefits">
+                <div class="email-benefit">
+                    <span class="email-benefit-icon">⌨️</span>
+                    <div>
+                        <h4>No more typing</h4>
+                        <p>Amount, due date and account number come from the bill itself.</p>
+                    </div>
+                </div>
+                <div class="email-benefit">
+                    <span class="email-benefit-icon">🔎</span>
+                    <div>
+                        <h4>Catch what you'd miss</h4>
+                        <p>Statements you haven't opened still get found.</p>
+                    </div>
+                </div>
+                <div class="email-benefit">
+                    <span class="email-benefit-icon">✅</span>
+                    <div>
+                        <h4>Nothing is added silently</h4>
+                        <p>You review every bill before it reaches My Bills.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="email-section-title">Choose your email provider</h3>
+            <div class="email-providers">
+                <label class="email-provider selected" id="provider-gmail">
+                    <input type="radio" name="email-provider" value="gmail" checked onchange="selectEmailProvider('gmail')">
+                    <span class="email-provider-mark gmail">G</span>
+                    <span class="email-provider-name">
+                        <strong>Google / Gmail</strong>
+                        <small>Continue with your Google account</small>
+                    </span>
+                    <span class="email-provider-tick">✓</span>
+                </label>
+                <label class="email-provider" id="provider-outlook">
+                    <input type="radio" name="email-provider" value="outlook" onchange="selectEmailProvider('outlook')">
+                    <span class="email-provider-mark outlook">O</span>
+                    <span class="email-provider-name">
+                        <strong>Outlook / Microsoft</strong>
+                        <small>Continue with your Microsoft account</small>
+                    </span>
+                    <span class="email-provider-tick">✓</span>
+                </label>
+            </div>
+
+            <div class="email-scope">
+                <h4><span class="scope-allowed">✓</span> What Paytm can access</h4>
+                <ul>
+                    <li>Read-only search of bill emails and attachments from the last 12 months.</li>
+                    <li>Only messages you've marked important or that come from recognised billers.</li>
+                    <li>Biller name, amount, due date and masked account number.</li>
+                </ul>
+                <h4><span class="scope-blocked">✕</span> What Paytm cannot do</h4>
+                <ul class="email-scope-blocked">
+                    <li>Send, delete or edit your emails.</li>
+                    <li>Read personal conversations outside that bill search.</li>
+                    <li>Add a bill or start a payment without you.</li>
+                </ul>
+            </div>
+
+            <p class="email-consent-note">You'll sign in with <span id="email-provider-name-inline">Google</span>. Paytm never sees your password. Extracted bill details are saved with My Bills; email content is not stored. You can disconnect anytime in Email connection.</p>
+
+            <div class="email-consent-actions">
+                <button class="primary-btn large" id="email-connect-button" onclick="startEmailScan('consent')">Continue with Google</button>
+                <button class="secondary-btn" onclick="declineEmailConsent()">Not now</button>
+            </div>
+            <p class="email-sim-note">Prototype only: email connection is simulated and no inbox is accessed.</p>
+        </div>
+
+        <!-- Screen 20b: Email Discovery Scanning -->
+        <div id="screen-email-scanning" class="screen">
+            <div class="screen-header">
+                <h1>Finding bills</h1>
+            </div>
+
+            <div class="email-scan">
+                <div class="email-scan-orb">
+                    <span class="email-scan-envelope">📧</span>
+                    <span class="email-scan-ring"></span>
+                </div>
+                <h2>Looking through your bill emails</h2>
+                <p class="email-scan-sub" id="email-scan-sub">Searching the last 12 months of Gmail</p>
+
+                <div class="email-scan-steps">
+                    <div class="email-scan-step active"><span class="scan-step-dot"></span>Checking bill senders</div>
+                    <div class="email-scan-step"><span class="scan-step-dot"></span>Reading bill attachments</div>
+                    <div class="email-scan-step"><span class="scan-step-dot"></span>Matching amounts and due dates</div>
+                </div>
+
+                <div class="email-scan-bar"><div class="email-scan-fill"></div></div>
+                <p class="email-scan-privacy">Read-only. Nothing is added until you approve it.</p>
+                <button class="text-btn" onclick="cancelEmailScan()">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Screen 21: Email Candidate Review -->
+        <div id="screen-email-candidates" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-email-connected')">←</button>
+                <h1>Review bills</h1>
+            </div>
+
+            <div class="email-info-banner">
+                <div class="email-info-icon">✓</div>
+                <div class="email-info-text">
+                    <p class="email-eyebrow">Found in your inbox</p>
+                    <h4 id="candidate-banner-title">3 bills found</h4>
+                    <p id="candidate-banner-copy">Nothing is added yet. Uncheck anything that isn't yours.</p>
+                </div>
+            </div>
+
+            <div class="candidate-toolbar" id="candidate-toolbar">
+                <label class="candidate-select-all">
+                    <input type="checkbox" id="select-all-candidates" checked onchange="toggleAllCandidates(this.checked)">
+                    <span>Select all</span>
+                </label>
+                <span class="candidate-toolbar-note">From <strong id="candidate-provider-label">Gmail</strong></span>
+            </div>
+
+            <div class="candidate-list" id="candidate-list"></div>
+
+            <div class="candidate-empty" id="candidate-empty" hidden>
+                <div class="candidate-empty-icon">📭</div>
+                <h3>No new bills found</h3>
+                <p>Everything from your last scan has been reviewed. New bill emails will appear here after the next scan.</p>
+                <button class="secondary-btn" onclick="startEmailScan('connected')">Scan again</button>
+            </div>
+
+            <div class="candidate-actions" id="candidate-actions">
+                <button class="primary-btn large" id="add-candidates-btn" onclick="addSelectedCandidates()">Add 2 bills · ₹8,090</button>
+                <button class="secondary-btn" onclick="navigateTo('screen-my-bills')">Skip for now</button>
+            </div>
+
+            <div class="email-disclaimer">
+                <p>Paytm only reads bill emails you've marked important. <button class="link-btn" onclick="navigateTo('screen-email-connected')">Manage email connection</button></p>
+            </div>
+        </div>
+
+        <!-- Screen 21b: Email Connection Management -->
+        <div id="screen-email-connected" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-my-bills')">←</button>
+                <h1>Email connection</h1>
+            </div>
+
+            <div class="email-account-card">
+                <div class="email-account-mark gmail" id="email-account-mark">G</div>
+                <div class="email-account-info">
+                    <h3 id="email-account-address">s•••••@gmail.com</h3>
+                    <p>Read-only bill access · connected</p>
+                </div>
+                <span class="email-connected-badge">Connected</span>
+            </div>
+
+            <div class="email-scan-stats">
+                <div class="email-scan-stat">
+                    <span class="email-stat-label">Last scan</span>
+                    <strong id="email-last-scan">Not scanned yet</strong>
+                </div>
+                <div class="email-scan-stat">
+                    <span class="email-stat-label">Bills found</span>
+                    <strong id="email-found-count">3</strong>
+                </div>
+                <div class="email-scan-stat">
+                    <span class="email-stat-label">Added</span>
+                    <strong id="email-added-count">0</strong>
+                </div>
+            </div>
+
+            <div class="email-connected-actions">
+                <button class="primary-btn large" onclick="startEmailScan('connected')">Scan now</button>
+                <button class="secondary-btn" onclick="navigateTo('screen-email-candidates')">Review found bills</button>
+            </div>
+
+            <div class="email-scope compact">
+                <h4><span class="scope-allowed">✓</span> What Paytm can access</h4>
+                <p>Read-only search for bill emails and attachments from the last 12 months. No sending, deleting or access to personal conversations.</p>
+            </div>
+
+            <div class="email-disconnect-card">
+                <div>
+                    <h4>Disconnect email</h4>
+                    <p>Stops all future scans. Bills already in My Bills stay.</p>
+                </div>
+                <button class="danger-text-btn" onclick="disconnectEmail()">Disconnect</button>
+            </div>
+        </div>
+
+        <!-- Screen 22: Widget Preview -->
+        <div id="screen-widget-preview" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-my-bills')">←</button>
+                <h1>Widget Preview</h1>
+            </div>
+
+            <div class="widget-section">
+                <h3>Compact Widget</h3>
+                <div class="widget-card compact">
+                    <div class="widget-header">
+                        <span class="widget-title">Paytm Bills</span>
+                        <span class="widget-count">2 need attention</span>
+                    </div>
+                    <div class="widget-item">
+                        <span class="widget-name">Electricity</span>
+                        <span class="widget-due">Due 18 Nov</span>
+                    </div>
+                    <div class="widget-item">
+                        <span class="widget-name">Credit Card</span>
+                        <span class="widget-due">Due 21 Nov</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="widget-section">
+                <h3>Expanded Widget</h3>
+                <div class="widget-card expanded">
+                    <div class="widget-header">
+                        <span class="widget-title">Paytm Bills</span>
+                        <span class="widget-count">2 need attention</span>
+                    </div>
+                    <div class="widget-item">
+                        <div class="widget-item-info">
+                            <span class="widget-name">Electricity</span>
+                            <span class="widget-account">XXXX1234</span>
+                        </div>
+                        <div class="widget-item-right">
+                            <span class="widget-amount">₹1,840</span>
+                            <span class="widget-due">Due 18 Nov</span>
+                        </div>
+                    </div>
+                    <div class="widget-item">
+                        <div class="widget-item-info">
+                            <span class="widget-name">Credit Card</span>
+                            <span class="widget-account">XXXX5678</span>
+                        </div>
+                        <div class="widget-item-right">
+                            <span class="widget-amount">₹6,250</span>
+                            <span class="widget-due">Due 21 Nov</span>
+                        </div>
+                    </div>
+                    <div class="widget-item">
+                        <div class="widget-item-info">
+                            <span class="widget-name">Broadband</span>
+                            <span class="widget-account">XXXX9012</span>
+                        </div>
+                        <div class="widget-item-right">
+                            <span class="widget-amount">₹999</span>
+                            <span class="widget-due">Due 25 Nov</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="widget-section">
+                <h3>Privacy-First Widget</h3>
+                <div class="widget-card privacy">
+                    <div class="widget-header">
+                        <span class="widget-title">Paytm Bills</span>
+                    </div>
+                    <div class="widget-privacy-content">
+                        <span class="widget-count">2 bills need attention</span>
+                        <span class="widget-due">Next payment due tomorrow</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="widget-info">
+                <p><strong>Note:</strong> Widgets are for quick glance and navigation only. No payment actions available. Tap to open the app.</p>
+            </div>
+        </div>
+
+        <!-- Screen 23: Camera Permission Denied -->
+        <div id="screen-camera-denied" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-camera')">←</button>
+                <h1>Camera access needed</h1>
+            </div>
+
+            <div class="permission-state">
+                <div class="permission-icon">📷</div>
+                <h2>Camera permission required</h2>
+                <p>To scan bills, Paytm needs access to your camera. You can enable camera access in your device settings.</p>
+
+                <div class="permission-actions">
+                    <button class="primary-btn" onclick="alert('Open device settings (prototype)')">Enable camera access</button>
+                    <button class="secondary-btn" onclick="navigateTo('screen-add-bill')">Use upload instead</button>
+                </div>
+
+                <div class="permission-note">
+                    <p>You can still add bills by uploading an image or PDF, or by searching for a biller.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 24: Notification Permission Denied -->
+        <div id="screen-notification-denied" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-reminder')">←</button>
+                <h1>Notifications disabled</h1>
+            </div>
+
+            <div class="permission-state">
+                <div class="permission-icon">🔔</div>
+                <h2>Notification permission denied</h2>
+                <p>Bill reminders won't work without notification permission. You can enable notifications in your device settings.</p>
+
+                <div class="permission-actions">
+                    <button class="primary-btn" onclick="alert('Open device settings (prototype)')">Enable notifications</button>
+                    <button class="secondary-btn" onclick="navigateTo('screen-reminder')">Continue without reminders</button>
+                </div>
+
+                <div class="permission-note">
+                    <p>You can still view bills and use the calendar. Reminders will be available when notifications are enabled.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 25: Email Disconnected -->
+        <div id="screen-email-disconnected" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-my-bills')">←</button>
+                <h1>Email disconnected</h1>
+            </div>
+
+            <div class="permission-state">
+                <div class="permission-icon">📧</div>
+                <h2>Email access disconnected</h2>
+                <p>Your email connection has been revoked. You can reconnect anytime to discover bills from your inbox.</p>
+
+                <div class="permission-actions">
+                    <button class="primary-btn" onclick="openEmailConsent()">Reconnect email</button>
+                    <button class="secondary-btn" onclick="navigateTo('screen-my-bills')">Continue without email</button>
+                </div>
+
+                <div class="permission-note">
+                    <p>You can still add bills manually, by camera, or by uploading files.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 26: Bill History -->
+        <div id="screen-bill-history" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-bill-detail')">←</button>
+                <h1>Bill History</h1>
+            </div>
+
+            <div class="history-header">
+                <div class="history-bill-info">
+                    <div class="bill-icon">⚡</div>
+                    <div class="history-bill-details">
+                        <h3>Electricity</h3>
+                        <span class="history-account">XXXX1234</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="history-stats">
+                <div class="stat-item">
+                    <span class="stat-value">12</span>
+                    <span class="stat-label">Bills tracked</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">₹1,850</span>
+                    <span class="stat-label">Avg amount</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">18th</span>
+                    <span class="stat-label">Typical due date</span>
+                </div>
+            </div>
+
+            <div class="history-list">
+                <h3 class="history-section-title">Recent bills</h3>
+
+                <div class="history-item" onclick="navigateTo('screen-smart-insight')">
+                    <div class="history-month">
+                        <span class="month-name">November</span>
+                        <span class="month-year">2026</span>
+                    </div>
+                    <div class="history-amount">₹3,150</div>
+                    <div class="history-status paid">Paid</div>
+                </div>
+
+                <div class="history-item" onclick="navigateTo('screen-smart-insight')">
+                    <div class="history-month">
+                        <span class="month-name">October</span>
+                        <span class="month-year">2026</span>
+                    </div>
+                    <div class="history-amount">₹1,840</div>
+                    <div class="history-status paid">Paid</div>
+                </div>
+
+                <div class="history-item" onclick="navigateTo('screen-smart-insight')">
+                    <div class="history-month">
+                        <span class="month-name">September</span>
+                        <span class="month-year">2026</span>
+                    </div>
+                    <div class="history-amount">₹1,650</div>
+                    <div class="history-status paid">Paid</div>
+                </div>
+
+                <div class="history-item" onclick="navigateTo('screen-smart-insight')">
+                    <div class="history-month">
+                        <span class="month-name">August</span>
+                        <span class="month-year">2026</span>
+                    </div>
+                    <div class="history-amount">₹1,780</div>
+                    <div class="history-status paid">Paid</div>
+                </div>
+            </div>
+
+            <div class="history-insight-link">
+                <button class="secondary-btn" onclick="navigateTo('screen-smart-insight')">
+                    View bill insight analysis
+                </button>
+            </div>
+        </div>
+
+        <!-- All Bill Payments Bottom Sheet -->
+        <div id="all-bills-sheet" class="bottom-sheet">
+            <div class="bottom-sheet-content">
+                <div class="bottom-sheet-handle"></div>
+                <h2>All Bill Payments</h2>
+
+                <div class="all-bills-grid">
+                    <button type="button" class="biller-tile" onclick="openBillerSearch('Electricity')">
+                        <span class="biller-tile-icon">⚡</span>
+                        <span class="biller-tile-label">Electricity</span>
+                    </button>
+                    <button type="button" class="biller-tile" onclick="openBillerSearch('Water')">
+                        <span class="biller-tile-icon">💧</span>
+                        <span class="biller-tile-label">Water</span>
+                    </button>
+                    <button type="button" class="biller-tile" onclick="openBillerSearch('Gas')">
+                        <span class="biller-tile-icon">🔥</span>
+                        <span class="biller-tile-label">Piped Gas</span>
+                    </button>
+                    <button type="button" class="biller-tile" onclick="openBillerSearch('Broadband')">
+                        <span class="biller-tile-icon">🌐</span>
+                        <span class="biller-tile-label">Broadband</span>
+                    </button>
+                    <button type="button" class="biller-tile" onclick="openBillerSearch('Mobile Postpaid')">
+                        <span class="biller-tile-icon">📱</span>
+                        <span class="biller-tile-label">Mobile Postpaid</span>
+                    </button>
+                    <button type="button" class="biller-tile" onclick="openBillerSearch('DTH')">
+                        <span class="biller-tile-icon">📡</span>
+                        <span class="biller-tile-label">DTH</span>
+                    </button>
+                    <button type="button" class="biller-tile" onclick="openBillerSearch('Credit Card')">
+                        <span class="biller-tile-icon">💳</span>
+                        <span class="biller-tile-label">Credit Card</span>
+                    </button>
+                    <button type="button" class="biller-tile" onclick="openBillerSearch('Loan EMI')">
+                        <span class="biller-tile-icon">🏦</span>
+                        <span class="biller-tile-label">Loan EMI</span>
+                    </button>
+                    <button type="button" class="biller-tile" onclick="openBillerSearch('Insurance')">
+                        <span class="biller-tile-icon">🛡️</span>
+                        <span class="biller-tile-label">Insurance</span>
+                    </button>
+                    <button type="button" class="biller-tile" onclick="openBillerSearch('FASTag')">
+                        <span class="biller-tile-icon">🚗</span>
+                        <span class="biller-tile-label">FASTag</span>
+                    </button>
+                    <button type="button" class="biller-tile" onclick="openBillerSearch('Cable TV')">
+                        <span class="biller-tile-icon">📺</span>
+                        <span class="biller-tile-label">Cable TV</span>
+                    </button>
+                    <button type="button" class="biller-tile" onclick="openBillerSearch('Municipal Tax')">
+                        <span class="biller-tile-icon">🏛️</span>
+                        <span class="biller-tile-label">Municipal Tax</span>
+                    </button>
+                </div>
+
+                <button class="primary-btn" onclick="closeAllBillsSheet(); navigateTo('screen-add-bill')">
+                    + Add New Bill
+                </button>
+                <button class="secondary-btn" onclick="closeAllBillsSheet()">Close</button>
+            </div>
+        </div>
+
+        <!-- Home Selector Bottom Sheet -->
+        <div id="home-selector-sheet" class="bottom-sheet">
+            <div class="bottom-sheet-content">
+                <div class="bottom-sheet-handle"></div>
+                <h2>Select home</h2>
+
+                <div class="home-selector-list">
+                    <div class="home-selector-item" onclick="selectHome('personal')">
+                        <div class="home-selector-icon">
+                            <span class="house-icon">🏠</span>
+                            <span class="status-icon check">✓</span>
+                        </div>
+                        <div class="home-selector-info">
+                            <h3>Personal Home</h3>
+                            <p>All tracked bills paid</p>
+                        </div>
+                    </div>
+
+                    <div class="home-selector-item" onclick="selectHome('flatmates')">
+                        <div class="home-selector-icon">
+                            <span class="house-icon">👥</span>
+                            <span class="status-icon clock">⏰</span>
+                        </div>
+                        <div class="home-selector-info">
+                            <h3>Flatmates</h3>
+                            <p>2 pending</p>
+                        </div>
+                    </div>
+
+                    <div class="home-selector-item add" onclick="showAddHomeModal()">
+                        <div class="home-selector-icon">
+                            <span class="house-icon add">+</span>
+                        </div>
+                        <div class="home-selector-info">
+                            <h3>Add another home</h3>
+                            <p>Create a new household</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="secondary-btn" onclick="closeHomeSelector()">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Rename Home Modal -->
+        <div id="rename-home-modal" class="modal">
+            <div class="modal-content">
+                <h2>Rename home</h2>
+                <p>Give this home a new name</p>
+
+                <div class="form-field">
+                    <label>Home name</label>
+                    <input type="text" id="rename-home-name" placeholder="e.g., Parents' Home, Office">
+                </div>
+
+                <div class="modal-actions">
+                    <button class="primary-btn" onclick="renameHome()">Save</button>
+                    <button class="secondary-btn" onclick="closeRenameHomeModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Home Modal -->
+        <div id="add-home-modal" class="modal">
+            <div class="modal-content">
+                <h2>Create new home</h2>
+                <p>Give your new household a name</p>
+
+                <div class="form-field">
+                    <label>Home name</label>
+                    <input type="text" placeholder="e.g., Parents' Home, Office">
+                </div>
+
+                <div class="form-field">
+                    <label>Why this home exists <span class="optional-chip">optional</span></label>
+                    <input type="text" id="add-home-reason" placeholder="e.g., Shared rent & utilities">
+                </div>
+
+                <details class="add-home-members">
+                    <summary>Add people to this home <span class="optional-chip">optional</span></summary>
+                    <p>Up to 5 people can join this home. Share the invite link — when they accept, their Paytm username is added automatically.</p>
+                    <p class="add-home-invite-link">Invite link: <span id="add-home-invite-link-text">paytm://join/hm-7Q2K9P</span> <button type="button" class="copy-link-btn" onclick="copyInviteLink('add-home-invite-link-text')">Copy</button></p>
+                </details>
+
+                <div class="modal-actions">
+                    <button class="primary-btn" onclick="createHome()">Create home</button>
+                    <button class="secondary-btn" onclick="closeAddHomeModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mark Paid Modal -->
+        <div id="mark-paid-modal" class="modal">
+            <div class="modal-content">
+                <h2>Mark as paid</h2>
+                <p>How did you pay this bill?</p>
+
+                <div class="payment-methods">
+                    <label class="payment-method">
+                        <input type="radio" name="payment-method" value="app">
+                        <span>Another app</span>
+                    </label>
+                    <label class="payment-method">
+                        <input type="radio" name="payment-method" value="bank">
+                        <span>Bank app/website</span>
+                    </label>
+                    <label class="payment-method">
+                        <input type="radio" name="payment-method" value="cash">
+                        <span>Cash/Cheque</span>
+                    </label>
+                    <label class="payment-method">
+                        <input type="radio" name="payment-method" value="other">
+                        <span>Other</span>
+                    </label>
+                </div>
+
+                <p class="payment-rule-note">Bills marked paid elsewhere don't count toward the Paytm bill payment reward.</p>
+
+                <div class="modal-actions">
+                    <button class="primary-btn" onclick="confirmMarkPaid()">I have paid this bill</button>
+                    <button class="secondary-btn" onclick="closeMarkPaidModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reward prompt modal (match quota) -->
+        <div class="modal" id="reward-prompt-modal">
+            <div class="modal-content reward-prompt-content">
+                <div class="reward-prompt-icon">🎯</div>
+                <h2>Match the bill payment quota</h2>
+                <p id="reward-prompt-text">Pay 2 more qualifying bills to unlock your reward.</p>
+                <div class="reward-prompt-progress">
+                    <div class="voucher-progress-bar">
+                        <div class="progress-fill" id="reward-prompt-fill" style="width: 33%"></div>
+                    </div>
+                    <span class="reward-prompt-meta" id="reward-prompt-meta">1 of 3 completed · only successful Paytm payments count</span>
+                </div>
+                <div class="modal-actions">
+                    <button class="primary-btn" onclick="closeRewardPrompt(); navigateTo('screen-my-bills')">Pay a bill</button>
+                    <button class="secondary-btn" onclick="closeRewardPrompt(); navigateTo('screen-voucher-details')">View reward details</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reward celebration overlay -->
+        <div class="reward-celebration" id="reward-celebration" hidden>
+            <div class="reward-celebration-backdrop"></div>
+            <div class="reward-celebration-confetti" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <div class="reward-celebration-card">
+                <div class="reward-celebration-icon">🎁</div>
+                <h2>Reward unlocked!</h2>
+                <p>You've completed 3 qualifying bill payments. Your voucher is ready to claim.</p>
+                <button class="primary-btn" onclick="closeRewardCelebration(); navigateTo('screen-reward-chooser'); renderRewardChooser()">Claim reward</button>
+            </div>
+        </div>
+
+        <!-- Undo Toast -->
+        <div id="undo-toast" class="toast hidden">
+            <span>Bill marked as paid</span>
+            <button class="undo-btn" onclick="undoMarkPaid()">Undo</button>
+        </div>
+
+        <!-- Lightweight app toast -->
+        <div id="app-toast" class="app-toast hidden" role="status" aria-live="polite"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
