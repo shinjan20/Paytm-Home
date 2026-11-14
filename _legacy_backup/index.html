@@ -182,24 +182,57 @@
             </div>
 
             <!-- Rewards / Voucher section on home screen -->
-            <div class="home-rewards-section">
-                <div class="home-rewards-head-row">
-                    <h3 class="home-rewards-title">Rewards you can win</h3>
-                    <button type="button" class="link-btn" onclick="navigateTo('screen-voucher-details')">View all →</button>
-                </div>
-                <div class="home-rewards-progress-card" onclick="openHomeReward()">
-                    <div class="home-rewards-progress-icon">🎁</div>
-                    <div class="home-rewards-progress-info">
-                        <p class="home-rewards-progress-title">Pay 3 bills to unlock a reward</p>
-                        <p class="home-rewards-progress-status" id="home-rewards-status">In progress · 1 of 3 qualifying payments</p>
+            <div class="rewards-card">
+                <div class="rewards-header">
+                    <div class="rewards-icon-wrapper">
+                        <span class="rewards-icon">🎁</span>
                     </div>
-                    <span class="home-rewards-arrow">→</span>
+                    <div class="rewards-title-group">
+                        <h3 class="rewards-title">Rewards you can win</h3>
+                        <p class="rewards-subtitle">Pay bills to earn rewards</p>
+                    </div>
+                    <button type="button" class="view-all-btn" onclick="navigateTo('screen-voucher-details')">View all →</button>
                 </div>
-                <div class="voucher-progress-bar home-rewards-bar">
-                    <div class="progress-fill" id="home-rewards-fill" style="width: 33%"></div>
+                
+                <div class="rewards-progress-container">
+                    <div class="rewards-progress-main">
+                        <div class="rewards-progress-text">
+                            <span class="rewards-current">1</span>
+                            <span class="rewards-total">/3 bills paid</span>
+                        </div>
+                        <div class="rewards-progress-bar">
+                            <div class="progress-fill" id="home-rewards-fill" style="width: 33%"></div>
+                        </div>
+                    </div>
+                    <div class="rewards-reward-preview">
+                        <div class="reward-preview-item">
+                            <span class="reward-icon">💰</span>
+                            <div class="reward-info">
+                                <p class="reward-name">₹50 Cashback</p>
+                                <p class="reward-status">Pay 2 more bills</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="home-rewards-list" id="home-rewards-list"></div>
-                <button type="button" class="home-rewards-expand" id="home-rewards-toggle" onclick="toggleRewardsExpand()" aria-label="Show more rewards"><span class="home-rewards-expand-arrow">↓</span></button>
+
+                <div class="rewards-list-simple">
+                    <div class="reward-card-simple locked">
+                        <div class="reward-card-icon">🏷️</div>
+                        <div class="reward-card-content">
+                            <p class="reward-card-title">10% Off Next Bill</p>
+                            <p class="reward-card-subtitle">Locked</p>
+                        </div>
+                        <span class="reward-lock-icon">🔒</span>
+                    </div>
+                    <div class="reward-card-simple locked">
+                        <div class="reward-card-icon">⚡</div>
+                        <div class="reward-card-content">
+                            <p class="reward-card-title">Free Bill Payment</p>
+                            <p class="reward-card-subtitle">Locked</p>
+                        </div>
+                        <span class="reward-lock-icon">🔒</span>
+                    </div>
+                </div>
             </div>
 
             <div class="section">

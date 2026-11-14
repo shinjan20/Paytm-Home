@@ -5692,70 +5692,188 @@ body {
     font-weight: 600;
 }
 
-/* Rewards / voucher section on home screen */
-.home-rewards-card {
-    margin: 0 0 16px;
-    padding: 14px;
+/* Rewards section - Paytm style */
+.rewards-card {
+    background: white;
     border: 2px solid #d0d0d0;
-    border-radius: 14px;
-    background: linear-gradient(160deg, #fffaf0 0%, #fff3d6 100%);
-    cursor: pointer;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
 }
-.home-rewards-head {
+
+.rewards-header {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 10px;
+    margin-bottom: 16px;
 }
-.home-rewards-icon {
+
+.rewards-icon-wrapper {
+    width: 40px;
+    height: 40px;
+    background: #e8f5e9;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    flex: 0 0 40px;
-    border-radius: 12px;
-    background: #ffb300;
-    color: #3b2a00;
-    font-size: 20px;
-}
-.home-rewards-info {
-    flex: 1;
-    min-width: 0;
-}
-.home-rewards-info h3 {
-    margin-bottom: 2px;
-    font-size: 15px;
-    font-weight: 700;
-    color: #3b2a00;
-}
-.home-rewards-status {
-    margin: 0;
-    font-size: 12px;
-    color: #6b5a2a;
+    flex-shrink: 0;
 }
 
-.home-rewards-progress-title {
-    margin: 0;
+.rewards-icon {
+    font-size: 20px;
+}
+
+.rewards-title-group {
+    flex: 1;
+}
+
+.rewards-title {
     font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+}
+
+.rewards-subtitle {
+    font-size: 12px;
+    color: #6b7280;
+    margin: 2px 0 0 0;
+}
+
+.view-all-btn {
+    background: none;
+    border: none;
+    color: #00baf2;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0;
+}
+
+.view-all-btn:hover {
+    text-decoration: underline;
+}
+
+.rewards-progress-container {
+    background: #f7f8fa;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+}
+
+.rewards-progress-main {
+    margin-bottom: 12px;
+}
+
+.rewards-progress-text {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.rewards-current {
+    font-size: 24px;
     font-weight: 700;
     color: #00baf2;
 }
-.home-rewards-arrow {
-    color: #b8860b;
-    font-size: 18px;
-    font-weight: 700;
+
+.rewards-total {
+    font-size: 14px;
+    color: #6b7280;
 }
-.home-rewards-bar {
+
+.rewards-progress-bar {
     height: 6px;
+    background: #e5e7eb;
     border-radius: 3px;
-    background: #f3e2b0;
     overflow: hidden;
 }
-.home-rewards-bar .progress-fill {
+
+.rewards-progress-bar .progress-fill {
     height: 100%;
+    background: #00baf2;
     border-radius: 3px;
-    background: linear-gradient(90deg, #ffb300, #ff9800);
+    transition: width 0.3s ease;
+}
+
+.rewards-reward-preview {
+    border-top: 1px solid #e5e7eb;
+    padding-top: 12px;
+}
+
+.reward-preview-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.reward-icon {
+    font-size: 28px;
+}
+
+.reward-info {
+    flex: 1;
+}
+
+.reward-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+}
+
+.reward-status {
+    font-size: 12px;
+    color: #6b7280;
+    margin: 2px 0 0 0;
+}
+
+.rewards-list-simple {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.reward-card-simple {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.reward-card-simple.locked {
+    opacity: 0.6;
+}
+
+.reward-card-icon {
+    font-size: 20px;
+}
+
+.reward-card-content {
+    flex: 1;
+}
+
+.reward-card-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #111827;
+    margin: 0;
+}
+
+.reward-card-subtitle {
+    font-size: 11px;
+    color: #6b7280;
+    margin: 2px 0 0 0;
+}
+
+.reward-lock-icon {
+    font-size: 16px;
+    opacity: 0.5;
 }
 
 /* Reward prompt modal */
