@@ -194,43 +194,59 @@
                     <button type="button" class="view-all-btn" onclick="navigateTo('screen-voucher-details')">View all →</button>
                 </div>
                 
-                <div class="rewards-progress-container">
+                <div class="rewards-hero">
                     <div class="rewards-progress-main">
-                        <div class="rewards-progress-text">
-                            <span class="rewards-current">1</span>
-                            <span class="rewards-total">/3 bills paid</span>
+                        <div class="rewards-progress-circle">
+                            <svg class="progress-ring" width="80" height="80">
+                                <circle class="progress-ring-bg" cx="40" cy="40" r="35" fill="none" stroke="#e5e7eb" stroke-width="6"/>
+                                <circle class="progress-ring-fill" cx="40" cy="40" r="35" fill="none" stroke="#00baf2" stroke-width="6" 
+                                    stroke-dasharray="220" stroke-dashoffset="147" stroke-linecap="round" transform="rotate(-90 40 40)"/>
+                            </svg>
+                            <div class="progress-text">
+                                <span class="progress-number">1</span>
+                                <span class="progress-label">/3</span>
+                            </div>
                         </div>
-                        <div class="rewards-progress-bar">
-                            <div class="progress-fill" id="home-rewards-fill" style="width: 33%"></div>
+                        <div class="rewards-progress-info">
+                            <p class="rewards-progress-title">Almost there!</p>
+                            <p class="rewards-progress-desc">Pay 2 more bills to unlock rewards</p>
                         </div>
                     </div>
-                    <div class="rewards-reward-preview">
-                        <div class="reward-preview-item">
-                            <span class="reward-icon">💰</span>
-                            <div class="reward-info">
-                                <p class="reward-name">₹50 Cashback</p>
-                                <p class="reward-status">Pay 2 more bills</p>
-                            </div>
+                    <div class="rewards-next-reward">
+                        <div class="next-reward-icon">💰</div>
+                        <div class="next-reward-info">
+                            <p class="next-reward-title">₹50 Cashback</p>
+                            <p class="next-reward-status">Next reward</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="rewards-list-simple">
-                    <div class="reward-card-simple locked">
-                        <div class="reward-card-icon">🏷️</div>
-                        <div class="reward-card-content">
-                            <p class="reward-card-title">10% Off Next Bill</p>
-                            <p class="reward-card-subtitle">Locked</p>
+                <div class="rewards-list">
+                    <div class="reward-card locked">
+                        <div class="reward-card-header">
+                            <div class="reward-card-icon">🏷️</div>
+                            <div class="reward-card-content">
+                                <p class="reward-card-title">10% Off Next Bill</p>
+                                <p class="reward-card-subtitle">Unlock after 3 bills</p>
+                            </div>
                         </div>
-                        <span class="reward-lock-icon">🔒</span>
+                        <div class="reward-card-footer">
+                            <span class="reward-progress-mini">0/3</span>
+                            <span class="reward-lock">🔒</span>
+                        </div>
                     </div>
-                    <div class="reward-card-simple locked">
-                        <div class="reward-card-icon">⚡</div>
-                        <div class="reward-card-content">
-                            <p class="reward-card-title">Free Bill Payment</p>
-                            <p class="reward-card-subtitle">Locked</p>
+                    <div class="reward-card locked">
+                        <div class="reward-card-header">
+                            <div class="reward-card-icon">⚡</div>
+                            <div class="reward-card-content">
+                                <p class="reward-card-title">Free Bill Payment</p>
+                                <p class="reward-card-subtitle">Unlock after 5 bills</p>
+                            </div>
                         </div>
-                        <span class="reward-lock-icon">🔒</span>
+                        <div class="reward-card-footer">
+                            <span class="reward-progress-mini">0/5</span>
+                            <span class="reward-lock">🔒</span>
+                        </div>
                     </div>
                 </div>
             </div>
