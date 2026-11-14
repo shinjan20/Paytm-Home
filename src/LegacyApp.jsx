@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import legacyHtml from '../_legacy_backup/index.html?raw';
 import legacyScript from '../_legacy_backup/script.js?raw';
 
-const SCREEN_TO_PATH = {
+export const SCREEN_TO_PATH = {
   'screen-recharge-bills': '/',
   'screen-my-bills': '/bills',
   'screen-home-selection': '/homes',
