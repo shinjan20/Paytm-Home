@@ -218,6 +218,25 @@ svg text {
     border-color: #00baf2;
 }
 
+.home-card.invite-open {
+    border-color: #bfe3f6;
+    background: #f4fbff;
+    box-shadow: inset 3px 0 0 #00baf2;
+}
+
+.home-card.invite-open:hover {
+    box-shadow: inset 3px 0 0 #00baf2, 0 2px 8px rgba(0, 90, 140, 0.12);
+}
+
+.home-card.invite-open .home-icon {
+    background: #e6f8fe;
+    box-shadow: inset 0 0 0 1px #c9ebf9;
+}
+
+.home-card.invite-open .home-rename-btn {
+    display: none;
+}
+
 .home-icon {
     width: 48px;
     height: 48px;
@@ -237,18 +256,41 @@ svg text {
 
 .home-info {
     flex: 1;
+    min-width: 0;
 }
 
+.home-info h2,
 .home-info h3 {
     font-size: 16px;
     font-weight: 600;
-    margin-bottom: 4px;
+    line-height: 1.3;
+    color: #1c2f4a;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .home-info p {
     font-size: 13px;
-    color: #666;
-    margin-bottom: 4px;
+    color: #5f6b7a;
+    margin-bottom: 0;
+}
+
+.home-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 8px;
+    margin-top: 8px;
+    min-height: 32px;
+}
+
+.home-meta-row .home-badge {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .home-badge {
@@ -259,6 +301,30 @@ svg text {
     border-radius: 12px;
     font-size: 12px;
     font-weight: 500;
+}
+
+.home-badge-invite {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #e6f8fe;
+    color: #0b4a9e;
+    padding: 4px 7px;
+    font-weight: 600;
+}
+
+.home-badge-dot {
+    flex: 0 0 6px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #007a9e;
+}
+
+.home-badge-joined {
+    background: #eef2f7;
+    color: #435466;
+    font-weight: 600;
 }
 
 .home-arrow {
@@ -1565,15 +1631,119 @@ svg text {
 
 /* Bill Detail — tighter page chrome so the bill fits without scrolling */
 #screen-bill-detail {
-    padding-bottom: 32px;
+    padding-bottom: 24px;
 }
 
 #screen-bill-detail .screen-header {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
+}
+
+#screen-bill-detail .screen-header h1 {
+    font-size: 18px;
 }
 
 #screen-bill-detail .link-btn {
     margin-top: 4px;
+}
+
+#screen-bill-detail .bill-detail-header {
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+#screen-bill-detail .bill-icon-large {
+    width: 40px;
+    height: 40px;
+    font-size: 26px;
+}
+
+#screen-bill-detail .bill-detail-title-row {
+    gap: 8px;
+    margin-bottom: 1px;
+}
+
+#screen-bill-detail .bill-detail-title-row h2 {
+    font-size: 18px;
+    line-height: 1.2;
+}
+
+#screen-bill-detail .bill-amount-large {
+    font-size: 30px;
+    line-height: 1.2;
+}
+
+#screen-bill-detail .bill-meta {
+    padding: 0 8px 0 10px;
+    margin-bottom: 8px;
+}
+
+#screen-bill-detail .meta-source-icon {
+    flex-basis: 28px;
+    width: 28px;
+    height: 28px;
+    border-radius: 9px;
+}
+
+#screen-bill-detail .meta-source-icon svg {
+    width: 15px;
+    height: 15px;
+}
+
+#screen-bill-detail .voucher-hint-card {
+    align-items: center;
+    gap: 10px;
+    padding: 10px 10px 10px 12px;
+    margin-bottom: 8px;
+}
+
+#screen-bill-detail .voucher-hint-icon {
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+}
+
+#screen-bill-detail .voucher-hint-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+#screen-bill-detail .voucher-hint-body h3 {
+    font-size: 13px;
+    line-height: 1.25;
+    margin-bottom: 1px;
+}
+
+#screen-bill-detail .voucher-hint-body p {
+    font-size: 12px;
+    line-height: 1.35;
+}
+
+#screen-bill-detail .action-buttons {
+    margin-top: 10px;
+}
+
+.voucher-view-btn {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-width: 44px;
+    min-height: 44px;
+    margin: -6px -4px -6px 0;
+    padding: 0 4px;
+    border: 0;
+    background: none;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    color: #0b4a9e;
+    cursor: pointer;
+}
+
+.voucher-view-btn span {
+    font-size: 16px;
+    line-height: 1;
 }
 
 /* Bill Detail */
@@ -2936,22 +3106,24 @@ svg text {
 }
 
 .voucher-card-large .voucher-scope {
-    margin-top: 8px;
+    margin-top: 6px;
+    font-size: 11px;
+    line-height: 1.35;
 }
 
 /* Voucher Details Screen */
 .voucher-card-large {
-    background: linear-gradient(135deg, #f8fbff 0%, #e3ebf8 100%);
+    padding: 20px;
+    margin-bottom: 16px;
     border-radius: 16px;
-    padding: 24px;
+    background: linear-gradient(135deg, #f8fbff 0%, #e3ebf8 100%);
     text-align: center;
-    margin-bottom: 20px;
 }
 
 .voucher-icon-large {
-    width: 64px;
-    height: 64px;
-    margin: 0 auto 12px;
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 8px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -2961,24 +3133,91 @@ svg text {
 }
 
 .voucher-icon-large svg {
-    width: 38px;
-    height: 38px;
+    width: 30px;
+    height: 30px;
 }
 
 .voucher-card-large h2 {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
-    margin-bottom: 4px;
+    line-height: 1.25;
+    margin-bottom: 3px;
 }
 
 .voucher-subtitle {
-    font-size: 13px;
-    color: #666;
-    margin-bottom: 20px;
+    font-size: 12px;
+    color: #5f6b7a;
+    margin-bottom: 14px;
+    line-height: 1.4;
+}
+
+.voucher-example {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    padding: 10px 12px;
+    border: 1px dashed #9fc4e8;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.78);
+    text-align: left;
+}
+
+.voucher-example-value {
+    flex: 0 0 auto;
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 1;
+    color: #0b4a9e;
+    white-space: nowrap;
+}
+
+.voucher-example-value span {
+    margin-left: 1px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #5f6b7a;
+}
+
+.voucher-example-copy {
+    min-width: 0;
+}
+
+.voucher-example-label {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #5f6b7a;
+}
+
+.voucher-example-copy p {
+    font-size: 12px;
+    line-height: 1.35;
+    color: #1c2f4a;
 }
 
 .voucher-progress-large {
-    margin-bottom: 16px;
+    margin-bottom: 0;
+    text-align: left;
+}
+
+.voucher-progress-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.voucher-card-large .progress-text {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #1c2f4a;
 }
 
 .progress-label {
@@ -2989,17 +3228,17 @@ svg text {
 }
 
 .progress-bar-large {
-    height: 12px;
+    height: 8px;
     background: rgba(0, 0, 0, 0.1);
-    border-radius: 6px;
-    margin-bottom: 8px;
+    border-radius: 4px;
+    margin-bottom: 6px;
     overflow: hidden;
 }
 
 .progress-fill-large {
     height: 100%;
     background: #0b4a9e;
-    border-radius: 6px;
+    border-radius: 4px;
     transition: width 0.3s;
 }
 
@@ -3014,6 +3253,14 @@ svg text {
     border-radius: 20px;
     font-size: 13px;
     font-weight: 500;
+}
+
+.voucher-card-large .voucher-status-badge {
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    line-height: 1.3;
+    white-space: nowrap;
 }
 
 .voucher-status-badge.in-progress {
@@ -3268,6 +3515,90 @@ svg text {
 .home-selector-info p {
     font-size: 13px;
     color: #666;
+}
+
+/* Compact mobile home switcher */
+#home-selector-sheet .bottom-sheet-content {
+    padding: 16px 16px 20px;
+}
+
+#home-selector-sheet .bottom-sheet-handle {
+    margin-bottom: 12px;
+}
+
+#home-selector-sheet .bottom-sheet-content h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+#home-selector-sheet .home-selector-list {
+    gap: 0;
+    margin-bottom: 12px;
+    overflow: hidden;
+    border: 1px solid #e3ebf6;
+    border-radius: 14px;
+    background: #fff;
+}
+
+#home-selector-sheet .home-selector-item {
+    min-height: 56px;
+    padding: 10px 12px;
+    gap: 10px;
+    border-radius: 0;
+    background: #fff;
+}
+
+#home-selector-sheet .home-selector-item + .home-selector-item {
+    border-top: 1px solid #eef1f5;
+}
+
+#home-selector-sheet .home-selector-item:hover {
+    background: #f8fbff;
+}
+
+#home-selector-sheet .home-selector-item.add {
+    border: 0;
+    border-top: 1px solid #eef1f5;
+    background: #fff;
+}
+
+#home-selector-sheet .home-selector-icon {
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+}
+
+#home-selector-sheet .house-icon {
+    font-size: 24px;
+    line-height: 1;
+}
+
+#home-selector-sheet .house-icon.add {
+    width: 36px;
+    height: 36px;
+    font-size: 22px;
+}
+
+#home-selector-sheet .status-icon {
+    right: -2px;
+    bottom: -2px;
+    width: 18px;
+    height: 18px;
+    font-size: 11px;
+}
+
+#home-selector-sheet .home-selector-info h2,
+#home-selector-sheet .home-selector-info h3 {
+    margin-bottom: 2px;
+    font-size: 15px;
+    line-height: 1.25;
+    color: #1c2f4a;
+}
+
+#home-selector-sheet .home-selector-info p {
+    font-size: 12px;
+    line-height: 1.35;
+    color: #5f6b7a;
 }
 
 /* Empty State */
@@ -6672,19 +7003,34 @@ svg text {
 
 /* Rename home affordance on home cards */
 .home-rename-btn {
+    position: relative;
     flex: 0 0 auto;
-    border: 0;
-    background: transparent;
+    margin-left: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+    padding: 0 10px;
+    border: 1px solid #cfe0f2;
+    border-radius: 8px;
+    background: #fff;
     color: #0b4a9e;
     font-family: inherit;
     font-size: 12px;
     font-weight: 600;
+    line-height: 1;
     cursor: pointer;
-    padding: 4px 6px;
-    border-radius: 6px;
+    white-space: nowrap;
+}
+.home-rename-btn::before {
+    content: "";
+    position: absolute;
+    inset: -6px -4px;
+    border-radius: 10px;
 }
 .home-rename-btn:hover {
     background: #eef4ff;
+    border-color: #b9d6f2;
 }
 
 /* 404 Not Found Screen */

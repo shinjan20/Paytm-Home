@@ -483,10 +483,12 @@ Please change the parent <Route path="${e}"> to <Route path="${e===`/`?`*`:`${e}
                     <div class="home-info">
                         <h2>Personal Home</h2>
                         <p>Your personal bills</p>
-                        <span class="home-badge">3 bills need attention</span>
+                        <div class="home-meta-row">
+                            <span class="home-badge">3 bills need attention</span>
+                            <button type="button" class="home-rename-btn" onclick="event.stopPropagation(); openRenameHome('Personal Home')" aria-label="Rename Personal Home">Rename</button>
+                        </div>
                     </div>
-                    <button type="button" class="home-rename-btn" onclick="event.stopPropagation(); openRenameHome('Personal Home')" aria-label="Rename Personal Home">Rename</button>
-                    <div class="home-arrow">→</div>
+                    <div class="home-arrow" aria-hidden="true">→</div>
                 </div>
 
                 <div class="home-card" onclick="navigateTo('screen-flatmates-home')">
@@ -494,21 +496,25 @@ Please change the parent <Route path="${e}"> to <Route path="${e===`/`?`*`:`${e}
                     <div class="home-info">
                         <h2>Flatmates</h2>
                         <p>Shared household bills</p>
-                        <span class="home-badge">2 bills need attention</span>
+                        <div class="home-meta-row">
+                            <span class="home-badge">2 bills need attention</span>
+                            <button type="button" class="home-rename-btn" onclick="event.stopPropagation(); openRenameHome('Flatmates')" aria-label="Rename Flatmates">Rename</button>
+                        </div>
                     </div>
-                    <button type="button" class="home-rename-btn" onclick="event.stopPropagation(); openRenameHome('Flatmates')" aria-label="Rename Flatmates">Rename</button>
-                    <div class="home-arrow">→</div>
+                    <div class="home-arrow" aria-hidden="true">→</div>
                 </div>
 
-                <div class="home-card" onclick="navigateTo('screen-home-details')">
+                <div class="home-card invite-open" onclick="navigateTo('screen-home-details')">
                     <div class="home-icon">🫂</div>
                     <div class="home-info">
                         <h2>Friends apartment</h2>
                         <p>Shared rent &amp; utilities</p>
-                        <span class="home-badge">2 members · invite open</span>
+                        <div class="home-meta-row">
+                            <span class="home-badge home-badge-invite"><span class="home-badge-dot" aria-hidden="true"></span>Invite open · 2 members</span>
+                            <button type="button" class="home-rename-btn" onclick="event.stopPropagation(); openRenameHome('Friends apartment')" aria-label="Rename Friends apartment">Rename</button>
+                        </div>
                     </div>
-                    <button type="button" class="home-rename-btn" onclick="event.stopPropagation(); openRenameHome('Friends apartment')" aria-label="Rename Friends apartment">Rename</button>
-                    <div class="home-arrow">→</div>
+                    <div class="home-arrow" aria-hidden="true">→</div>
                 </div>
 
                 <div class="home-card add-home" onclick="showAddHomeModal()">
@@ -1051,7 +1057,7 @@ Please change the parent <Route path="${e}"> to <Route path="${e===`/`?`*`:`${e}
         <div id="screen-bill-detail" class="screen">
             <div class="screen-header">
                 <button type="button" class="back-btn" onclick="navigateTo('screen-my-bills')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
-                <h1>Electricity</h1>
+                <h1>Bill details</h1>
             </div>
 
             <div class="bill-detail-header">
@@ -1065,9 +1071,9 @@ Please change the parent <Route path="${e}"> to <Route path="${e===`/`?`*`:`${e}
                         <span class="bill-account">XXXX1234</span>
                         <span class="bill-sep" aria-hidden="true">·</span>
                         <span class="bill-due-large">Due 18 Nov 2026</span>
-                        <span class="status-badge confirmed">
+                        <span class="status-badge confirmed" aria-label="Confirmed with biller, payment pending">
                             <span class="status-icon" aria-hidden="true">✓</span>
-                            Confirmed pending
+                            Confirmed
                         </span>
                     </div>
                 </div>
@@ -1100,10 +1106,13 @@ Please change the parent <Route path="${e}"> to <Route path="${e===`/`?`*`:`${e}
             <div class="voucher-hint-card">
                 <div class="voucher-hint-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10.5h16V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19v-8.5Z"/><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5v3H3v-3Z"/><path d="M12 6v14.5"/><path d="M12 6S10.6 2.5 8.3 2.5a1.75 1.75 0 1 0 0 3.5H12Z"/><path d="M12 6s1.4-3.5 3.7-3.5a1.75 1.75 0 1 1 0 3.5H12Z"/></svg></div>
                 <div class="voucher-hint-body">
-                    <h3>This payment earns voucher progress</h3>
-                    <p>Counts toward your 3 qualifying payments for the bill payment voucher.</p>
-                    <button type="button" class="link-btn" onclick="navigateTo('screen-voucher-details')">View voucher →</button>
+                    <h3>Earns voucher progress</h3>
+                    <p>Counts toward 3 qualifying payments</p>
                 </div>
+                <button type="button" class="voucher-view-btn" onclick="navigateTo('screen-voucher-details')" aria-label="View voucher details">
+                    View
+                    <span aria-hidden="true">›</span>
+                </button>
             </div>
 
             <div class="action-buttons">
@@ -1703,17 +1712,25 @@ Please change the parent <Route path="${e}"> to <Route path="${e===`/`?`*`:`${e}
                 <h2>Bill Payment Voucher · Me</h2>
                 <p class="voucher-subtitle">Illustrative voucher · unlocks on your 3rd qualifying payment</p>
 
+                <div class="voucher-example" aria-label="Example voucher: ₹100 off any bill of ₹500 or more">
+                    <div class="voucher-example-value">₹100 <span>off</span></div>
+                    <div class="voucher-example-copy">
+                        <span class="voucher-example-label">Example voucher</span>
+                        <p>Redeem on any bill of ₹500 or more</p>
+                    </div>
+                </div>
+
                 <div class="voucher-progress-large">
-                    <div class="progress-label">Progress</div>
+                    <div class="voucher-progress-row">
+                        <span class="progress-text" id="voucher-progress-text">1 of 3 qualifying payments</span>
+                        <div class="voucher-status-badge in-progress" id="voucher-status-badge">
+                            In progress
+                        </div>
+                    </div>
                     <div class="progress-bar-large">
                         <div class="progress-fill-large" id="voucher-progress-fill" style="width: 33%"></div>
                     </div>
-                    <p class="progress-text" id="voucher-progress-text">1 of 3 qualifying payments completed</p>
-                    <p class="voucher-scope">Me voucher only · each home tracks its own voucher separately</p>
-                </div>
-
-                <div class="voucher-status-badge in-progress" id="voucher-status-badge">
-                    In progress
+                    <p class="voucher-scope">Me voucher only · each home tracks its own voucher</p>
                 </div>
             </div>
 
@@ -2529,7 +2546,7 @@ Please change the parent <Route path="${e}"> to <Route path="${e===`/`?`*`:`${e}
                             <span class="status-icon check">✓</span>
                         </div>
                         <div class="home-selector-info">
-                            <h2>Personal Home</h2>
+                            <h3>Personal Home</h3>
                             <p>All tracked bills paid</p>
                         </div>
                     </div>
@@ -2540,7 +2557,7 @@ Please change the parent <Route path="${e}"> to <Route path="${e===`/`?`*`:`${e}
                             <span class="status-icon clock">⏰</span>
                         </div>
                         <div class="home-selector-info">
-                            <h2>Flatmates</h2>
+                            <h3>Flatmates</h3>
                             <p>2 pending</p>
                         </div>
                     </div>
@@ -3243,7 +3260,7 @@ function updateVoucherDetails() {
         fill.style.width = percent + '%';
     }
     if (text) {
-        text.textContent = \`\${meVoucherStep} of 3 qualifying payments completed\`;
+        text.textContent = \`\${meVoucherStep} of 3 qualifying payments\`;
     }
     if (status) {
         status.classList.toggle('in-progress', meVoucherStep < 3);
@@ -3573,7 +3590,7 @@ function renameHome() {
     const list = document.getElementById('home-list-homes');
     if (list && renameHomeTarget) {
         list.querySelectorAll('.home-card').forEach(card => {
-            const title = card.querySelector('h3');
+            const title = card.querySelector('h2, h3');
             if (title && title.textContent.trim() === renameHomeTarget) {
                 title.textContent = newName;
             }
@@ -3627,12 +3644,14 @@ function updateHomeCardAfterAccept(homeName) {
     const list = document.getElementById('home-list-homes');
     if (!list) return;
     list.querySelectorAll('.home-card').forEach(card => {
-        const title = card.querySelector('h3');
+        const title = card.querySelector('h2, h3');
         if (title && title.textContent.trim() === homeName) {
             const badge = card.querySelector('.home-badge');
             if (badge) {
+                badge.className = 'home-badge home-badge-joined';
                 badge.textContent = 'Joined · invite closed';
             }
+            card.classList.remove('invite-open');
             card.classList.add('joined');
         }
     });
@@ -3642,7 +3661,7 @@ function removeHomeInviteCard(homeName) {
     const list = document.getElementById('home-list-invitations');
     if (!list) return;
     list.querySelectorAll('.home-invite-card').forEach(card => {
-        const title = card.querySelector('h3');
+        const title = card.querySelector('h2, h3');
         if (title && title.textContent.trim() === homeName) {
             card.remove();
         }
@@ -3657,7 +3676,7 @@ function removeHomeCard(homeName) {
     const list = document.getElementById('home-list-homes');
     if (!list) return;
     list.querySelectorAll('.home-card').forEach(card => {
-        const title = card.querySelector('h3');
+        const title = card.querySelector('h2, h3');
         if (title && title.textContent.trim() === homeName) {
             card.remove();
         }
@@ -3683,7 +3702,7 @@ function updateHomePendingInvite() {
         banner.hidden = true;
         return;
     }
-    const nameEl = card.querySelector('h3');
+    const nameEl = card.querySelector('h2, h3');
     const reasonEl = card.querySelector('.home-invite-reason');
     const name = nameEl ? nameEl.textContent.trim() : 'a home';
     const reason = reasonEl ? reasonEl.textContent.trim() : '';

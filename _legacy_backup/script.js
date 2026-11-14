@@ -525,7 +525,7 @@ function updateVoucherDetails() {
         fill.style.width = percent + '%';
     }
     if (text) {
-        text.textContent = `${meVoucherStep} of 3 qualifying payments completed`;
+        text.textContent = `${meVoucherStep} of 3 qualifying payments`;
     }
     if (status) {
         status.classList.toggle('in-progress', meVoucherStep < 3);
@@ -855,7 +855,7 @@ function renameHome() {
     const list = document.getElementById('home-list-homes');
     if (list && renameHomeTarget) {
         list.querySelectorAll('.home-card').forEach(card => {
-            const title = card.querySelector('h3');
+            const title = card.querySelector('h2, h3');
             if (title && title.textContent.trim() === renameHomeTarget) {
                 title.textContent = newName;
             }
@@ -909,12 +909,14 @@ function updateHomeCardAfterAccept(homeName) {
     const list = document.getElementById('home-list-homes');
     if (!list) return;
     list.querySelectorAll('.home-card').forEach(card => {
-        const title = card.querySelector('h3');
+        const title = card.querySelector('h2, h3');
         if (title && title.textContent.trim() === homeName) {
             const badge = card.querySelector('.home-badge');
             if (badge) {
+                badge.className = 'home-badge home-badge-joined';
                 badge.textContent = 'Joined · invite closed';
             }
+            card.classList.remove('invite-open');
             card.classList.add('joined');
         }
     });
@@ -924,7 +926,7 @@ function removeHomeInviteCard(homeName) {
     const list = document.getElementById('home-list-invitations');
     if (!list) return;
     list.querySelectorAll('.home-invite-card').forEach(card => {
-        const title = card.querySelector('h3');
+        const title = card.querySelector('h2, h3');
         if (title && title.textContent.trim() === homeName) {
             card.remove();
         }
@@ -939,7 +941,7 @@ function removeHomeCard(homeName) {
     const list = document.getElementById('home-list-homes');
     if (!list) return;
     list.querySelectorAll('.home-card').forEach(card => {
-        const title = card.querySelector('h3');
+        const title = card.querySelector('h2, h3');
         if (title && title.textContent.trim() === homeName) {
             card.remove();
         }
@@ -965,7 +967,7 @@ function updateHomePendingInvite() {
         banner.hidden = true;
         return;
     }
-    const nameEl = card.querySelector('h3');
+    const nameEl = card.querySelector('h2, h3');
     const reasonEl = card.querySelector('.home-invite-reason');
     const name = nameEl ? nameEl.textContent.trim() : 'a home';
     const reason = reasonEl ? reasonEl.textContent.trim() : '';
