@@ -4,12 +4,12 @@ A mobile-first interactive prototype for the Paytm My Bills feature, built accor
 
 ## Overview
 
-This prototype demonstrates the core user journey for managing recurring bills within Paytm's existing Recharge & Bills section. It follows the design principle of "familiar first, intelligent second" and implements the physical-calendar metaphor for bill tracking.
+This prototype demonstrates the core user journey for managing recurring bills within Paytm's existing Recharge & Bills section. It follows the design principle of "familiar first, intelligent second" and uses a compact bills calendar with a selected-day agenda for bill tracking.
 
 ## Screens Implemented
 
-1. **Recharge & Bills Landing** - Entry point with Add New Bill action, View All bill categories sheet, and a My Bills card with a Me/Home toggle (Home mode shows each home as a custom house icon with its due amount and name)
-2. **My Bills Dashboard (Me Tab)** - Personal bills with Needs attention, Upcoming, and Recently paid sections
+1. **Recharge & Bills Landing** - Entry point with a View All bill categories sheet and a My Bills card with a Me/Home toggle, bill previews, and an Add New Bill action (Home mode shows each home as a custom house icon with its due amount and name)
+2. **My Bills Dashboard (Me Tab)** - Personal bill summary, voucher progress, and Recently paid list, with Add a bill
 3. **Home Selection Screen** - Choose between multiple homes (Personal Home, Flatmates)
 4. **Personal Home Dashboard** - Separate bill view for personal household
 5. **Flatmates Home Dashboard** - Separate bill view for shared flatmate bills
@@ -23,9 +23,9 @@ This prototype demonstrates the core user journey for managing recurring bills w
 13. **Payment Processing / Pending** - In-flight transaction state with 3-step animated timeline, BBPS clearance polling, duplicate payment protection notice, and manual status check
 14. **Payment Failed** - Transaction failure state with bank timeout error code, 100% automatic refund assurance within 2-3 business days, voucher safeguard disclaimer, and retry with alternate payment methods
 15. **Payment Success** - Confirmation with post-success voucher milestone cue
-16. **Bills Calendar (Me)** - Paper wall-calendar view of all bills with pen marks and a day agenda
-13. **Calendar (Personal Home)** - Paper calendar with personal home bills
-14. **Calendar (Flatmates Home)** - Paper calendar with flatmate bills
+16. **Bills Calendar (Me)** - Compact month view with bill markers and a selected-day bill list
+13. **Calendar (Personal Home)** - Compact calendar with personal home bills
+14. **Calendar (Flatmates Home)** - Compact calendar with flatmate bills
 15. **Reminder Settings** - Notification preferences
 16. **Home Details / Invite Join** - Paytm home details screen with members, reason, invite link, accept/decline
 16. **Email Bill Discovery – Consent** - Value-led invitation, provider/scope consent, read-only promise
@@ -39,13 +39,11 @@ This prototype demonstrates the core user journey for managing recurring bills w
 - **Multiple Home Support**: Personal Home, Flatmates, and ability to create new homes
 - **Separate Bill Dashboards**: Each home has its own distinct billing information
 - **Status Confidence System**: Distinguishes between confirmed pending, estimated, user-declared, and verified paid states
-- **Physical-Calendar Metaphor**: A paper wall calendar with a spiral binding, printed month header, ledger totals, ruled date cells, a folded page corner and a stuck-on sticky note
-  - **Hand-drawn marks**: red ink circles around due dates, amber dashed loops around estimates, stars for important bills, highlighter swipes for today/payday, and green cross-offs for paid dates
-  - **Paper trail**: crossed-off dates and bills stay visible instead of disappearing
-  - **Margin and sticky notes**: handwritten reminders sit beside the grid and on the desk below it
-  - **Pen-marks legend**: explains each mark without relying on colour alone
-  - **Day agenda**: selecting a date rewrites the lined agenda page, including a "next up" note on empty days
-  - **Working filters**: All / Needs attention / Paid dim non-matching dates and filter the agenda
+- **Bills Calendar**: A compact month grid with the selected day's bills directly below, so amounts and actions stay above the fold
+  - **Scan-friendly marks**: red circles for due dates, dashed loops for estimates, stars for important bills, highlighter swipes for today/payday, and green tags for paid dates
+  - **Paid history**: crossed-off bills stay visible with their strike-through tags instead of disappearing
+  - **Day agenda**: selecting a date updates the bill list, with a "next" link on empty days
+  - **Working filters**: All / Needs attention / Paid dim non-matching dates and filter the bill list
 - **Multiple Bill Addition Paths**: Camera, upload, and manual entry
 - **Email Bill Discovery**: Optional, read-only inbox scan that finds bill emails and attachments, then routes them through a review step before anything is added
   - **Value-led invitation**: Add a bill screen and My Bills status card explain what the feature does and why it helps (catch bills you would have missed, no more typing amounts/due dates)
@@ -141,7 +139,7 @@ Paytm Home/
 ## Testing Checklist
 
 - [ ] Navigate from landing to My Bills
-- [ ] View Needs attention, Upcoming, and Recently paid sections
+- [ ] View voucher progress and Recently paid sections
 - [ ] Try each Add bill method (Camera, Upload, Search)
 - [ ] Review OCR fields and edit them
 - [ ] View bill details and see status confidence

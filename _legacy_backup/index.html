@@ -98,22 +98,13 @@
                     <h2 class="section-title">Recharge & Bills</h2>
                     <button type="button" class="view-all" onclick="showAllBillsSheet()">View All →</button>
                 </div>
-                <div class="icon-grid icon-grid-five">
-                    <div class="icon-item" onclick="navigateTo('screen-add-bill')">
-                        <div class="icon-outline">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                <circle cx="12" cy="12" r="8.5" />
-                                <path d="M12 8v8M8 12h8" />
-                            </svg>
-                        </div>
-                        <span class="icon-label">Add New Bill</span>
-                    </div>
+                <div class="icon-grid">
                     <div class="icon-item">
                         <div class="icon-outline">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <rect x="4" y="5.5" width="16" height="15" rx="2.5" />
                                 <path d="M8 3.5v4M16 3.5v4M4 9.5h16" />
-                                <text x="12" y="16.8" text-anchor="middle" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" fill="currentColor" stroke="none">EMI</text>
+                                <text x="12" y="16.8" text-anchor="middle" font-size="5.5" font-weight="700" fill="currentColor" stroke="none">EMI</text>
                             </svg>
                         </div>
                         <span class="icon-label">Loan EMI payment</span>
@@ -123,7 +114,7 @@
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <rect x="7" y="3" width="10" height="18" rx="2.5" />
                                 <path d="M10.5 17.5h3" />
-                                <text x="12" y="13" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" font-weight="700" fill="currentColor" stroke="none">₹</text>
+                                <text x="12" y="13" text-anchor="middle" font-size="7" font-weight="700" fill="currentColor" stroke="none">₹</text>
                             </svg>
                         </div>
                         <span class="icon-label">Mobile Postpaid</span>
@@ -162,9 +153,6 @@
                     </div>
                 </div>
                 <p class="my-bills-subtitle">Keep track of bills you pay every month</p>
-                <div class="my-bills-status-row" id="landing-status-row">
-                    <span class="badge" id="landing-badge">3 bills need attention</span>
-                </div>
                 <div class="my-bills-preview" id="landing-preview">
                     <div class="bill-preview-item">
                         <span class="bill-preview-name">Electricity</span>
@@ -175,10 +163,19 @@
                         <span class="bill-preview-amount">₹6,250</span>
                     </div>
                 </div>
-                <button type="button" class="my-bills-open" onclick="openLandingBills()">
-                    <span id="landing-open-label">View my bills</span>
-                    <span aria-hidden="true">→</span>
-                </button>
+                <div class="my-bills-actions">
+                    <button type="button" class="my-bills-open" onclick="openLandingBills()">
+                        <span id="landing-open-label">View my bills</span>
+                        <span aria-hidden="true">→</span>
+                    </button>
+                    <button type="button" class="my-bills-add" onclick="navigateTo('screen-add-bill')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                            <circle cx="12" cy="12" r="8.5" />
+                            <path d="M12 8v8M8 12h8" />
+                        </svg>
+                        Add New Bill
+                    </button>
+                </div>
             </div>
 
             <!-- Bill payment offers banner (bank cards) -->
@@ -398,10 +395,6 @@
                 </button>
             </div>
 
-            <div class="dashboard-summary">
-                <span class="summary-count">3 bills need attention</span>
-            </div>
-
             <!-- Voucher Progress Card -->
             <div class="voucher-progress-card" onclick="navigateTo('screen-voucher-details')">
                 <div class="voucher-header">
@@ -424,55 +417,6 @@
                 </div>
                 <p class="voucher-text" id="me-voucher-text">1 of 3 qualifying bill payments completed</p>
                 <p class="voucher-scope">Me progress only · each home counts its own voucher separately</p>
-            </div>
-
-            <div class="bill-section">
-                <h3 class="bill-section-title">Needs attention</h3>
-
-                <div class="bill-card" onclick="navigateTo('screen-bill-detail')">
-                    <div class="bill-card-header">
-                        <div class="bill-icon">⚡</div>
-                        <div class="bill-info">
-                            <h4>Electricity</h4>
-                            <span class="bill-account">XXXX1234</span>
-                        </div>
-                        <div class="bill-amount">₹1,840</div>
-                    </div>
-                    <div class="bill-card-footer">
-                        <span class="bill-due">Due 18 Nov</span>
-                        <span class="bill-status confirmed">Confirmed pending</span>
-                    </div>
-                </div>
-
-                <div class="bill-card" onclick="navigateTo('screen-bill-detail')">
-                    <div class="bill-card-header">
-                        <div class="bill-icon">💳</div>
-                        <div class="bill-info">
-                            <h4>Credit Card</h4>
-                            <span class="bill-account">XXXX5678</span>
-                        </div>
-                        <div class="bill-amount">₹6,250</div>
-                    </div>
-                    <div class="bill-card-footer">
-                        <span class="bill-due">Due 21 Nov</span>
-                        <span class="bill-status marked-paid">Marked paid elsewhere</span>
-                    </div>
-                </div>
-
-                <div class="bill-card" onclick="navigateTo('screen-bill-detail')">
-                    <div class="bill-card-header">
-                        <div class="bill-icon">🌐</div>
-                        <div class="bill-info">
-                            <h4>Broadband</h4>
-                            <span class="bill-account">XXXX9012</span>
-                        </div>
-                        <div class="bill-amount">₹999</div>
-                    </div>
-                    <div class="bill-card-footer">
-                        <span class="bill-due">Due 20 Nov</span>
-                        <span class="bill-status confirmed">Confirmed pending</span>
-                    </div>
-                </div>
             </div>
 
             <div class="bill-section">
@@ -527,7 +471,7 @@
                 <div class="home-card" onclick="navigateTo('screen-personal-home')">
                     <div class="home-icon">🏠</div>
                     <div class="home-info">
-                        <h3>Personal Home</h3>
+                        <h2>Personal Home</h2>
                         <p>Your personal bills</p>
                         <span class="home-badge">3 bills need attention</span>
                     </div>
@@ -538,7 +482,7 @@
                 <div class="home-card" onclick="navigateTo('screen-flatmates-home')">
                     <div class="home-icon">👥</div>
                     <div class="home-info">
-                        <h3>Flatmates</h3>
+                        <h2>Flatmates</h2>
                         <p>Shared household bills</p>
                         <span class="home-badge">2 bills need attention</span>
                     </div>
@@ -549,7 +493,7 @@
                 <div class="home-card" onclick="navigateTo('screen-home-details')">
                     <div class="home-icon">🫂</div>
                     <div class="home-info">
-                        <h3>Friends apartment</h3>
+                        <h2>Friends apartment</h2>
                         <p>Shared rent &amp; utilities</p>
                         <span class="home-badge">2 members · invite open</span>
                     </div>
@@ -560,7 +504,7 @@
                 <div class="home-card add-home" onclick="showAddHomeModal()">
                     <div class="home-icon add">+</div>
                     <div class="home-info">
-                        <h3>Add new home</h3>
+                        <h2>Add new home</h2>
                         <p>Create a new household</p>
                     </div>
                 </div>
@@ -570,7 +514,7 @@
                 <div class="home-invite-card">
                     <div class="home-invite-icon">🫂</div>
                     <div class="home-invite-info">
-                        <h3>Friends apartment</h3>
+                        <h2>Friends apartment</h2>
                         <p class="home-invite-reason">Shared rent &amp; utilities for the flat</p>
                         <span class="home-invite-from">Invited by Shinjan · up to 5 people</span>
                     </div>
@@ -803,7 +747,7 @@
                         </svg>
                     </div>
                     <div class="voucher-info">
-                        <h4>Bill payment voucher</h4>
+                        <h3>Bill payment voucher</h3>
                         <p class="voucher-status">In progress</p>
                     </div>
                 </div>
@@ -882,19 +826,19 @@
             <div class="add-bill-options">
                 <div class="add-bill-option" onclick="navigateTo('screen-camera')">
                     <div class="option-icon">📷</div>
-                    <h3>Take a photo</h3>
+                    <h2>Take a photo</h2>
                     <p>Capture a paper bill</p>
                 </div>
 
                 <div class="add-bill-option" onclick="navigateTo('screen-upload')">
                     <div class="option-icon">📁</div>
-                    <h3>Upload a bill</h3>
+                    <h2>Upload a bill</h2>
                     <p>Choose an image or PDF</p>
                 </div>
 
                 <div class="add-bill-option" onclick="navigateTo('screen-biller-search')">
                     <div class="option-icon">🔍</div>
-                    <h3>Find biller</h3>
+                    <h2>Find biller</h2>
                     <p>Search and enter account details</p>
                 </div>
             </div>
@@ -905,7 +849,7 @@
                     <div class="email-invite-icon">📧</div>
                     <div>
                         <p class="email-invite-eyebrow">Optional · read-only</p>
-                        <h4>Find bills already in your inbox</h4>
+                        <h3>Find bills already in your inbox</h3>
                     </div>
                 </div>
                 <p class="email-invite-copy">Skip typing amounts and due dates. Paytm looks for bill emails, then shows you what it found.</p>
@@ -967,7 +911,7 @@
                 </div>
             </div>
 
-            <input type="file" id="upload-file-input" accept="image/*,.pdf" style="display:none;" />
+            <input type="file" id="upload-file-input" accept="image/*,.pdf" aria-label="Choose a bill image or PDF" style="display:none;" />
         </div>
 
         <!-- Screen 06: Biller Search -->
@@ -977,13 +921,14 @@
                 <h1>Find biller</h1>
             </div>
 
-            <div class="search-input">
-                <span class="search-icon">🔍</span>
+            <label class="search-input" for="biller-search-input">
+                <span class="search-icon" aria-hidden="true">🔍</span>
+                <span class="sr-only">Search for a biller</span>
                 <input type="text" id="biller-search-input" placeholder="Search for biller (e.g., Electricity, Mobile)">
-            </div>
+            </label>
 
             <div class="biller-categories">
-                <h3>Popular categories</h3>
+                <h2>Popular categories</h2>
                 <div class="category-list">
                     <div class="category-item">⚡ Electricity</div>
                     <div class="category-item">📱 Mobile Postpaid</div>
@@ -1061,29 +1006,29 @@
             </div>
 
             <div class="form-field">
-                <label>Biller</label>
-                <input type="text" value="Electricity Board" class="editable">
-                <span class="field-status">Please check</span>
+                <label for="ocr-biller">Biller</label>
+                <input type="text" id="ocr-biller" value="Electricity Board" class="editable" aria-describedby="ocr-biller-status">
+                <span class="field-status" id="ocr-biller-status">Please check</span>
             </div>
 
             <div class="form-field">
-                <label>Account number</label>
-                <input type="text" value="1234567890" class="editable">
+                <label for="ocr-account">Account number</label>
+                <input type="text" id="ocr-account" value="1234567890" class="editable">
             </div>
 
             <div class="form-field">
-                <label>Amount</label>
-                <input type="text" value="₹1,840" class="editable">
+                <label for="ocr-amount">Amount</label>
+                <input type="text" id="ocr-amount" value="₹1,840" class="editable">
             </div>
 
             <div class="form-field">
-                <label>Due date</label>
-                <input type="text" value="18 Nov 2026" class="editable">
+                <label for="ocr-due">Due date</label>
+                <input type="text" id="ocr-due" value="18 Nov 2026" class="editable">
             </div>
 
             <div class="form-field">
-                <label>Billing period</label>
-                <input type="text" value="Oct 2026" class="editable">
+                <label for="ocr-period">Billing period</label>
+                <input type="text" id="ocr-period" value="Oct 2026" class="editable">
             </div>
 
             <div class="form-actions">
@@ -1120,23 +1065,32 @@
 
             <div class="bill-meta">
                 <div class="meta-row">
-                    <span class="meta-label">Source</span>
                     <span class="meta-source">
-                        <span class="meta-value">Verified with biller</span>
-                        <button type="button" class="meta-refresh-btn" onclick="refreshBillStatus()" aria-label="Refresh bill status" title="Refresh">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-                                <path d="M23 4v6h-6"/>
-                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                        <span class="meta-source-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                                <path d="M7 3h7l4 4v14H7z"/>
+                                <path d="M14 3v5h5"/>
+                                <path d="m10 14 2 2 3-3"/>
                             </svg>
-                        </button>
+                        </span>
+                        <span class="meta-source-text">
+                            <span class="meta-label">Bill source</span>
+                            <span class="meta-value">Verified with biller</span>
+                        </span>
                     </span>
+                    <button type="button" class="meta-refresh-btn" onclick="refreshBillStatus()" aria-label="Refresh bill status" title="Refresh">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                            <path d="M23 4v6h-6"/>
+                            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
 
             <div class="voucher-hint-card">
                 <div class="voucher-hint-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10.5h16V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19v-8.5Z"/><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5v3H3v-3Z"/><path d="M12 6v14.5"/><path d="M12 6S10.6 2.5 8.3 2.5a1.75 1.75 0 1 0 0 3.5H12Z"/><path d="M12 6s1.4-3.5 3.7-3.5a1.75 1.75 0 1 1 0 3.5H12Z"/></svg></div>
                 <div class="voucher-hint-body">
-                    <h4>This payment earns voucher progress</h4>
+                    <h3>This payment earns voucher progress</h3>
                     <p>Counts toward your 3 qualifying payments for the bill payment voucher.</p>
                     <button type="button" class="link-btn" onclick="navigateTo('screen-voucher-details')">View voucher →</button>
                 </div>
@@ -1145,13 +1099,13 @@
             <div class="action-buttons">
                 <button class="primary-btn large" onclick="openPayBill()">Pay through Paytm</button>
                 <div class="action-grid">
-                    <button class="secondary-btn" onclick="navigateTo('screen-smart-insight')">View bill insight</button>
-                    <button class="secondary-btn" onclick="navigateTo('screen-bill-history')">View bill history</button>
                     <button class="secondary-btn" onclick="showMarkPaidModal()">I paid elsewhere</button>
                     <button class="secondary-btn" onclick="snoozeBillReminder()">Remind me later</button>
-                    <button class="secondary-btn" onclick="navigateTo('screen-ocr-review')">Edit bill details</button>
-                    <button class="danger-btn" onclick="removeBill()">Remove bill</button>
                 </div>
+                <button type="button" class="more-actions-btn" onclick="openBillActions()" aria-haspopup="dialog" aria-controls="bill-actions-sheet">
+                    <span aria-hidden="true">⋯</span>
+                    More actions
+                </button>
             </div>
         </div>
 
@@ -1175,7 +1129,7 @@
             <div class="voucher-hint-card prominent">
                 <div class="voucher-hint-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10.5h16V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19v-8.5Z"/><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5v3H3v-3Z"/><path d="M12 6v14.5"/><path d="M12 6S10.6 2.5 8.3 2.5a1.75 1.75 0 1 0 0 3.5H12Z"/><path d="M12 6s1.4-3.5 3.7-3.5a1.75 1.75 0 1 1 0 3.5H12Z"/></svg></div>
                 <div class="voucher-hint-body">
-                    <h4>Bill payment voucher</h4>
+                    <h3>Bill payment voucher</h3>
                     <p id="pay-voucher-copy">This eligible payment takes you from 1 of 3 to 2 of 3 qualifying payments.</p>
                     <div class="voucher-hint-bar">
                         <div class="voucher-hint-fill" id="pay-voucher-fill" style="width: 33%"></div>
@@ -1187,7 +1141,7 @@
 
             <div class="pay-section">
                 <h3>Pay using</h3>
-                <div class="payment-methods">
+                <div class="payment-methods" role="radiogroup" aria-label="How did you pay this bill?">
                     <label class="payment-method">
                         <input type="radio" name="pay-method" value="upi" checked>
                         <span>Paytm UPI</span>
@@ -1228,7 +1182,7 @@
                 <div class="voucher-hint-card success">
                     <div class="voucher-hint-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10.5h16V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19v-8.5Z"/><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5v3H3v-3Z"/><path d="M12 6v14.5"/><path d="M12 6S10.6 2.5 8.3 2.5a1.75 1.75 0 1 0 0 3.5H12Z"/><path d="M12 6s1.4-3.5 3.7-3.5a1.75 1.75 0 1 1 0 3.5H12Z"/></svg></div>
                     <div class="voucher-hint-body">
-                        <h4>Voucher progress updated</h4>
+                        <h2>Voucher progress updated</h2>
                         <p id="success-voucher-text">2 of 3 qualifying payments completed. One more to unlock your bill payment voucher.</p>
                         <div class="voucher-hint-bar">
                             <div class="voucher-hint-fill" id="success-voucher-fill" style="width: 66%"></div>
@@ -1265,7 +1219,7 @@
                     <div class="timeline-step completed" id="pending-step-1">
                         <div class="step-dot">✓</div>
                         <div class="step-content">
-                            <h4>Payment initiated</h4>
+                            <h3>Payment initiated</h3>
                             <p>₹1,840 debited via Paytm UPI</p>
                             <span class="step-time">Just now</span>
                         </div>
@@ -1273,7 +1227,7 @@
                     <div class="timeline-step active" id="pending-step-2">
                         <div class="step-dot pulse">⏳</div>
                         <div class="step-content">
-                            <h4>BBPS / Biller clearance</h4>
+                            <h3>BBPS / Biller clearance</h3>
                             <p>Awaiting confirmation from BSES Rajdhani</p>
                             <span class="step-meta">Usually takes 2–5 minutes</span>
                         </div>
@@ -1281,7 +1235,7 @@
                     <div class="timeline-step upcoming" id="pending-step-3">
                         <div class="step-dot">○</div>
                         <div class="step-content">
-                            <h4>Bill status update</h4>
+                            <h3>Bill status update</h3>
                             <p>Marked as Paid in My Bills & receipt generated</p>
                         </div>
                     </div>
@@ -1291,7 +1245,7 @@
                 <div class="payment-reassurance-card">
                     <div class="reassurance-icon">🛡️</div>
                     <div class="reassurance-text">
-                        <h4>Do not pay again</h4>
+                        <h3>Do not pay again</h3>
                         <p>Your payment is safely in progress. If money was debited, your bill will be updated automatically. Reminders are paused.</p>
                     </div>
                 </div>
@@ -1352,7 +1306,6 @@
                 <div class="payment-error-card">
                     <div class="error-header">
                         <span class="error-badge">Bank Server Timeout</span>
-                        <span class="error-code">ERR_BBPS_082</span>
                     </div>
                     <p class="error-desc">Your bank's UPI switch did not respond in time. The payment could not be cleared by the biller.</p>
                 </div>
@@ -1361,7 +1314,7 @@
                 <div class="refund-assurance-card">
                     <div class="refund-icon">💳</div>
                     <div class="refund-text">
-                        <h4>100% Refund Assurance</h4>
+                        <h3>100% Refund Assurance</h3>
                         <p>If any money was debited from your account, it will be automatically reversed to your bank account within <strong>2 to 3 business days</strong>.</p>
                         <span class="refund-ref">Reversal tracking: <strong>PTM-REV-541902</strong></span>
                     </div>
@@ -1412,14 +1365,14 @@
                 </div>
             </div>
 
-            <div class="insight-state-tabs" role="tablist">
-                <button class="insight-state-tab active" data-state="anomaly" onclick="switchInsightState('anomaly')">Anomaly</button>
-                <button class="insight-state-tab" data-state="insufficient" onclick="switchInsightState('insufficient')">Insufficient history</button>
-                <button class="insight-state-tab" data-state="noncomparable" onclick="switchInsightState('noncomparable')">Non-comparable</button>
-                <button class="insight-state-tab" data-state="stale" onclick="switchInsightState('stale')">Stale data</button>
+            <div class="insight-state-tabs" role="tablist" aria-label="Bill insight state">
+                <button class="insight-state-tab active" data-state="anomaly" role="tab" aria-selected="true" aria-controls="insight-panel-anomaly" id="insight-tab-anomaly" tabindex="0" onclick="switchInsightState('anomaly')">Anomaly</button>
+                <button class="insight-state-tab" data-state="insufficient" role="tab" aria-selected="false" aria-controls="insight-panel-insufficient" id="insight-tab-insufficient" tabindex="-1" onclick="switchInsightState('insufficient')">Insufficient history</button>
+                <button class="insight-state-tab" data-state="noncomparable" role="tab" aria-selected="false" aria-controls="insight-panel-noncomparable" id="insight-tab-noncomparable" tabindex="-1" onclick="switchInsightState('noncomparable')">Non-comparable</button>
+                <button class="insight-state-tab" data-state="stale" role="tab" aria-selected="false" aria-controls="insight-panel-stale" id="insight-tab-stale" tabindex="-1" onclick="switchInsightState('stale')">Stale data</button>
             </div>
 
-            <div class="insight-panel" data-panel="anomaly">
+            <div class="insight-panel" data-panel="anomaly" id="insight-panel-anomaly" role="tabpanel" aria-labelledby="insight-tab-anomaly">
             <div class="insight-summary">
                 <div class="insight-alert">
                     <span class="insight-icon-alert">📈</span>
@@ -1506,7 +1459,7 @@
             </div>
 
             <!-- Suppressed states -->
-            <div class="insight-panel" data-panel="insufficient" hidden>
+            <div class="insight-panel" data-panel="insufficient" id="insight-panel-insufficient" role="tabpanel" aria-labelledby="insight-tab-insufficient" hidden>
                 <div class="insight-suppressed">
                     <div class="insight-suppressed-icon">📊</div>
                     <h3>Not enough history yet</h3>
@@ -1515,7 +1468,7 @@
                 </div>
             </div>
 
-            <div class="insight-panel" data-panel="noncomparable" hidden>
+            <div class="insight-panel" data-panel="noncomparable" id="insight-panel-noncomparable" role="tabpanel" aria-labelledby="insight-tab-noncomparable" hidden>
                 <div class="insight-suppressed">
                     <div class="insight-suppressed-icon">⚖️</div>
                     <h3>Comparison not available</h3>
@@ -1524,7 +1477,7 @@
                 </div>
             </div>
 
-            <div class="insight-panel" data-panel="stale" hidden>
+            <div class="insight-panel" data-panel="stale" id="insight-panel-stale" role="tabpanel" aria-labelledby="insight-tab-stale" hidden>
                 <div class="insight-suppressed">
                     <div class="insight-suppressed-icon">⏳</div>
                     <h3>Status data is stale</h3>
@@ -1542,12 +1495,14 @@
             </div>
 
             <div class="paper-calendar">
-                <div class="paper-coils" aria-hidden="true"></div>
                 <div class="paper-sheet">
                     <div class="paper-head">
                         <div>
-                            <p class="paper-imprint">Paytm · My Bills</p>
                             <h2 class="paper-month">November <span class="paper-year">2026</span></h2>
+                            <p class="calendar-summary">
+                                <span class="calendar-left"><span data-summary-left="screen-calendar">₹2,839</span> left to pay</span>
+                                <span class="calendar-paid" data-paper-progress="screen-calendar">1 of 3 paid</span>
+                            </p>
                         </div>
                         <div class="month-nav paper-month-nav">
                             <button class="icon-btn" type="button" aria-label="Previous month">
@@ -1559,37 +1514,13 @@
                         </div>
                     </div>
 
-                    <div class="paper-summary" aria-label="November totals">
-                        <div class="paper-summary-item">
-                            <span class="paper-summary-label">Tracked</span>
-                            <span class="paper-summary-value" data-summary-total="screen-calendar">₹9,089</span>
-                        </div>
-                        <div class="paper-summary-item">
-                            <span class="paper-summary-label">Crossed off</span>
-                            <span class="paper-summary-value" data-summary-crossed="screen-calendar">₹6,250</span>
-                        </div>
-                        <div class="paper-summary-item">
-                            <span class="paper-summary-label">Left to pay</span>
-                            <span class="paper-summary-value" data-summary-left="screen-calendar">₹2,839</span>
-                        </div>
-                    </div>
-
-                    <p class="paper-progress" data-paper-progress="screen-calendar">1 of 3 bills crossed off this month</p>
-                    <p class="paper-margin-note">only electricity is left this week ↘</p>
-
-                    <div class="paper-legend" role="group" aria-label="Calendar key">
-                        <span class="paper-legend-title">Key</span>
-                        <span class="legend-item"><i class="ink-swatch due" aria-hidden="true"></i>Due (circled date)</span>
-                        <span class="legend-item"><i class="ink-swatch estimated" aria-hidden="true"></i>Estimated (dashed circle)</span>
-                        <span class="legend-item"><i class="ink-swatch crossed" aria-hidden="true"></i>Paid (crossed off)</span>
-                        <span class="legend-item"><i class="ink-swatch unconfirmed" aria-hidden="true"></i>Marked paid, unconfirmed</span>
-                        <span class="legend-item"><i class="ink-swatch star" aria-hidden="true"></i>Important</span>
-                        <span class="legend-item"><i class="ink-swatch highlight" aria-hidden="true"></i>Today / payday</span>
-                    </div>
-
                     <div class="calendar-grid paper-grid" data-calendar-grid="screen-calendar" role="grid" aria-label="November 2026 bills calendar"></div>
-
-                    <div class="paper-curl" aria-hidden="true"></div>
+                    <p class="calendar-tag-legend" aria-label="Bill tag legend">
+                        <span class="due">● Due</span>
+                        <span class="paid">✓ Paid</span>
+                        <span class="unverified">? Unverified</span>
+                        <span class="estimated">≈ Estimated</span>
+                    </p>
                 </div>
             </div>
 
@@ -1600,11 +1531,6 @@
             </div>
 
             <div class="calendar-agenda paper-agenda" data-agenda="screen-calendar" aria-live="polite"></div>
-
-            <div class="sticky-note">
-                <span class="sticky-tape" aria-hidden="true"></span>
-                <p>Broadband auto-pay is ON — don't pay it twice.</p>
-            </div>
         </div>
 
         <!-- Screen 10: Personal Home Calendar (paper wall calendar) -->
@@ -1615,12 +1541,14 @@
             </div>
 
             <div class="paper-calendar">
-                <div class="paper-coils" aria-hidden="true"></div>
                 <div class="paper-sheet">
                     <div class="paper-head">
                         <div>
-                            <p class="paper-imprint">Paytm · Personal Home</p>
                             <h2 class="paper-month">November <span class="paper-year">2026</span></h2>
+                            <p class="calendar-summary">
+                                <span class="calendar-left"><span data-summary-left="screen-personal-calendar">₹3,689</span> left to pay</span>
+                                <span class="calendar-paid" data-paper-progress="screen-personal-calendar">1 of 4 paid</span>
+                            </p>
                         </div>
                         <div class="month-nav paper-month-nav">
                             <button class="icon-btn" type="button" aria-label="Previous month">
@@ -1632,37 +1560,13 @@
                         </div>
                     </div>
 
-                    <div class="paper-summary" aria-label="November totals">
-                        <div class="paper-summary-item">
-                            <span class="paper-summary-label">Tracked</span>
-                            <span class="paper-summary-value" data-summary-total="screen-personal-calendar">₹4,139</span>
-                        </div>
-                        <div class="paper-summary-item">
-                            <span class="paper-summary-label">Crossed off</span>
-                            <span class="paper-summary-value" data-summary-crossed="screen-personal-calendar">₹450</span>
-                        </div>
-                        <div class="paper-summary-item">
-                            <span class="paper-summary-label">Left to pay</span>
-                            <span class="paper-summary-value" data-summary-left="screen-personal-calendar">₹3,689</span>
-                        </div>
-                    </div>
-
-                    <p class="paper-progress" data-paper-progress="screen-personal-calendar">1 of 4 bills crossed off this month</p>
-                    <p class="paper-margin-note">gas is an estimate — check the meter ↘</p>
-
-                    <div class="paper-legend" role="group" aria-label="Calendar key">
-                        <span class="paper-legend-title">Key</span>
-                        <span class="legend-item"><i class="ink-swatch due" aria-hidden="true"></i>Due (circled date)</span>
-                        <span class="legend-item"><i class="ink-swatch estimated" aria-hidden="true"></i>Estimated (dashed circle)</span>
-                        <span class="legend-item"><i class="ink-swatch crossed" aria-hidden="true"></i>Paid (crossed off)</span>
-                        <span class="legend-item"><i class="ink-swatch unconfirmed" aria-hidden="true"></i>Marked paid, unconfirmed</span>
-                        <span class="legend-item"><i class="ink-swatch star" aria-hidden="true"></i>Important</span>
-                        <span class="legend-item"><i class="ink-swatch highlight" aria-hidden="true"></i>Today / payday</span>
-                    </div>
-
                     <div class="calendar-grid paper-grid" data-calendar-grid="screen-personal-calendar" role="grid" aria-label="November 2026 personal home bills calendar"></div>
-
-                    <div class="paper-curl" aria-hidden="true"></div>
+                    <p class="calendar-tag-legend" aria-label="Bill tag legend">
+                        <span class="due">● Due</span>
+                        <span class="paid">✓ Paid</span>
+                        <span class="unverified">? Unverified</span>
+                        <span class="estimated">≈ Estimated</span>
+                    </p>
                 </div>
             </div>
 
@@ -1673,11 +1577,6 @@
             </div>
 
             <div class="calendar-agenda paper-agenda" data-agenda="screen-personal-calendar" aria-live="polite"></div>
-
-            <div class="sticky-note">
-                <span class="sticky-tape" aria-hidden="true"></span>
-                <p>Water receipt is in the kitchen drawer. Gas figure is usually ₹100 high.</p>
-            </div>
         </div>
 
         <!-- Screen 11: Flatmates Home Calendar (paper wall calendar) -->
@@ -1688,12 +1587,14 @@
             </div>
 
             <div class="paper-calendar">
-                <div class="paper-coils" aria-hidden="true"></div>
                 <div class="paper-sheet">
                     <div class="paper-head">
                         <div>
-                            <p class="paper-imprint">Paytm · Flatmates</p>
                             <h2 class="paper-month">November <span class="paper-year">2026</span></h2>
+                            <p class="calendar-summary">
+                                <span class="calendar-left"><span data-summary-left="screen-flatmates-calendar">₹3,148</span> left to pay</span>
+                                <span class="calendar-paid" data-paper-progress="screen-flatmates-calendar">1 of 3 paid</span>
+                            </p>
                         </div>
                         <div class="month-nav paper-month-nav">
                             <button class="icon-btn" type="button" aria-label="Previous month">
@@ -1705,37 +1606,13 @@
                         </div>
                     </div>
 
-                    <div class="paper-summary" aria-label="November totals">
-                        <div class="paper-summary-item">
-                            <span class="paper-summary-label">Tracked</span>
-                            <span class="paper-summary-value" data-summary-total="screen-flatmates-calendar">₹28,148</span>
-                        </div>
-                        <div class="paper-summary-item">
-                            <span class="paper-summary-label">Crossed off</span>
-                            <span class="paper-summary-value" data-summary-crossed="screen-flatmates-calendar">₹25,000</span>
-                        </div>
-                        <div class="paper-summary-item">
-                            <span class="paper-summary-label">Left to pay</span>
-                            <span class="paper-summary-value" data-summary-left="screen-flatmates-calendar">₹3,148</span>
-                        </div>
-                    </div>
-
-                    <p class="paper-progress" data-paper-progress="screen-flatmates-calendar">1 of 3 bills crossed off this month</p>
-                    <p class="paper-margin-note">rent done ✓ now chase the Netflix split ↘</p>
-
-                    <div class="paper-legend" role="group" aria-label="Calendar key">
-                        <span class="paper-legend-title">Key</span>
-                        <span class="legend-item"><i class="ink-swatch due" aria-hidden="true"></i>Due (circled date)</span>
-                        <span class="legend-item"><i class="ink-swatch estimated" aria-hidden="true"></i>Estimated (dashed circle)</span>
-                        <span class="legend-item"><i class="ink-swatch crossed" aria-hidden="true"></i>Paid (crossed off)</span>
-                        <span class="legend-item"><i class="ink-swatch unconfirmed" aria-hidden="true"></i>Marked paid, unconfirmed</span>
-                        <span class="legend-item"><i class="ink-swatch star" aria-hidden="true"></i>Important</span>
-                        <span class="legend-item"><i class="ink-swatch highlight" aria-hidden="true"></i>Today / payday</span>
-                    </div>
-
                     <div class="calendar-grid paper-grid" data-calendar-grid="screen-flatmates-calendar" role="grid" aria-label="November 2026 flatmates bills calendar"></div>
-
-                    <div class="paper-curl" aria-hidden="true"></div>
+                    <p class="calendar-tag-legend" aria-label="Bill tag legend">
+                        <span class="due">● Due</span>
+                        <span class="paid">✓ Paid</span>
+                        <span class="unverified">? Unverified</span>
+                        <span class="estimated">≈ Estimated</span>
+                    </p>
                 </div>
             </div>
 
@@ -1746,11 +1623,6 @@
             </div>
 
             <div class="calendar-agenda paper-agenda" data-agenda="screen-flatmates-calendar" aria-live="polite"></div>
-
-            <div class="sticky-note">
-                <span class="sticky-tape" aria-hidden="true"></span>
-                <p>Netflix splits 3 ways = ₹216 each. Collect before the 25th.</p>
-            </div>
         </div>
 
         <!-- Screen 12: Reminder Settings -->
@@ -1763,21 +1635,21 @@
             <div class="reminder-options">
                 <div class="reminder-option">
                     <div class="reminder-info">
-                        <h3>Reminders enabled</h3>
+                        <h2>Reminders enabled</h2>
                         <p>Get notified before due date</p>
                     </div>
                     <label class="toggle">
-                        <input type="checkbox" checked>
+                        <input type="checkbox" checked aria-label="Reminders enabled">
                         <span class="toggle-slider"></span>
                     </label>
                 </div>
 
                 <div class="reminder-option">
                     <div class="reminder-info">
-                        <h3>Reminder timing</h3>
+                        <h2>Reminder timing</h2>
                         <p>When to remind you</p>
                     </div>
-                    <select class="reminder-select">
+                    <select class="reminder-select" aria-label="Reminder timing">
                         <option>1 day before</option>
                         <option>2 days before</option>
                         <option>3 days before</option>
@@ -1787,10 +1659,10 @@
 
                 <div class="reminder-option">
                     <div class="reminder-info">
-                        <h3>Snooze</h3>
+                        <h2>Snooze</h2>
                         <p>Reminder after snooze</p>
                     </div>
-                    <select class="reminder-select">
+                    <select class="reminder-select" aria-label="Snooze duration">
                         <option>1 hour</option>
                         <option>3 hours</option>
                         <option>1 day</option>
@@ -1872,6 +1744,11 @@
                     </div>
                     <div class="transaction-amount">₹999</div>
                     <span class="transaction-badge pending">Pending</span>
+                </div>
+
+                <div class="voucher-cta-block">
+                    <button type="button" class="primary-btn" onclick="openPayBill()">Pay Electricity · ₹1,840</button>
+                    <p class="voucher-cta-note">This bill is due 18 Nov. Paying it counts as your 2nd qualifying payment.</p>
                 </div>
             </div>
 
@@ -2043,13 +1920,13 @@
             </div>
 
             <div class="bill-section">
-                <h3 class="bill-section-title">Needs attention</h3>
+                <h2 class="bill-section-title">Needs attention</h2>
 
                 <div class="bill-card offline" onclick="navigateTo('screen-bill-detail')">
                     <div class="bill-card-header">
                         <div class="bill-icon">⚡</div>
                         <div class="bill-info">
-                            <h4>Electricity</h4>
+                            <h3>Electricity</h3>
                             <span class="bill-account">XXXX1234</span>
                         </div>
                         <div class="bill-amount">₹1,840</div>
@@ -2089,13 +1966,13 @@
             </div>
 
             <div class="bill-section">
-                <h3 class="bill-section-title">Needs attention</h3>
+                <h2 class="bill-section-title">Needs attention</h2>
 
                 <div class="bill-card stale" onclick="navigateTo('screen-bill-detail')">
                     <div class="bill-card-header">
                         <div class="bill-icon">⚡</div>
                         <div class="bill-info">
-                            <h4>Electricity</h4>
+                            <h3>Electricity</h3>
                             <span class="bill-account">XXXX1234</span>
                         </div>
                         <div class="bill-amount">₹1,840</div>
@@ -2110,7 +1987,7 @@
                     <div class="bill-card-header">
                         <div class="bill-icon">💳</div>
                         <div class="bill-info">
-                            <h4>Credit Card</h4>
+                            <h3>Credit Card</h3>
                             <span class="bill-account">XXXX5678</span>
                         </div>
                         <div class="bill-amount">₹6,250</div>
@@ -2145,28 +2022,28 @@
                 <div class="email-benefit">
                     <span class="email-benefit-icon">⌨️</span>
                     <div>
-                        <h4>No more typing</h4>
+                        <h3>No more typing</h3>
                         <p>Amount, due date and account number come from the bill itself.</p>
                     </div>
                 </div>
                 <div class="email-benefit">
                     <span class="email-benefit-icon">🔎</span>
                     <div>
-                        <h4>Catch what you'd miss</h4>
+                        <h3>Catch what you'd miss</h3>
                         <p>Statements you haven't opened still get found.</p>
                     </div>
                 </div>
                 <div class="email-benefit">
                     <span class="email-benefit-icon">✅</span>
                     <div>
-                        <h4>Nothing is added silently</h4>
+                        <h3>Nothing is added silently</h3>
                         <p>You review every bill before it reaches My Bills.</p>
                     </div>
                 </div>
             </div>
 
             <h3 class="email-section-title">Choose your email provider</h3>
-            <div class="email-providers">
+            <div class="email-providers" role="radiogroup" aria-label="Choose your email provider">
                 <label class="email-provider selected" id="provider-gmail">
                     <input type="radio" name="email-provider" value="gmail" checked onchange="selectEmailProvider('gmail')">
                     <span class="email-provider-mark gmail">G</span>
@@ -2188,13 +2065,13 @@
             </div>
 
             <div class="email-scope">
-                <h4><span class="scope-allowed">✓</span> What Paytm can access</h4>
+                <h3><span class="scope-allowed">✓</span> What Paytm can access</h3>
                 <ul>
                     <li>Read-only search of bill emails and attachments from the last 12 months.</li>
                     <li>Only messages you've marked important or that come from recognised billers.</li>
                     <li>Biller name, amount, due date and masked account number.</li>
                 </ul>
-                <h4><span class="scope-blocked">✕</span> What Paytm cannot do</h4>
+                <h3><span class="scope-blocked">✕</span> What Paytm cannot do</h3>
                 <ul class="email-scope-blocked">
                     <li>Send, delete or edit your emails.</li>
                     <li>Read personal conversations outside that bill search.</li>
@@ -2248,7 +2125,7 @@
                 <div class="email-info-icon">✓</div>
                 <div class="email-info-text">
                     <p class="email-eyebrow">Found in your inbox</p>
-                    <h4 id="candidate-banner-title">3 bills found</h4>
+                    <h2 id="candidate-banner-title">3 bills found</h2>
                     <p id="candidate-banner-copy">Nothing is added yet. Uncheck anything that isn't yours.</p>
                 </div>
             </div>
@@ -2290,7 +2167,7 @@
             <div class="email-account-card">
                 <div class="email-account-mark gmail" id="email-account-mark">G</div>
                 <div class="email-account-info">
-                    <h3 id="email-account-address">s•••••@gmail.com</h3>
+                    <h2 id="email-account-address">s•••••@gmail.com</h2>
                     <p>Read-only bill access · connected</p>
                 </div>
                 <span class="email-connected-badge">Connected</span>
@@ -2317,7 +2194,7 @@
             </div>
 
             <div class="email-scope compact">
-                <h4><span class="scope-allowed">✓</span> What Paytm can access</h4>
+                <h3><span class="scope-allowed">✓</span> What Paytm can access</h3>
                 <p>Read-only search for bill emails and attachments from the last 12 months. No sending, deleting or access to personal conversations.</p>
             </div>
 
@@ -2338,7 +2215,7 @@
             </div>
 
             <div class="widget-section">
-                <h3>Compact Widget</h3>
+                <h2>Compact Widget</h2>
                 <div class="widget-card compact">
                     <div class="widget-header">
                         <span class="widget-title">Paytm Bills</span>
@@ -2360,7 +2237,7 @@
             </div>
 
             <div class="widget-section">
-                <h3>Expanded Widget</h3>
+                <h2>Expanded Widget</h2>
                 <div class="widget-card expanded">
                     <div class="widget-header">
                         <span class="widget-title">Paytm Bills</span>
@@ -2400,7 +2277,7 @@
             </div>
 
             <div class="widget-section">
-                <h3>Privacy-First Widget</h3>
+                <h2>Privacy-First Widget</h2>
                 <div class="widget-card privacy">
                     <div class="widget-header">
                         <span class="widget-title">Paytm Bills</span>
@@ -2497,7 +2374,7 @@
                 <div class="history-bill-info">
                     <div class="bill-icon">⚡</div>
                     <div class="history-bill-details">
-                        <h3>Electricity</h3>
+                        <h2>Electricity</h2>
                         <span class="history-account">XXXX1234</span>
                     </div>
                 </div>
@@ -2642,7 +2519,7 @@
                             <span class="status-icon check">✓</span>
                         </div>
                         <div class="home-selector-info">
-                            <h3>Personal Home</h3>
+                            <h2>Personal Home</h2>
                             <p>All tracked bills paid</p>
                         </div>
                     </div>
@@ -2653,7 +2530,7 @@
                             <span class="status-icon clock">⏰</span>
                         </div>
                         <div class="home-selector-info">
-                            <h3>Flatmates</h3>
+                            <h2>Flatmates</h2>
                             <p>2 pending</p>
                         </div>
                     </div>
@@ -2673,6 +2550,34 @@
             </div>
         </div>
 
+        <!-- Bill Actions Bottom Sheet -->
+        <div id="bill-actions-sheet" class="bottom-sheet">
+            <div class="bottom-sheet-content">
+                <div class="bottom-sheet-handle"></div>
+                <h2>More bill actions</h2>
+
+                <div class="bill-actions-list">
+                    <button type="button" class="sheet-action" onclick="closeBillActions(); navigateTo('screen-smart-insight')">
+                        View bill insight
+                        <span class="sheet-action-chevron" aria-hidden="true">›</span>
+                    </button>
+                    <button type="button" class="sheet-action" onclick="closeBillActions(); navigateTo('screen-bill-history')">
+                        View bill history
+                        <span class="sheet-action-chevron" aria-hidden="true">›</span>
+                    </button>
+                    <button type="button" class="sheet-action" onclick="closeBillActions(); navigateTo('screen-ocr-review')">
+                        Edit bill details
+                        <span class="sheet-action-chevron" aria-hidden="true">›</span>
+                    </button>
+                    <button type="button" class="sheet-action danger" onclick="closeBillActions(); removeBill()">
+                        Remove bill
+                    </button>
+                </div>
+
+                <button class="secondary-btn" onclick="closeBillActions()">Cancel</button>
+            </div>
+        </div>
+
         <!-- Rename Home Modal -->
         <div id="rename-home-modal" class="modal">
             <div class="modal-content">
@@ -2680,7 +2585,7 @@
                 <p>Give this home a new name</p>
 
                 <div class="form-field">
-                    <label>Home name</label>
+                    <label for="rename-home-name">Home name</label>
                     <input type="text" id="rename-home-name" placeholder="e.g., Parents' Home, Office">
                 </div>
 
@@ -2698,12 +2603,12 @@
                 <p>Give your new household a name</p>
 
                 <div class="form-field">
-                    <label>Home name</label>
-                    <input type="text" placeholder="e.g., Parents' Home, Office">
+                    <label for="add-home-name">Home name</label>
+                    <input type="text" id="add-home-name" placeholder="e.g., Parents' Home, Office">
                 </div>
 
                 <div class="form-field">
-                    <label>Why this home exists <span class="optional-chip">optional</span></label>
+                    <label for="add-home-reason">Why this home exists <span class="optional-chip">optional</span></label>
                     <input type="text" id="add-home-reason" placeholder="e.g., Shared rent & utilities">
                 </div>
 
@@ -2726,7 +2631,7 @@
                 <h2>Mark as paid</h2>
                 <p>How did you pay this bill?</p>
 
-                <div class="payment-methods">
+                <div class="payment-methods" role="radiogroup" aria-label="How did you pay this bill?">
                     <label class="payment-method">
                         <input type="radio" name="payment-method" value="app">
                         <span>Another app</span>

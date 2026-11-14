@@ -29,6 +29,8 @@ function navigateTo(screenId) {
     // Camera control: turn on for OCR/scan QR cases
     handleCameraForScreen(screenId);
 
+    syncTabStates();
+
     // Scroll to top
     window.scrollTo(0, 0);
 }
@@ -115,6 +117,15 @@ function closeAllBillsSheet() {
     document.getElementById('all-bills-sheet').classList.remove('active');
 }
 
+// Bill detail secondary actions
+function openBillActions() {
+    document.getElementById('bill-actions-sheet').classList.add('active');
+}
+
+function closeBillActions() {
+    document.getElementById('bill-actions-sheet').classList.remove('active');
+}
+
 // Landing bill-payment offers banner (two slides, each with a defined destination)
 const OFFER_SLIDES = [
     {
@@ -177,7 +188,6 @@ let landingMode = 'me';
 let activeHome = 'personal';
 
 const ME_BILL_DATA = {
-    attention: 3,
     destination: 'screen-my-bills',
     bills: [
         { name: 'Electricity', amount: '₹1,840' },
@@ -280,15 +290,14 @@ function createAddHomeTile() {
 function setLandingMode(mode) {
     landingMode = mode;
     renderLandingOverview();
+    syncTabStates();
 }
 
 function renderLandingOverview() {
-    const badge = document.getElementById('landing-badge');
-    const statusRow = document.getElementById('landing-status-row');
     const preview = document.getElementById('landing-preview');
     const openLabel = document.getElementById('landing-open-label');
 
-    if (!badge || !preview) {
+    if (!preview) {
         return;
     }
 
@@ -297,12 +306,6 @@ function renderLandingOverview() {
     });
 
     const isHomeMode = landingMode === 'home';
-
-    if (statusRow) {
-        statusRow.classList.toggle('hidden', isHomeMode);
-    }
-
-    badge.textContent = `${ME_BILL_DATA.attention} bill${ME_BILL_DATA.attention === 1 ? '' : 's'} need attention`;
 
     preview.innerHTML = '';
     preview.classList.toggle('home-tiles', isHomeMode);
@@ -468,13 +471,6 @@ function resolvePayment(outcome) {
         updateMeVoucher();
         updateVoucherDetails();
         updateSuccessCue();
-
-        // Mark electricity bill visually paid
-        const elecStatus = document.querySelector('#screen-my-bills .bill-card:first-child .bill-status');
-        if (elecStatus) {
-            elecStatus.className = 'bill-status paid';
-            elecStatus.textContent = 'Paid · Verified';
-        }
 
         showAppToast('Payment confirmed by biller ✓');
         navigateTo('screen-payment-success');
@@ -812,10 +808,15 @@ function startCreditScoreCheck() {
 }
 
 function removeBill() {
-    const confirmed = window.confirm('Remove this bill from My Bills?');
-    if (!confirmed) return;
-    showAppToast('Bill removed from My Bills');
-    navigateTo('screen-my-bills');
+    showAppConfirm({
+        title: 'Remove this bill?',
+        message: 'It will be removed from My Bills. Your payment history stays intact.',
+        confirmLabel: 'Remove bill',
+        onConfirm: function() {
+            showAppToast('Bill removed from My Bills');
+            navigateTo('screen-my-bills');
+        }
+    });
 }
 
 function attemptOfflineRefresh() {
@@ -869,7 +870,10 @@ function switchInsightState(state) {
     if (!screen) return;
 
     screen.querySelectorAll('.insight-state-tab').forEach(tab => {
-        tab.classList.toggle('active', tab.dataset.state === state);
+        const active = tab.dataset.state === state;
+        tab.classList.toggle('active', active);
+        tab.setAttribute('aria-selected', String(active));
+        tab.setAttribute('tabindex', active ? '0' : '-1');
     });
     screen.querySelectorAll('.insight-panel').forEach(panel => {
         panel.hidden = panel.dataset.panel !== state;
@@ -991,6 +995,7 @@ function switchHomeTab(tab) {
 
     if (homes) homes.hidden = tab !== 'homes';
     if (invites) invites.hidden = tab !== 'invitations';
+    syncTabStates();
 }
 
 function copyInviteLink(elementId) {
@@ -1410,11 +1415,18 @@ function addSelectedCandidates() {
 }
 
 function disconnectEmail() {
-    emailConnection = 'disconnected';
-    emailLastScanLabel = 'Not scanned yet';
-    emailStatusDismissed = false;
-    renderEmailExperience();
-    navigateTo('screen-email-disconnected');
+    showAppConfirm({
+        title: 'Disconnect email?',
+        message: 'Future scans stop immediately. Bills already in My Bills stay, and you can reconnect anytime.',
+        confirmLabel: 'Disconnect email',
+        onConfirm: function() {
+            emailConnection = 'disconnected';
+            emailLastScanLabel = 'Not scanned yet';
+            emailStatusDismissed = false;
+            renderEmailExperience();
+            navigateTo('screen-email-disconnected');
+        }
+    });
 }
 
 function dismissAddBillInvite() {
@@ -1475,10 +1487,9 @@ function undoMarkPaid() {
 }
 
 // ============================================================
-// Physical paper calendar
-// A wall-calendar model: ink marks for due dates (circled),
-// stars for important bills, highlighter for today/payday,
-// cross-offs for paid bills, and a sticky note for reminders.
+// Bills calendar
+// A month grid with due/estimated/paid marks and a selected-day
+// bill list underneath.
 // ============================================================
 const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -1487,12 +1498,12 @@ const PAPER_CALENDARS = {
         monthIndex: 10,
         year: 2026,
         today: 15,
-        selected: 15,
+        selected: 18,
         filter: 'all',
         bills: {
-            18: [{ key: 'electricity', name: 'Electricity', account: 'XXXX1234', amount: 1840, state: 'due', tag: 'elec ₹1.8k', note: 'Confirmed with biller · pay from UPI' }],
-            21: [{ key: 'credit-card', name: 'Credit Card', account: 'XXXX5678', amount: 6250, state: 'unverified', tag: 'card', note: 'Marked paid on the HDFC app · not confirmed yet' }],
-            20: [{ key: 'broadband', name: 'Broadband', account: 'XXXX9012', amount: 999, state: 'due', tag: "b'band ₹1k", note: 'Confirmed with biller · renews this week' }]
+            18: [{ key: 'electricity', name: 'Electricity', account: 'XXXX1234', amount: 1840, state: 'due', tag: '₹1.8k', note: 'Confirmed with biller · pay from UPI' }],
+            21: [{ key: 'credit-card', name: 'Credit Card', account: 'XXXX5678', amount: 6250, state: 'unverified', tag: '₹6.3k', note: 'Marked paid on the HDFC app · not confirmed yet' }],
+            20: [{ key: 'broadband', name: 'Broadband', account: 'XXXX9012', amount: 999, state: 'due', tag: '₹1k', note: 'Auto-pay is on · don’t pay twice' }]
         },
         marks: { 1: ['payday'], 18: ['starred'] }
     },
@@ -1500,13 +1511,13 @@ const PAPER_CALENDARS = {
         monthIndex: 10,
         year: 2026,
         today: 15,
-        selected: 15,
+        selected: 18,
         filter: 'all',
         bills: {
-            10: [{ key: 'water', name: 'Water', account: 'XXXX3456', amount: 450, state: 'paid', tag: 'water', note: 'Paid from Paytm Wallet · verified' }],
-            18: [{ key: 'electricity', name: 'Electricity', account: 'XXXX1234', amount: 1840, state: 'due', tag: 'elec ₹1.8k', note: 'Confirmed with biller · pay from UPI' }],
-            20: [{ key: 'broadband', name: 'Broadband', account: 'XXXX9012', amount: 999, state: 'due', tag: "b'band ₹1k", note: 'Confirmed with biller · renews this week' }],
-            22: [{ key: 'gas', name: 'Gas', account: 'XXXX9012', amount: 850, state: 'estimated', tag: 'gas ~₹850', note: 'Estimate from last month · meter reading pending' }]
+            10: [{ key: 'water', name: 'Water', account: 'XXXX3456', amount: 450, state: 'paid', tag: '₹450', note: 'Paid from Paytm Wallet · verified' }],
+            18: [{ key: 'electricity', name: 'Electricity', account: 'XXXX1234', amount: 1840, state: 'due', tag: '₹1.8k', note: 'Confirmed with biller · pay from UPI' }],
+            20: [{ key: 'broadband', name: 'Broadband', account: 'XXXX9012', amount: 999, state: 'due', tag: '₹1k', note: 'Auto-pay is on · don’t pay twice' }],
+            22: [{ key: 'gas', name: 'Gas', account: 'XXXX9012', amount: 850, state: 'estimated', tag: '₹850', note: 'Estimate from last month · meter reading pending' }]
         },
         marks: { 18: ['starred'] }
     },
@@ -1514,12 +1525,12 @@ const PAPER_CALENDARS = {
         monthIndex: 10,
         year: 2026,
         today: 15,
-        selected: 15,
+        selected: 19,
         filter: 'all',
         bills: {
-            1: [{ key: 'rent', name: 'Rent (Nov)', account: 'Apartment 4B', amount: 25000, state: 'paid', tag: 'rent', note: 'Paid from the joint account · verified' }],
-            19: [{ key: 'shared-broadband', name: 'Shared Broadband', account: 'XXXX7890', amount: 2499, state: 'due', tag: "b'band ₹2.5k", note: 'Split 3 ways · confirmed with biller' }],
-            25: [{ key: 'netflix', name: 'Netflix (Shared)', account: 'Family Plan', amount: 649, state: 'estimated', tag: 'netflix ~₹650', note: '₹216 each · renews on the 25th' }]
+            1: [{ key: 'rent', name: 'Rent (Nov)', account: 'Apartment 4B', amount: 25000, state: 'paid', tag: '₹25k', note: 'Paid from the joint account · verified' }],
+            19: [{ key: 'shared-broadband', name: 'Shared Broadband', account: 'XXXX7890', amount: 2499, state: 'due', tag: '₹2.5k', note: 'Split 3 ways · confirmed with biller' }],
+            25: [{ key: 'netflix', name: 'Netflix (Shared)', account: 'Family Plan', amount: 649, state: 'estimated', tag: '₹650', note: '₹216 each · renews on the 25th' }]
         },
         marks: { 19: ['starred'] }
     }
@@ -1543,13 +1554,13 @@ function allCalendarBills(cal) {
 
 function calendarBillNote(bill) {
     if (bill.state === 'paid' && bill.baseState !== 'paid') {
-        return 'Crossed off just now · the paper trail stays on the page';
+        return 'Paid just now · tap the check to undo';
     }
     if (bill.state === 'due' && bill.baseState === 'unverified') {
-        return 'Cross-off removed · still shows as unpaid here';
+        return 'Marked unpaid again · tap the check to redo';
     }
     if (bill.state === 'due' && bill.baseState === 'paid') {
-        return 'Cross-off undone · marked unpaid again';
+        return 'Marked unpaid again · tap the check to redo';
     }
     return bill.note;
 }
@@ -1619,7 +1630,7 @@ function renderPaperGrid(screenId) {
         marks.forEach(mark => classes.push(mark));
 
         const star = marks.includes('starred') ? '<span class="day-star" aria-hidden="true"></span>' : '';
-        const tags = bills.map(bill => `<span class="day-tag ${bill.state}">${bill.tag}</span>`).join('');
+        const tags = bills.map(bill => `<span class="day-tag ${bill.state}" title="${bill.name} · ${bill.tag}">${bill.tag}</span>`).join('');
         const paydayTag = marks.includes('payday') ? '<span class="day-tag payday">salary</span>' : '';
 
         html += `<div class="${classes.join(' ')}" data-day="${day}" role="gridcell" tabindex="0" aria-label="${dayAriaLabel(cal, day, bills)}" onclick="selectCalendarDay('${screenId}', ${day})">
@@ -1670,7 +1681,7 @@ function agendaItemHTML(screenId, day, bill) {
             ${note ? `<span class="agenda-note">${note}</span>` : ''}
         </div>
         <div class="agenda-amount${crossed ? ' strike-through' : ''}">${formatINR(bill.amount)}</div>
-        <button class="check-btn${crossed ? ' checked' : ''}" type="button" onclick="toggleComplete(this)" aria-pressed="${crossed}" aria-label="${crossed ? 'Undo cross-off for' : 'Cross off'} ${bill.name}">${crossed ? '✓' : '☐'}</button>
+        <button class="check-btn${crossed ? ' checked' : ''}" type="button" onclick="toggleComplete(this)" aria-pressed="${crossed}" aria-label="${crossed ? 'Mark unpaid' : 'Mark paid'} ${bill.name}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${crossed ? '<path d="m5 12.5 4.5 4.5L19 7.5"/>' : ''}</svg></button>
     </div>`;
 }
 
@@ -1694,14 +1705,14 @@ function renderAgenda(screenId) {
     </div>`;
 
     if (!bills.length) {
-        html += '<p class="agenda-empty">Nothing written on this square.</p>';
+        html += '<p class="agenda-empty">No bills on this date.</p>';
         const next = nextBillDay(cal, day);
         if (next) {
-            html += `<p class="agenda-set-date">Next up: <button type="button" class="agenda-link" onclick="selectCalendarDay('${screenId}', ${next.day})">${next.bill.name} · ${next.day} ${month}</button></p>`;
+            html += `<p class="agenda-set-date">Next: <button type="button" class="agenda-link" onclick="selectCalendarDay('${screenId}', ${next.day})">${next.bill.name} · ${formatINR(next.bill.amount)} · ${next.day} ${month}</button></p>`;
         }
     } else if (!visibleBills.length) {
         const filterName = cal.filter === 'paid' ? 'Paid' : 'Needs attention';
-        html += `<p class="agenda-empty">This date is hidden by the “${filterName}” filter.</p>`;
+        html += `<p class="agenda-empty">No bills match the “${filterName}” filter.</p>`;
         html += `<p class="agenda-set-date"><button type="button" class="agenda-link" onclick="applyCalendarFilter('${screenId}', 'all')">Show all bills</button></p>`;
     } else {
         visibleBills.forEach(bill => {
@@ -1721,22 +1732,12 @@ function updatePaperSummary(screenId) {
     const crossedBills = bills.filter(billIsCrossed);
     const crossed = crossedBills.reduce((sum, bill) => sum + bill.amount, 0);
 
-    const write = (attr, value) => {
-        const el = document.querySelector(`[data-summary-${attr}="${screenId}"]`);
-        if (el) el.textContent = formatINR(value);
-    };
-
-    write('total', total);
-    write('crossed', crossed);
-    write('left', total - crossed);
+    const left = document.querySelector(`[data-summary-left="${screenId}"]`);
+    if (left) left.textContent = formatINR(total - crossed);
 
     const progress = document.querySelector(`[data-paper-progress="${screenId}"]`);
     if (progress) {
-        const unverifiedCount = bills.filter(bill => bill.state === 'unverified').length;
-        const unverifiedNote = unverifiedCount
-            ? ` · ${unverifiedCount} marked elsewhere`
-            : '';
-        progress.textContent = `${crossedBills.length} of ${bills.length} crossed off this month${unverifiedNote}`;
+        progress.textContent = `${crossedBills.length} of ${bills.length} paid`;
     }
 }
 
@@ -1786,7 +1787,7 @@ function toggleComplete(button) {
     const bill = (cal && cal.bills[day] || []).find(candidate => candidate.key === key);
     if (!bill) return;
 
-    // Cross off / undo, keeping the existing paper trail visible either way.
+    // Toggle paid / unpaid while keeping the updated state visible.
     if (billIsCrossed(bill)) {
         bill.state = 'due';
     } else {
@@ -1841,16 +1842,24 @@ function navigateCalendarMonth(screenId, direction) {
     if (!cal) return;
 
     const history = cal.monthHistory || (cal.monthHistory = []);
-    const currentKey = `${cal.year}-${cal.monthIndex}`;
-    const lastEntry = history[history.length - 1];
-    if (!lastEntry || lastEntry.monthKey !== currentKey) {
+
+    if (direction > 0) {
+        // Remember the current month only when moving forward, so Back
+        // restores exactly one month instead of pushing a duplicate entry.
         history.push({
-            monthKey: currentKey,
+            monthKey: `${cal.year}-${cal.monthIndex}`,
             bills: JSON.parse(JSON.stringify(cal.bills || {})),
             marks: Object.assign({}, cal.marks || {}),
             selected: cal.selected,
             filter: cal.filter
         });
+    } else {
+        const previous = history.pop();
+        if (!previous) return;
+        cal.bills = previous.bills;
+        cal.marks = previous.marks || {};
+        cal.selected = previous.selected;
+        cal.filter = previous.filter;
     }
 
     const target = new Date(cal.year, cal.monthIndex + direction, 1);
@@ -1859,14 +1868,6 @@ function navigateCalendarMonth(screenId, direction) {
 
     if (direction > 0) {
         cal.bills = buildMonthBills(cal, targetMonthIndex, targetYear);
-    } else {
-        const previous = history.pop();
-        if (previous) {
-            cal.bills = previous.bills;
-            cal.marks = previous.marks || {};
-            cal.selected = previous.selected;
-            cal.filter = previous.filter;
-        }
     }
 
     cal.monthIndex = targetMonthIndex;
@@ -2165,3 +2166,219 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('This is a prototype for demonstration purposes only');
     console.log('No real payments, data storage, or integrations are connected');
 });
+
+// ---------------------------------------------------------------------------
+// Accessibility hardening: keyboard-operable cards, tab state, dialogs, focus
+// ---------------------------------------------------------------------------
+
+const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), summary, [tabindex]:not([tabindex="-1"])';
+let dialogReturnFocus = null;
+let activeDialog = null;
+let confirmAction = null;
+
+function syncTabStates() {
+    const groups = [
+        ['.tab-toggle', 'Bill view'],
+        ['.card-toggle', 'Bill view'],
+        ['.home-tab-toggle', 'Home view']
+    ];
+    groups.forEach(([selector, label]) => {
+        document.querySelectorAll(selector).forEach(group => {
+            group.setAttribute('role', 'group');
+            if (!group.getAttribute('aria-label')) group.setAttribute('aria-label', label);
+            group.querySelectorAll('button').forEach(button => {
+                button.setAttribute('aria-pressed', String(button.classList.contains('active')));
+            });
+        });
+    });
+}
+
+function enhanceClickableCards(root) {
+    const scope = root || document.getElementById('app');
+    if (!scope) return;
+    scope.querySelectorAll('[onclick]').forEach(element => {
+        if (element.matches('button, a, input, select, textarea, label, summary')) return;
+        element.setAttribute('role', 'button');
+        if (!element.hasAttribute('tabindex')) element.setAttribute('tabindex', '0');
+    });
+}
+
+function initDialogA11y(dialog) {
+    dialog.setAttribute('role', dialog.id === 'app-confirm' ? 'alertdialog' : 'dialog');
+    dialog.setAttribute('aria-modal', 'true');
+    if (!dialog.hasAttribute('aria-labelledby')) {
+        const heading = dialog.querySelector('h2');
+        if (heading) {
+            if (!heading.id) heading.id = 'dialog-title-' + Math.random().toString(36).slice(2, 8);
+            dialog.setAttribute('aria-labelledby', heading.id);
+        }
+    }
+}
+
+function getActiveDialog() {
+    const dialogs = Array.from(document.querySelectorAll('.modal.active, .bottom-sheet.active'));
+    return dialogs.length ? dialogs[dialogs.length - 1] : null;
+}
+
+const DIALOG_CLOSERS = {
+    'rename-home-modal': () => closeRenameHomeModal(),
+    'add-home-modal': () => closeAddHomeModal(),
+    'mark-paid-modal': () => closeMarkPaidModal(),
+    'reward-prompt-modal': () => closeRewardPrompt(),
+    'all-bills-sheet': () => closeAllBillsSheet(),
+    'home-selector-sheet': () => closeHomeSelector(),
+    'bill-actions-sheet': () => closeBillActions(),
+    'app-confirm': () => closeAppConfirm()
+};
+
+function closeTopDialog(dialog) {
+    const closer = DIALOG_CLOSERS[dialog.id];
+    if (closer) {
+        closer();
+    } else {
+        dialog.classList.remove('active');
+    }
+}
+
+function ensureAppConfirm() {
+    let modal = document.getElementById('app-confirm');
+    if (modal) return modal;
+
+    modal = document.createElement('div');
+    modal.id = 'app-confirm';
+    modal.className = 'modal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h2 id="app-confirm-title">Are you sure?</h2>
+            <p id="app-confirm-message"></p>
+            <div class="modal-actions">
+                <button type="button" class="primary-btn" data-confirm-ok aria-describedby="app-confirm-message">Confirm</button>
+                <button type="button" class="secondary-btn" data-confirm-cancel>Cancel</button>
+            </div>
+        </div>`;
+    document.getElementById('app').appendChild(modal);
+    initDialogA11y(modal);
+    modal.querySelector('[data-confirm-cancel]').addEventListener('click', closeAppConfirm);
+    modal.querySelector('[data-confirm-ok]').addEventListener('click', function() {
+        const action = confirmAction;
+        closeAppConfirm();
+        if (action) action();
+    });
+    return modal;
+}
+
+function showAppConfirm(options) {
+    const modal = ensureAppConfirm();
+    modal.querySelector('#app-confirm-title').textContent = options.title;
+    modal.querySelector('#app-confirm-message').textContent = options.message;
+    modal.querySelector('[data-confirm-ok]').textContent = options.confirmLabel || 'Confirm';
+    confirmAction = options.onConfirm || null;
+    modal.classList.add('active');
+    window.setTimeout(() => modal.querySelector('[data-confirm-cancel]').focus(), 0);
+}
+
+function closeAppConfirm() {
+    const modal = document.getElementById('app-confirm');
+    if (!modal) return;
+    modal.classList.remove('active');
+    confirmAction = null;
+    if (dialogReturnFocus && document.contains(dialogReturnFocus)) {
+        window.setTimeout(() => dialogReturnFocus.focus(), 0);
+    }
+}
+
+document.addEventListener('click', function(event) {
+    const trigger = event.target.closest('button, [role="button"], a');
+    if (trigger && !trigger.closest('.modal, .bottom-sheet')) {
+        dialogReturnFocus = trigger;
+    }
+}, true);
+
+document.addEventListener('keydown', function(event) {
+    const dialog = getActiveDialog();
+    if (!dialog) return;
+
+    if (event.key === 'Escape') {
+        event.preventDefault();
+        closeTopDialog(dialog);
+        return;
+    }
+
+    if (event.key !== 'Tab') return;
+    const focusable = Array.from(dialog.querySelectorAll(FOCUSABLE_SELECTOR))
+        .filter(element => element.offsetParent !== null);
+    if (!focusable.length) {
+        event.preventDefault();
+        const content = dialog.querySelector('.modal-content, .bottom-sheet-content');
+        if (content) {
+            content.setAttribute('tabindex', '-1');
+            content.focus();
+        }
+        return;
+    }
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && (document.activeElement === first || !dialog.contains(document.activeElement))) {
+        event.preventDefault();
+        last.focus();
+    } else if (!event.shiftKey && (document.activeElement === last || !dialog.contains(document.activeElement))) {
+        event.preventDefault();
+        first.focus();
+    }
+});
+
+// Enter/Space activates card-style controls that are not native buttons
+document.addEventListener('keydown', function(event) {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    const control = event.target.closest('[role="button"][onclick]');
+    if (!control || control.matches('button, a')) return;
+    event.preventDefault();
+    control.click();
+});
+
+// Arrow-key navigation across the insight tabs
+document.addEventListener('keydown', function(event) {
+    const tab = event.target.closest('.insight-state-tab');
+    if (!tab) return;
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    const tabs = Array.from(tab.closest('.insight-state-tabs').querySelectorAll('.insight-state-tab'));
+    const current = tabs.indexOf(tab);
+    let next = current;
+    if (event.key === 'ArrowLeft') next = (current - 1 + tabs.length) % tabs.length;
+    if (event.key === 'ArrowRight') next = (current + 1) % tabs.length;
+    if (event.key === 'Home') next = 0;
+    if (event.key === 'End') next = tabs.length - 1;
+    event.preventDefault();
+    tabs[next].click();
+    tabs[next].focus();
+});
+
+function initAccessibility() {
+    enhanceClickableCards();
+    syncTabStates();
+    document.querySelectorAll('.modal, .bottom-sheet').forEach(initDialogA11y);
+
+    const dialogObserver = new MutationObserver(() => {
+        const dialog = getActiveDialog();
+        if (dialog && dialog !== activeDialog) {
+            activeDialog = dialog;
+            const target = dialog.querySelector('[data-autofocus]') || dialog.querySelector(FOCUSABLE_SELECTOR);
+            if (target) window.setTimeout(() => target.focus(), 0);
+        } else if (!dialog && activeDialog) {
+            activeDialog = null;
+            if (dialogReturnFocus && document.contains(dialogReturnFocus)) {
+                window.setTimeout(() => dialogReturnFocus.focus(), 0);
+            }
+        }
+    });
+
+    document.querySelectorAll('.modal, .bottom-sheet').forEach(dialog => {
+        dialogObserver.observe(dialog, { attributes: true, attributeFilter: ['class'] });
+    });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAccessibility);
+} else {
+    initAccessibility();
+}
