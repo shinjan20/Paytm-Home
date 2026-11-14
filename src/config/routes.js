@@ -22,7 +22,7 @@ export const APP_ROUTES = [
   { id: 'screen-personal-calendar', path: '/calendar/personal', title: 'Personal Calendar' },
   { id: 'screen-flatmates-calendar', path: '/calendar/flatmates', title: 'Flatmates Calendar' },
   { id: 'screen-reminder', path: '/reminders', title: 'Reminder Settings' },
-  { id: 'screen-voucher-details', path: '/voucher', title: 'Reward Details' },
+  { id: 'screen-voucher-details', path: '/voucher', title: 'Voucher Details' },
   { id: 'screen-empty-bills', path: '/empty-bills', title: 'No Bills' },
   { id: 'screen-ocr-loading', path: '/ocr-loading', title: 'Scanning...' },
   { id: 'screen-bill-loading', path: '/bill-loading', title: 'Loading Bill...' },
@@ -31,7 +31,7 @@ export const APP_ROUTES = [
   { id: 'screen-stale-data', path: '/stale', title: 'Stale Data' },
   { id: 'screen-email-consent', path: '/email/consent', title: 'Connect Email' },
   { id: 'screen-email-scanning', path: '/email/scanning', title: 'Scanning Inbox...' },
-  { id: 'email-candidates', path: '/email/candidates', title: 'Candidate Bills' },
+  { id: 'screen-email-candidates', path: '/email/candidates', title: 'Candidate Bills' },
   { id: 'screen-email-connected', path: '/email/connected', title: 'Email Connected' },
   { id: 'screen-widget-preview', path: '/widget', title: 'Widget Preview' },
   { id: 'screen-camera-denied', path: '/camera-denied', title: 'Camera Permission' },
@@ -39,7 +39,7 @@ export const APP_ROUTES = [
   { id: 'screen-email-disconnected', path: '/email/disconnected', title: 'Email Disconnected' },
   { id: 'screen-bill-history', path: '/bill-history', title: 'Bill History' },
   { id: 'screen-home-details', path: '/home-details', title: 'Home Details' },
-  { id: 'screen-reward-chooser', path: '/reward-chooser', title: 'Choose Reward' },
+  { id: 'screen-reward-chooser', path: '/reward-chooser', title: 'Choose Voucher' },
   { id: 'screen-404', path: '/404', title: 'Page Not Found' },
 ];
 

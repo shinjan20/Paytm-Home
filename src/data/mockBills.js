@@ -100,11 +100,18 @@ export const INITIAL_BILLS = [
   }
 ];
 
+const REWARD_ICON_ATTRS =
+  'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"';
+const REWARD_ICON_TICKET = `<svg ${REWARD_ICON_ATTRS}><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h11A2.5 2.5 0 0 1 20 8.5v1a2.5 2.5 0 0 0 0 5v1a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 15.5v-1a2.5 2.5 0 0 0 0-5v-1Z"/><path d="M14.5 6.5v2M14.5 11v2M14.5 15.5v2"/></svg>`;
+const REWARD_ICON_PERCENT = `<svg ${REWARD_ICON_ATTRS}><path d="M19 5 5 19"/><circle cx="7.5" cy="7.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>`;
+const REWARD_ICON_TV = `<svg ${REWARD_ICON_ATTRS}><rect x="3.5" y="6.5" width="17" height="11.5" rx="2"/><path d="m8 3.5 4 3 4-3"/></svg>`;
+const REWARD_ICON_WIFI = `<svg ${REWARD_ICON_ATTRS}><path d="M3.5 9.5a12 12 0 0 1 17 0"/><path d="M6.8 13a8 8 0 0 1 10.4 0"/><path d="M10 16.4a3.4 3.4 0 0 1 4 0"/><circle cx="12" cy="19.3" r="1"/></svg>`;
+
 export const AVAILABLE_REWARDS = [
-  { id: 'cashback-50', icon: '💸', name: '₹50 cashback', desc: 'Credited to your Paytm wallet' },
-  { id: 'bill-discount', icon: '🧾', name: '10% off next bill', desc: 'Up to ₹200 on any bill' },
-  { id: 'movie-ticket', icon: '🎬', name: 'Free movie ticket', desc: 'One ticket at partner cinemas' },
-  { id: 'wallet-credit', icon: '💳', name: '₹100 wallet credit', desc: 'Valid for 30 days' }
+  { id: 'voucher-100', icon: REWARD_ICON_TICKET, name: '₹100 bill voucher', desc: 'On any bill of ₹500 or more' },
+  { id: 'voucher-10pc', icon: REWARD_ICON_PERCENT, name: '10% off next bill', desc: 'Up to ₹200 on any bill payment' },
+  { id: 'voucher-dth', icon: REWARD_ICON_TV, name: '₹75 DTH voucher', desc: 'On your next DTH recharge' },
+  { id: 'voucher-broadband', icon: REWARD_ICON_WIFI, name: '₹50 broadband voucher', desc: 'On your next broadband bill' }
 ];
 
 export const EMAIL_CANDIDATES = [

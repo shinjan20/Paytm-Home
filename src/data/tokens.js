@@ -14,8 +14,8 @@ export const TOKENS = {
     statusPaidBorder: '#bbf7d0',
     
     statusPending: '#d97706',
-    statusPendingBg: '#fffbeb',
-    statusPendingBorder: '#fde68a',
+    statusPendingBg: '#eef4ff',
+    statusPendingBorder: '#dbe7fb',
     
     statusOverdue: '#dc2626',
     statusOverdueBg: '#fef2f2',

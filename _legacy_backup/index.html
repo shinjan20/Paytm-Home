@@ -45,7 +45,7 @@
             <div class="section landing-card">
                 <h2 class="section-title">UPI Money Transfer</h2>
                 <div class="icon-grid">
-                    <div class="icon-item">
+                    <div class="icon-item" onclick="navigateTo('screen-camera')">
                         <div class="icon-circle navy">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8" />
@@ -163,7 +163,7 @@
                 </div>
                 <p class="my-bills-subtitle">Keep track of bills you pay every month</p>
                 <div class="my-bills-status-row" id="landing-status-row">
-                    <span class="badge" id="landing-badge">2 bills need attention</span>
+                    <span class="badge" id="landing-badge">3 bills need attention</span>
                 </div>
                 <div class="my-bills-preview" id="landing-preview">
                     <div class="bill-preview-item">
@@ -181,120 +181,241 @@
                 </button>
             </div>
 
-            <!-- Rewards / Voucher section on home screen -->
+            <!-- Bill payment offers banner (bank cards) -->
+            <div class="offers-banner-wrap">
+                <div class="offers-banner" id="offers-banner">
+                    <button type="button" class="offers-banner-hit" id="offers-banner-hit"
+                            aria-label="Get up to ₹150 Off using top bank cards. Opens all bill payments."
+                            onclick="handleOfferBannerClick()"></button>
+                    <div class="offers-banner-copy" aria-live="polite">
+                        <p class="offers-banner-title" id="offers-banner-title">Get up to ₹150 Off</p>
+                        <p class="offers-banner-sub"><span id="offers-banner-sub">using top bank cards</span> <span class="offers-banner-arrow" aria-hidden="true">→</span></p>
+                        <div class="offers-banner-dots" aria-label="Offer slides">
+                            <button type="button" class="offers-dot active" aria-label="Offer 1: up to ₹150 off using top bank cards" aria-pressed="true" onclick="setOfferSlide(0)"></button>
+                            <button type="button" class="offers-dot" aria-label="Offer 2: earn a bill payment voucher on your 3rd bill payment" aria-pressed="false" onclick="setOfferSlide(1)"></button>
+                        </div>
+                    </div>
+                    <div class="offers-banner-art" aria-hidden="true">
+                        <span class="offers-card offers-card-cyan"></span>
+                        <span class="offers-card offers-card-gold"></span>
+                        <span class="offers-card offers-card-light"></span>
+                        <span class="offers-card-dot offers-card-dot-a"></span>
+                        <span class="offers-card-dot offers-card-dot-b"></span>
+                        <span class="offers-card-dot offers-card-dot-c"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bill Payments & Offers: Paytm voucher-grid layout, wired to bill payment entry points -->
+            <div class="section landing-card bill-offers-card">
+                <div class="section-header">
+                    <h2 class="section-title">Bill Payments &amp; Offers</h2>
+                    <button type="button" class="view-all" onclick="showAllBillsSheet()">View All →</button>
+                </div>
+                <div class="offer-grid">
+                    <button type="button" class="offer-tile" onclick="openBillerSearch('Electricity')" aria-label="Pay Electricity bill, 5 percent off">
+                        <span class="offer-logo">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2.6 4.9 13.1c-.3.4 0 1 .5 1h4.9l-1 7.2c-.1.6.7.9 1.1.4L19 11.2c.3-.4 0-1-.5-1h-5l1-7.2c.1-.6-.7-.9-1.1-.4Z"/></svg>
+                        </span>
+                        <span class="offer-text">
+                            <span class="offer-value">5% Off</span>
+                            <span class="offer-label">Electricity</span>
+                        </span>
+                    </button>
+                    <button type="button" class="offer-tile" onclick="openBillerSearch('Water')" aria-label="Pay Water bill, 4 percent off">
+                        <span class="offer-logo">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.1c3.3 4 6 7.3 6 10.4a6 6 0 1 1-12 0c0-3.1 2.7-6.4 6-10.4Z"/></svg>
+                        </span>
+                        <span class="offer-text">
+                            <span class="offer-value">4% Off</span>
+                            <span class="offer-label">Water</span>
+                        </span>
+                    </button>
+                    <button type="button" class="offer-tile" onclick="openBillerSearch('Broadband')" aria-label="Pay Broadband bill, 10 percent off">
+                        <span class="offer-logo">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 8.6a12.4 12.4 0 0 1 16 0"/><path d="M7 12.1a8.2 8.2 0 0 1 10 0"/><path d="M9.9 15.5a4.2 4.2 0 0 1 4.2 0"/><circle cx="12" cy="18.7" r="1.35" fill="currentColor" stroke="none"/></svg>
+                        </span>
+                        <span class="offer-text">
+                            <span class="offer-value">10% Off</span>
+                            <span class="offer-label">Broadband</span>
+                        </span>
+                    </button>
+                    <button type="button" class="offer-tile" onclick="openBillerSearch('DTH')" aria-label="Pay DTH bill, 16 percent off">
+                        <span class="offer-logo">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.9" y="6.6" width="18.2" height="12.3" rx="2.5"/><path d="m9.4 3.2 2.6 3.4 2.6-3.4"/><path d="m10.2 10.6 4.6 2.3-4.6 2.3Z" fill="currentColor" stroke="none"/></svg>
+                        </span>
+                        <span class="offer-text">
+                            <span class="offer-value">16% Off</span>
+                            <span class="offer-label">DTH</span>
+                        </span>
+                    </button>
+                    <button type="button" class="offer-tile" onclick="openBillerSearch('Gas')" aria-label="Pay Piped Gas bill, 20 percent off">
+                        <span class="offer-logo">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.5 2.7c.3 3 1.5 4.4 2.7 5.8 1 1.1 1.8 2.3 1.8 4a5 5 0 0 1-10 0c0-1.7.8-3 1.8-4.4.3 1.3.8 2.1 1.8 2.6-.2-2.8.2-5.3 1.9-8Z"/></svg>
+                        </span>
+                        <span class="offer-text">
+                            <span class="offer-value">20% Off</span>
+                            <span class="offer-label">Piped Gas</span>
+                        </span>
+                    </button>
+                    <button type="button" class="offer-tile" onclick="openBillerSearch('Credit Card')" aria-label="Pay Credit Card bill, 12 percent off">
+                        <span class="offer-logo">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="2.8" y="5.2" width="18.4" height="13.6" rx="2.6"/><path d="M2.8 9.7h18.4"/><path d="M6.4 15.2h3.8"/></svg>
+                        </span>
+                        <span class="offer-text">
+                            <span class="offer-value">12% Off</span>
+                            <span class="offer-label">Credit Card</span>
+                        </span>
+                    </button>
+                    <button type="button" class="offer-tile" onclick="openBillerSearch('FASTag')" aria-label="Recharge FASTag, 9 percent off">
+                        <span class="offer-logo">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.2 15.2v-1.5l1.4-3.6a2.1 2.1 0 0 1 2-1.3h8.8a2.1 2.1 0 0 1 2 1.3l1.4 3.6v1.5"/><path d="M4.2 12.9h15.6v3.2a1.4 1.4 0 0 1-1.4 1.4H5.6a1.4 1.4 0 0 1-1.4-1.4Z"/><path d="M6.4 11.2h11.2"/><circle cx="7.4" cy="18" r="1.2" fill="currentColor" stroke="none"/><circle cx="16.6" cy="18" r="1.2" fill="currentColor" stroke="none"/></svg>
+                        </span>
+                        <span class="offer-text">
+                            <span class="offer-value">9% Off</span>
+                            <span class="offer-label">FASTag</span>
+                        </span>
+                    </button>
+                    <button type="button" class="offer-tile" onclick="openBillerSearch('Insurance')" aria-label="Pay Insurance premium, 9 percent off">
+                        <span class="offer-logo">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.9 4.6 5.7v5.5c0 5 3.1 8.3 7.4 9.9 4.3-1.6 7.4-4.9 7.4-9.9V5.7Z"/><path d="m8.9 11.8 2.2 2.2 4-4.3"/></svg>
+                        </span>
+                        <span class="offer-text">
+                            <span class="offer-value">9% Off</span>
+                            <span class="offer-label">Insurance</span>
+                        </span>
+                    </button>
+                </div>
+                <p class="offers-footnote">Illustrative offers · prototype data</p>
+            </div>
+
+            <!-- Rewards / Voucher section on home screen (voucher unlocks on the 3rd qualifying bill payment) -->
             <div class="rewards-card">
                 <div class="rewards-header">
                     <div class="rewards-icon-wrapper">
-                        <span class="rewards-icon">🎁</span>
+                        <svg class="rewards-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                            <path d="M4 10.5h16V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19v-8.5Z"/>
+                            <path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5v3H3v-3Z"/>
+                            <path d="M12 6v14.5"/>
+                            <path d="M12 6S10.6 2.5 8.3 2.5a1.75 1.75 0 1 0 0 3.5H12Z"/>
+                            <path d="M12 6s1.4-3.5 3.7-3.5a1.75 1.75 0 1 1 0 3.5H12Z"/>
+                        </svg>
                     </div>
                     <div class="rewards-title-group">
-                        <h3 class="rewards-title">Rewards you can win</h3>
-                        <p class="rewards-subtitle">Pay bills to earn rewards</p>
+                        <h3 class="rewards-title">Reward progress</h3>
+                        <p class="rewards-subtitle">3 bill payments unlock a voucher</p>
                     </div>
                     <button type="button" class="view-all-btn" onclick="navigateTo('screen-voucher-details')">View all →</button>
                 </div>
-                
+
                 <div class="rewards-hero">
                     <div class="rewards-progress-main">
                         <div class="rewards-progress-circle">
-                            <svg class="progress-ring" width="80" height="80">
+                            <svg class="progress-ring" width="80" height="80" viewBox="0 0 80 80">
                                 <circle class="progress-ring-bg" cx="40" cy="40" r="35" fill="none" stroke="#e5e7eb" stroke-width="6"/>
-                                <circle class="progress-ring-fill" cx="40" cy="40" r="35" fill="none" stroke="#00baf2" stroke-width="6" 
+                                <circle class="progress-ring-fill" id="rewards-ring-fill" cx="40" cy="40" r="35" fill="none" stroke="#0b4a9e" stroke-width="6" 
                                     stroke-dasharray="220" stroke-dashoffset="147" stroke-linecap="round" transform="rotate(-90 40 40)"/>
                             </svg>
                             <div class="progress-text">
-                                <span class="progress-number">1</span>
+                                <span class="progress-number" id="rewards-progress-number">1</span>
                                 <span class="progress-label">/3</span>
                             </div>
                         </div>
                         <div class="rewards-progress-info">
-                            <p class="rewards-progress-title">Almost there!</p>
-                            <p class="rewards-progress-desc">Pay 2 more bills to unlock rewards</p>
+                            <p class="rewards-progress-title" id="rewards-progress-title">Almost there!</p>
+                            <p class="rewards-progress-desc" id="rewards-progress-desc">Pay 2 more bills to unlock your voucher</p>
                         </div>
                     </div>
                     <div class="rewards-next-reward">
-                        <div class="next-reward-icon">💰</div>
+                        <div class="next-reward-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                                <path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h11A2.5 2.5 0 0 1 20 8.5v1a2.5 2.5 0 0 0 0 5v1a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 15.5v-1a2.5 2.5 0 0 0 0-5v-1Z"/>
+                                <path d="M14.5 6.5v2M14.5 11v2M14.5 15.5v2"/>
+                            </svg>
+                        </div>
                         <div class="next-reward-info">
-                            <p class="next-reward-title">₹50 Cashback</p>
-                            <p class="next-reward-status">Next reward</p>
+                            <p class="next-reward-title">Bill payment voucher</p>
+                            <p class="next-reward-status" id="rewards-next-status">Unlocks on your 3rd bill payment</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="rewards-list">
-                    <div class="reward-card locked">
+                    <div class="reward-card locked" id="rewards-voucher-card">
                         <div class="reward-card-header">
-                            <div class="reward-card-icon">🏷️</div>
+                            <div class="reward-card-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                                    <path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h11A2.5 2.5 0 0 1 20 8.5v1a2.5 2.5 0 0 0 0 5v1a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 15.5v-1a2.5 2.5 0 0 0 0-5v-1Z"/>
+                                    <path d="M14.5 6.5v2M14.5 11v2M14.5 15.5v2"/>
+                                </svg>
+                            </div>
                             <div class="reward-card-content">
-                                <p class="reward-card-title">10% Off Next Bill</p>
-                                <p class="reward-card-subtitle">Unlock after 3 bills</p>
+                                <p class="reward-card-title">Bill payment voucher</p>
+                                <p class="reward-card-subtitle" id="rewards-voucher-subtitle">Earned after 3 qualifying bill payments</p>
                             </div>
                         </div>
                         <div class="reward-card-footer">
-                            <span class="reward-progress-mini">0/3</span>
-                            <span class="reward-lock">🔒</span>
-                        </div>
-                    </div>
-                    <div class="reward-card locked">
-                        <div class="reward-card-header">
-                            <div class="reward-card-icon">⚡</div>
-                            <div class="reward-card-content">
-                                <p class="reward-card-title">Free Bill Payment</p>
-                                <p class="reward-card-subtitle">Unlock after 5 bills</p>
-                            </div>
-                        </div>
-                        <div class="reward-card-footer">
-                            <span class="reward-progress-mini">0/5</span>
-                            <span class="reward-lock">🔒</span>
+                            <span class="reward-progress-mini" id="rewards-voucher-progress">1/3</span>
+                            <span class="reward-lock" id="rewards-voucher-lock">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                                    <rect x="5" y="10.5" width="14" height="9.5" rx="2"/>
+                                    <path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>
+                                </svg>
+                            </span>
                         </div>
                     </div>
                 </div>
+
+                <p class="rewards-footnote">Voucher is not cashback · illustrative prototype data</p>
             </div>
 
             <div class="section">
                 <div class="promo-card">
-                    <h4>Credit Score</h4>
-                    <p>Free, 1-tap check: no impact on score</p>
+                    <div class="promo-copy">
+                        <h4>Credit Score</h4>
+                        <p>Free, 1-tap check: no impact on score</p>
+                    </div>
+                    <button type="button" class="secondary-btn credit-score-cta" onclick="startCreditScoreCheck()">Check score</button>
                 </div>
             </div>
-
-            <button class="scan-qr-btn" onclick="navigateTo('screen-camera')">
-                <span class="scan-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="3" width="7" height="7"></rect>
-                        <rect x="14" y="3" width="7" height="7"></rect>
-                        <rect x="3" y="14" width="7" height="7"></rect>
-                        <rect x="14" y="14" width="3" height="3"></rect>
-                        <rect x="18" y="18" width="3" height="3"></rect>
-                        <rect x="14" y="18" width="3" height="3"></rect>
-                        <rect x="18" y="14" width="3" height="3"></rect>
-                    </svg>
-                </span>
-                Scan QR
-            </button>
         </div>
 
         <!-- Screen 02: My Bills Dashboard (Me Tab) -->
         <div id="screen-my-bills" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-recharge-bills')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-recharge-bills')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <div class="tab-toggle">
                     <button class="tab-btn active" onclick="switchTab('me')">Me</button>
                     <button class="tab-btn" onclick="switchTab('home')">Home</button>
                 </div>
-                <button class="icon-btn" onclick="navigateTo('screen-calendar')">📅</button>
+                <button class="icon-btn calendar-icon-btn" onclick="navigateTo('screen-calendar')" aria-label="Open bills calendar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/>
+                        <path d="M3.5 9.5h17"/>
+                        <path d="M8 3v4M16 3v4"/>
+                        <path d="M8 13.5h2M14 13.5h2M8 17h2M14 17h2"/>
+                    </svg>
+                </button>
             </div>
 
             <div class="dashboard-summary">
-                <span class="summary-count">2 bills need attention</span>
+                <span class="summary-count">3 bills need attention</span>
             </div>
 
             <!-- Voucher Progress Card -->
             <div class="voucher-progress-card" onclick="navigateTo('screen-voucher-details')">
                 <div class="voucher-header">
-                    <div class="voucher-icon">🎁</div>
+                    <div class="voucher-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                            <path d="M4 10.5h16V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19v-8.5Z"/>
+                            <path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5v3H3v-3Z"/>
+                            <path d="M12 6v14.5"/>
+                            <path d="M12 6S10.6 2.5 8.3 2.5a1.75 1.75 0 1 0 0 3.5H12Z"/>
+                            <path d="M12 6s1.4-3.5 3.7-3.5a1.75 1.75 0 1 1 0 3.5H12Z"/>
+                        </svg>
+                    </div>
                     <div class="voucher-info">
-                        <h4>Bill payment reward</h4>
+                        <h4>Bill payment voucher · Me</h4>
                         <p class="voucher-status" id="me-voucher-status">In progress</p>
                     </div>
                 </div>
@@ -302,6 +423,7 @@
                     <div class="progress-fill" id="me-voucher-fill" style="width: 33%"></div>
                 </div>
                 <p class="voucher-text" id="me-voucher-text">1 of 3 qualifying bill payments completed</p>
+                <p class="voucher-scope">Me progress only · each home counts its own voucher separately</p>
             </div>
 
             <div class="bill-section">
@@ -336,10 +458,6 @@
                         <span class="bill-status marked-paid">Marked paid elsewhere</span>
                     </div>
                 </div>
-            </div>
-
-            <div class="bill-section">
-                <h3 class="bill-section-title">Upcoming</h3>
 
                 <div class="bill-card" onclick="navigateTo('screen-bill-detail')">
                     <div class="bill-card-header">
@@ -351,8 +469,8 @@
                         <div class="bill-amount">₹999</div>
                     </div>
                     <div class="bill-card-footer">
-                        <span class="bill-due">Due 25 Nov</span>
-                        <span class="bill-status estimated">Upcoming · estimated</span>
+                        <span class="bill-due">Due 20 Nov</span>
+                        <span class="bill-status confirmed">Confirmed pending</span>
                     </div>
                 </div>
             </div>
@@ -396,7 +514,7 @@
         <!-- Screen 02b: Home Selection (when Home tab is clicked) -->
         <div id="screen-home-selection" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-my-bills')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-my-bills')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Select Home</h1>
             </div>
 
@@ -468,7 +586,7 @@
         <!-- Screen 02c: Home Details / Invite (Paytm home details) -->
         <div id="screen-home-details" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-home-selection')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-home-selection')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Home details</h1>
             </div>
 
@@ -518,12 +636,19 @@
         <!-- Screen 02c: Personal Home Dashboard -->
         <div id="screen-personal-home" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-home-selection')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-home-selection')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <div class="tab-toggle">
                     <button class="tab-btn" onclick="switchTab('me')">Me</button>
                     <button class="tab-btn active" onclick="switchTab('home')">Home</button>
                 </div>
-                <button class="icon-btn" onclick="navigateTo('screen-personal-calendar')">📅</button>
+                <button class="icon-btn calendar-icon-btn" onclick="navigateTo('screen-personal-calendar')" aria-label="Open home calendar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/>
+                        <path d="M3.5 9.5h17"/>
+                        <path d="M8 3v4M16 3v4"/>
+                        <path d="M8 13.5h2M14 13.5h2M8 17h2M14 17h2"/>
+                    </svg>
+                </button>
             </div>
 
             <div class="home-indicator clickable" onclick="showHomeSelector()">
@@ -538,9 +663,17 @@
             <!-- Voucher Progress Card -->
             <div class="voucher-progress-card" onclick="navigateTo('screen-voucher-details')">
                 <div class="voucher-header">
-                    <div class="voucher-icon">🎁</div>
+                    <div class="voucher-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                            <path d="M4 10.5h16V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19v-8.5Z"/>
+                            <path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5v3H3v-3Z"/>
+                            <path d="M12 6v14.5"/>
+                            <path d="M12 6S10.6 2.5 8.3 2.5a1.75 1.75 0 1 0 0 3.5H12Z"/>
+                            <path d="M12 6s1.4-3.5 3.7-3.5a1.75 1.75 0 1 1 0 3.5H12Z"/>
+                        </svg>
+                    </div>
                     <div class="voucher-info">
-                        <h4>Bill payment reward</h4>
+                        <h4>Bill payment voucher · Personal Home</h4>
                         <p class="voucher-status">In progress</p>
                     </div>
                 </div>
@@ -548,6 +681,7 @@
                     <div class="progress-fill" style="width: 66%"></div>
                 </div>
                 <p class="voucher-text">2 of 3 qualifying bill payments completed</p>
+                <p class="voucher-scope">Personal Home progress only · counted separately from your Me voucher</p>
             </div>
 
             <div class="bill-section">
@@ -560,7 +694,7 @@
                             <h4>Electricity</h4>
                             <span class="bill-account">XXXX1234</span>
                         </div>
-                        <div class="bill-amount">₹2,150</div>
+                        <div class="bill-amount">₹1,840</div>
                     </div>
                     <div class="bill-card-footer">
                         <span class="bill-due">Due 18 Nov</span>
@@ -573,9 +707,9 @@
                         <div class="bill-icon">🌐</div>
                         <div class="bill-info">
                             <h4>Broadband</h4>
-                            <span class="bill-account">XXXX5678</span>
+                            <span class="bill-account">XXXX9012</span>
                         </div>
-                        <div class="bill-amount">₹1,299</div>
+                        <div class="bill-amount">₹999</div>
                     </div>
                     <div class="bill-card-footer">
                         <span class="bill-due">Due 20 Nov</span>
@@ -627,12 +761,19 @@
         <!-- Screen 02d: Flatmates Home Dashboard -->
         <div id="screen-flatmates-home" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-home-selection')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-home-selection')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <div class="tab-toggle">
                     <button class="tab-btn" onclick="switchTab('me')">Me</button>
                     <button class="tab-btn active" onclick="switchTab('home')">Home</button>
                 </div>
-                <button class="icon-btn" onclick="navigateTo('screen-flatmates-calendar')">📅</button>
+                <button class="icon-btn calendar-icon-btn" onclick="navigateTo('screen-flatmates-calendar')" aria-label="Open flatmates calendar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/>
+                        <path d="M3.5 9.5h17"/>
+                        <path d="M8 3v4M16 3v4"/>
+                        <path d="M8 13.5h2M14 13.5h2M8 17h2M14 17h2"/>
+                    </svg>
+                </button>
             </div>
 
             <div class="home-indicator clickable" onclick="showHomeSelector()">
@@ -652,9 +793,17 @@
             <!-- Voucher Progress Card -->
             <div class="voucher-progress-card" onclick="navigateTo('screen-voucher-details')">
                 <div class="voucher-header">
-                    <div class="voucher-icon">🎁</div>
+                    <div class="voucher-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                            <path d="M4 10.5h16V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19v-8.5Z"/>
+                            <path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5v3H3v-3Z"/>
+                            <path d="M12 6v14.5"/>
+                            <path d="M12 6S10.6 2.5 8.3 2.5a1.75 1.75 0 1 0 0 3.5H12Z"/>
+                            <path d="M12 6s1.4-3.5 3.7-3.5a1.75 1.75 0 1 1 0 3.5H12Z"/>
+                        </svg>
+                    </div>
                     <div class="voucher-info">
-                        <h4>Bill payment reward</h4>
+                        <h4>Bill payment voucher</h4>
                         <p class="voucher-status">In progress</p>
                     </div>
                 </div>
@@ -726,7 +875,7 @@
         <!-- Screen 03: Add Bill Chooser -->
         <div id="screen-add-bill" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="backFromAddBill()">←</button>
+                <button type="button" class="back-btn" onclick="backFromAddBill()" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Add a bill</h1>
             </div>
 
@@ -779,7 +928,7 @@
         <!-- Screen 04: Camera Capture -->
         <div id="screen-camera" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-add-bill')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-add-bill')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Scan bill</h1>
             </div>
 
@@ -804,7 +953,7 @@
         <!-- Screen 05: File Upload -->
         <div id="screen-upload" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-add-bill')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-add-bill')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Upload bill</h1>
             </div>
 
@@ -824,7 +973,7 @@
         <!-- Screen 06: Biller Search -->
         <div id="screen-biller-search" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-add-bill')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-add-bill')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Find biller</h1>
             </div>
 
@@ -851,7 +1000,7 @@
         <!-- Screen 08: Verification State -->
         <div id="screen-verification" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-ocr-review')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-ocr-review')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Verification Result</h1>
             </div>
 
@@ -902,7 +1051,7 @@
         <!-- Screen 07: OCR Review -->
         <div id="screen-ocr-review" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-camera')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-camera')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Review bill details</h1>
             </div>
 
@@ -946,62 +1095,70 @@
         <!-- Screen 08: Bill Detail -->
         <div id="screen-bill-detail" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-my-bills')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-my-bills')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Electricity</h1>
             </div>
 
             <div class="bill-detail-header">
                 <div class="bill-icon-large">⚡</div>
                 <div class="bill-detail-info">
-                    <h2>Electricity</h2>
-                    <span class="bill-account">XXXX1234</span>
+                    <div class="bill-detail-title-row">
+                        <h2>Electricity</h2>
+                        <div class="bill-amount-large">₹1,840</div>
+                    </div>
+                    <div class="bill-subline">
+                        <span class="bill-account">XXXX1234</span>
+                        <span class="bill-sep" aria-hidden="true">·</span>
+                        <span class="bill-due-large">Due 18 Nov 2026</span>
+                        <span class="status-badge confirmed">
+                            <span class="status-icon" aria-hidden="true">✓</span>
+                            Confirmed pending
+                        </span>
+                    </div>
                 </div>
-            </div>
-
-            <div class="bill-amount-large">₹1,840</div>
-            <div class="bill-due-large">Due 18 Nov 2026</div>
-
-            <div class="status-badge confirmed">
-                <span class="status-icon">✓</span>
-                Confirmed pending
             </div>
 
             <div class="bill-meta">
                 <div class="meta-row">
-                    <span class="meta-label">Last refreshed</span>
-                    <span class="meta-value">2 hours ago</span>
-                </div>
-                <div class="meta-row">
                     <span class="meta-label">Source</span>
-                    <span class="meta-value">Verified with biller</span>
+                    <span class="meta-source">
+                        <span class="meta-value">Verified with biller</span>
+                        <button type="button" class="meta-refresh-btn" onclick="refreshBillStatus()" aria-label="Refresh bill status" title="Refresh">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                                <path d="M23 4v6h-6"/>
+                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                            </svg>
+                        </button>
+                    </span>
                 </div>
             </div>
 
             <div class="voucher-hint-card">
-                <div class="voucher-hint-icon">🎁</div>
+                <div class="voucher-hint-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10.5h16V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19v-8.5Z"/><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5v3H3v-3Z"/><path d="M12 6v14.5"/><path d="M12 6S10.6 2.5 8.3 2.5a1.75 1.75 0 1 0 0 3.5H12Z"/><path d="M12 6s1.4-3.5 3.7-3.5a1.75 1.75 0 1 1 0 3.5H12Z"/></svg></div>
                 <div class="voucher-hint-body">
-                    <h4>This payment earns reward progress</h4>
-                    <p>This eligible Paytm payment counts toward your 3 qualifying payments for the bill payment reward.</p>
-                    <button type="button" class="link-btn" onclick="navigateTo('screen-voucher-details')">View reward →</button>
+                    <h4>This payment earns voucher progress</h4>
+                    <p>Counts toward your 3 qualifying payments for the bill payment voucher.</p>
+                    <button type="button" class="link-btn" onclick="navigateTo('screen-voucher-details')">View voucher →</button>
                 </div>
             </div>
 
             <div class="action-buttons">
                 <button class="primary-btn large" onclick="openPayBill()">Pay through Paytm</button>
-                <button class="secondary-btn" onclick="navigateTo('screen-smart-insight')">View bill insight</button>
-                <button class="secondary-btn" onclick="navigateTo('screen-bill-history')">View bill history</button>
-                <button class="secondary-btn" onclick="showMarkPaidModal()">I paid elsewhere</button>
-                <button class="secondary-btn" onclick="snoozeBillReminder()">Remind me later</button>
-                <button class="secondary-btn" onclick="refreshBillStatus()">Refresh status</button>
-                <button class="secondary-btn" onclick="navigateTo('screen-ocr-review')">Edit bill details</button>
-                <button class="danger-btn" onclick="removeBill()">Remove bill</button>
+                <div class="action-grid">
+                    <button class="secondary-btn" onclick="navigateTo('screen-smart-insight')">View bill insight</button>
+                    <button class="secondary-btn" onclick="navigateTo('screen-bill-history')">View bill history</button>
+                    <button class="secondary-btn" onclick="showMarkPaidModal()">I paid elsewhere</button>
+                    <button class="secondary-btn" onclick="snoozeBillReminder()">Remind me later</button>
+                    <button class="secondary-btn" onclick="navigateTo('screen-ocr-review')">Edit bill details</button>
+                    <button class="danger-btn" onclick="removeBill()">Remove bill</button>
+                </div>
             </div>
         </div>
 
         <!-- Screen 10b: Pay Bill -->
         <div id="screen-pay-bill" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-bill-detail')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-bill-detail')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Pay bill</h1>
             </div>
 
@@ -1016,15 +1173,15 @@
 
             <!-- Pre-payment voucher eligibility hint -->
             <div class="voucher-hint-card prominent">
-                <div class="voucher-hint-icon">🎁</div>
+                <div class="voucher-hint-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10.5h16V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19v-8.5Z"/><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5v3H3v-3Z"/><path d="M12 6v14.5"/><path d="M12 6S10.6 2.5 8.3 2.5a1.75 1.75 0 1 0 0 3.5H12Z"/><path d="M12 6s1.4-3.5 3.7-3.5a1.75 1.75 0 1 1 0 3.5H12Z"/></svg></div>
                 <div class="voucher-hint-body">
-                    <h4>Bill payment reward</h4>
+                    <h4>Bill payment voucher</h4>
                     <p id="pay-voucher-copy">This eligible payment takes you from 1 of 3 to 2 of 3 qualifying payments.</p>
                     <div class="voucher-hint-bar">
                         <div class="voucher-hint-fill" id="pay-voucher-fill" style="width: 33%"></div>
                     </div>
                     <p class="voucher-hint-meta" id="pay-voucher-meta">1 of 3 completed · only successful Paytm payments count</p>
-                    <button type="button" class="link-btn" onclick="navigateTo('screen-voucher-details')">View reward →</button>
+                    <button type="button" class="link-btn" onclick="navigateTo('screen-voucher-details')">View voucher →</button>
                 </div>
             </div>
 
@@ -1057,7 +1214,7 @@
             </div>
 
             <button class="primary-btn large" onclick="payBill()">Pay ₹1,840</button>
-            <p class="pay-note">Only successful Paytm payments count toward the reward. Payments marked paid offline or on another app do not qualify.</p>
+            <p class="pay-note">Only successful Paytm payments count toward the voucher. Payments marked paid offline or on another app do not qualify.</p>
         </div>
 
         <!-- Screen 10c: Payment Success -->
@@ -1069,10 +1226,10 @@
 
                 <!-- Post-success voucher progress cue -->
                 <div class="voucher-hint-card success">
-                    <div class="voucher-hint-icon">🎁</div>
+                    <div class="voucher-hint-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10.5h16V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19v-8.5Z"/><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5v3H3v-3Z"/><path d="M12 6v14.5"/><path d="M12 6S10.6 2.5 8.3 2.5a1.75 1.75 0 1 0 0 3.5H12Z"/><path d="M12 6s1.4-3.5 3.7-3.5a1.75 1.75 0 1 1 0 3.5H12Z"/></svg></div>
                     <div class="voucher-hint-body">
-                        <h4>Reward progress updated</h4>
-                        <p id="success-voucher-text">2 of 3 qualifying payments completed. One more to unlock your bill payment reward.</p>
+                        <h4>Voucher progress updated</h4>
+                        <p id="success-voucher-text">2 of 3 qualifying payments completed. One more to unlock your bill payment voucher.</p>
                         <div class="voucher-hint-bar">
                             <div class="voucher-hint-fill" id="success-voucher-fill" style="width: 66%"></div>
                         </div>
@@ -1081,7 +1238,7 @@
 
                 <div class="success-actions">
                     <button class="primary-btn" onclick="navigateTo('screen-my-bills')">Back to My Bills</button>
-                    <button class="secondary-btn" onclick="navigateTo('screen-voucher-details')">View reward</button>
+                    <button class="secondary-btn" onclick="navigateTo('screen-voucher-details')">View voucher</button>
                 </div>
             </div>
         </div>
@@ -1089,7 +1246,7 @@
         <!-- Screen 10d: Payment Pending / Processing -->
         <div id="screen-payment-pending" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-my-bills')">✕</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-my-bills')" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
                 <h1>Payment Processing</h1>
             </div>
 
@@ -1178,7 +1335,7 @@
         <!-- Screen 10e: Payment Failed -->
         <div id="screen-payment-failed" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-pay-bill')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-pay-bill')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Payment Failed</h1>
             </div>
 
@@ -1213,7 +1370,7 @@
                 <!-- Voucher safeguard note (PRD requirement) -->
                 <div class="voucher-rule-disclaimer">
                     <span class="rule-icon">ℹ️</span>
-                    <span>Failed transactions do not count toward your bill payment reward milestone.</span>
+                    <span>Failed transactions do not count toward your bill payment voucher milestone.</span>
                 </div>
 
                 <!-- Transaction Details Card -->
@@ -1243,7 +1400,7 @@
         <!-- Screen 11: Smart Bill Insight -->
         <div id="screen-smart-insight" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-bill-detail')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-bill-detail')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Bill Insight</h1>
             </div>
 
@@ -1266,20 +1423,20 @@
             <div class="insight-summary">
                 <div class="insight-alert">
                     <span class="insight-icon-alert">📈</span>
-                    <h3>Your electricity bill is 71% higher than last month</h3>
+                    <h3>Your electricity bill is 70% higher than last month</h3>
                 </div>
                 <div class="insight-comparison">
                     <div class="comparison-item current">
                         <span class="comparison-label">This month</span>
-                        <span class="comparison-amount">₹3,150</span>
+                        <span class="comparison-amount">₹1,840</span>
                     </div>
                     <div class="comparison-item previous">
                         <span class="comparison-label">Last month</span>
-                        <span class="comparison-amount">₹1,840</span>
+                        <span class="comparison-amount">₹1,080</span>
                     </div>
                     <div class="comparison-delta">
                         <span class="delta-label">Difference</span>
-                        <span class="delta-amount increase">+₹1,310 (+71%)</span>
+                        <span class="delta-amount increase">+₹760 (+70%)</span>
                     </div>
                 </div>
             </div>
@@ -1294,23 +1451,23 @@
                 <div class="chart-bars">
                     <div class="chart-bar">
                         <div class="bar-label">Aug</div>
-                        <div class="bar" style="height: 60%"></div>
-                        <div class="bar-value">₹1,780</div>
+                        <div class="bar" style="height: 49px"></div>
+                        <div class="bar-value">₹1,150</div>
                     </div>
                     <div class="chart-bar">
                         <div class="bar-label">Sep</div>
-                        <div class="bar" style="height: 55%"></div>
-                        <div class="bar-value">₹1,650</div>
+                        <div class="bar" style="height: 48px"></div>
+                        <div class="bar-value">₹1,120</div>
                     </div>
                     <div class="chart-bar">
                         <div class="bar-label">Oct</div>
-                        <div class="bar" style="height: 50%"></div>
-                        <div class="bar-value">₹1,840</div>
+                        <div class="bar" style="height: 46px"></div>
+                        <div class="bar-value">₹1,080</div>
                     </div>
                     <div class="chart-bar current">
                         <div class="bar-label">Nov</div>
-                        <div class="bar" style="height: 85%"></div>
-                        <div class="bar-value">₹3,150</div>
+                        <div class="bar" style="height: 78px"></div>
+                        <div class="bar-value">₹1,840</div>
                     </div>
                 </div>
             </div>
@@ -1319,7 +1476,7 @@
                 <h3>What may have changed?</h3>
                 <div class="explanation-item">
                     <span class="explanation-label">Units consumed</span>
-                    <span class="explanation-value">320 kWh (was 180 kWh)</span>
+                    <span class="explanation-value">220 kWh (was 130 kWh)</span>
                 </div>
                 <div class="explanation-item">
                     <span class="explanation-label">Tariff rate</span>
@@ -1331,7 +1488,7 @@
                 </div>
                 <div class="explanation-item">
                     <span class="explanation-label">Taxes & duties</span>
-                    <span class="explanation-value">₹320 (was ₹180)</span>
+                    <span class="explanation-value">₹260 (was ₹124)</span>
                 </div>
             </div>
 
@@ -1380,7 +1537,7 @@
         <!-- Screen 09: Bills Calendar (paper wall calendar) -->
         <div id="screen-calendar" class="screen calendar-screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-my-bills')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-my-bills')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Bills calendar</h1>
             </div>
 
@@ -1393,8 +1550,12 @@
                             <h2 class="paper-month">November <span class="paper-year">2026</span></h2>
                         </div>
                         <div class="month-nav paper-month-nav">
-                            <button class="icon-btn" type="button" aria-label="Previous month">‹</button>
-                            <button class="icon-btn" type="button" aria-label="Next month">›</button>
+                            <button class="icon-btn" type="button" aria-label="Previous month">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m14.5 6-6 6 6 6"/></svg>
+                            </button>
+                            <button class="icon-btn" type="button" aria-label="Next month">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9.5 6 6 6-6 6"/></svg>
+                            </button>
                         </div>
                     </div>
 
@@ -1416,16 +1577,17 @@
                     <p class="paper-progress" data-paper-progress="screen-calendar">1 of 3 bills crossed off this month</p>
                     <p class="paper-margin-note">only electricity is left this week ↘</p>
 
-                    <div class="calendar-grid paper-grid" data-calendar-grid="screen-calendar" role="grid" aria-label="November 2026 bills calendar"></div>
-
-                    <div class="paper-legend" aria-label="What the pen marks mean">
-                        <span class="paper-legend-title">Pen marks</span>
-                        <span class="legend-item"><i class="ink-swatch due" aria-hidden="true"></i>due date</span>
-                        <span class="legend-item"><i class="ink-swatch star" aria-hidden="true"></i>important</span>
-                        <span class="legend-item"><i class="ink-swatch highlight" aria-hidden="true"></i>today / payday</span>
-                        <span class="legend-item"><i class="ink-swatch crossed" aria-hidden="true"></i>crossed off</span>
-                        <span class="legend-item"><i class="ink-swatch unconfirmed" aria-hidden="true"></i>unconfirmed</span>
+                    <div class="paper-legend" role="group" aria-label="Calendar key">
+                        <span class="paper-legend-title">Key</span>
+                        <span class="legend-item"><i class="ink-swatch due" aria-hidden="true"></i>Due (circled date)</span>
+                        <span class="legend-item"><i class="ink-swatch estimated" aria-hidden="true"></i>Estimated (dashed circle)</span>
+                        <span class="legend-item"><i class="ink-swatch crossed" aria-hidden="true"></i>Paid (crossed off)</span>
+                        <span class="legend-item"><i class="ink-swatch unconfirmed" aria-hidden="true"></i>Marked paid, unconfirmed</span>
+                        <span class="legend-item"><i class="ink-swatch star" aria-hidden="true"></i>Important</span>
+                        <span class="legend-item"><i class="ink-swatch highlight" aria-hidden="true"></i>Today / payday</span>
                     </div>
+
+                    <div class="calendar-grid paper-grid" data-calendar-grid="screen-calendar" role="grid" aria-label="November 2026 bills calendar"></div>
 
                     <div class="paper-curl" aria-hidden="true"></div>
                 </div>
@@ -1448,7 +1610,7 @@
         <!-- Screen 10: Personal Home Calendar (paper wall calendar) -->
         <div id="screen-personal-calendar" class="screen calendar-screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-personal-home')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-personal-home')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Home calendar</h1>
             </div>
 
@@ -1461,15 +1623,19 @@
                             <h2 class="paper-month">November <span class="paper-year">2026</span></h2>
                         </div>
                         <div class="month-nav paper-month-nav">
-                            <button class="icon-btn" type="button" aria-label="Previous month">‹</button>
-                            <button class="icon-btn" type="button" aria-label="Next month">›</button>
+                            <button class="icon-btn" type="button" aria-label="Previous month">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m14.5 6-6 6 6 6"/></svg>
+                            </button>
+                            <button class="icon-btn" type="button" aria-label="Next month">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9.5 6 6 6-6 6"/></svg>
+                            </button>
                         </div>
                     </div>
 
                     <div class="paper-summary" aria-label="November totals">
                         <div class="paper-summary-item">
                             <span class="paper-summary-label">Tracked</span>
-                            <span class="paper-summary-value" data-summary-total="screen-personal-calendar">₹4,749</span>
+                            <span class="paper-summary-value" data-summary-total="screen-personal-calendar">₹4,139</span>
                         </div>
                         <div class="paper-summary-item">
                             <span class="paper-summary-label">Crossed off</span>
@@ -1477,23 +1643,24 @@
                         </div>
                         <div class="paper-summary-item">
                             <span class="paper-summary-label">Left to pay</span>
-                            <span class="paper-summary-value" data-summary-left="screen-personal-calendar">₹4,299</span>
+                            <span class="paper-summary-value" data-summary-left="screen-personal-calendar">₹3,689</span>
                         </div>
                     </div>
 
                     <p class="paper-progress" data-paper-progress="screen-personal-calendar">1 of 4 bills crossed off this month</p>
                     <p class="paper-margin-note">gas is an estimate — check the meter ↘</p>
 
-                    <div class="calendar-grid paper-grid" data-calendar-grid="screen-personal-calendar" role="grid" aria-label="November 2026 personal home bills calendar"></div>
-
-                    <div class="paper-legend" aria-label="What the pen marks mean">
-                        <span class="paper-legend-title">Pen marks</span>
-                        <span class="legend-item"><i class="ink-swatch due" aria-hidden="true"></i>due date</span>
-                        <span class="legend-item"><i class="ink-swatch star" aria-hidden="true"></i>important</span>
-                        <span class="legend-item"><i class="ink-swatch highlight" aria-hidden="true"></i>today / payday</span>
-                        <span class="legend-item"><i class="ink-swatch crossed" aria-hidden="true"></i>crossed off</span>
-                        <span class="legend-item"><i class="ink-swatch unconfirmed" aria-hidden="true"></i>unconfirmed</span>
+                    <div class="paper-legend" role="group" aria-label="Calendar key">
+                        <span class="paper-legend-title">Key</span>
+                        <span class="legend-item"><i class="ink-swatch due" aria-hidden="true"></i>Due (circled date)</span>
+                        <span class="legend-item"><i class="ink-swatch estimated" aria-hidden="true"></i>Estimated (dashed circle)</span>
+                        <span class="legend-item"><i class="ink-swatch crossed" aria-hidden="true"></i>Paid (crossed off)</span>
+                        <span class="legend-item"><i class="ink-swatch unconfirmed" aria-hidden="true"></i>Marked paid, unconfirmed</span>
+                        <span class="legend-item"><i class="ink-swatch star" aria-hidden="true"></i>Important</span>
+                        <span class="legend-item"><i class="ink-swatch highlight" aria-hidden="true"></i>Today / payday</span>
                     </div>
+
+                    <div class="calendar-grid paper-grid" data-calendar-grid="screen-personal-calendar" role="grid" aria-label="November 2026 personal home bills calendar"></div>
 
                     <div class="paper-curl" aria-hidden="true"></div>
                 </div>
@@ -1516,7 +1683,7 @@
         <!-- Screen 11: Flatmates Home Calendar (paper wall calendar) -->
         <div id="screen-flatmates-calendar" class="screen calendar-screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-flatmates-home')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-flatmates-home')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Flat calendar</h1>
             </div>
 
@@ -1529,8 +1696,12 @@
                             <h2 class="paper-month">November <span class="paper-year">2026</span></h2>
                         </div>
                         <div class="month-nav paper-month-nav">
-                            <button class="icon-btn" type="button" aria-label="Previous month">‹</button>
-                            <button class="icon-btn" type="button" aria-label="Next month">›</button>
+                            <button class="icon-btn" type="button" aria-label="Previous month">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m14.5 6-6 6 6 6"/></svg>
+                            </button>
+                            <button class="icon-btn" type="button" aria-label="Next month">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9.5 6 6 6-6 6"/></svg>
+                            </button>
                         </div>
                     </div>
 
@@ -1552,16 +1723,17 @@
                     <p class="paper-progress" data-paper-progress="screen-flatmates-calendar">1 of 3 bills crossed off this month</p>
                     <p class="paper-margin-note">rent done ✓ now chase the Netflix split ↘</p>
 
-                    <div class="calendar-grid paper-grid" data-calendar-grid="screen-flatmates-calendar" role="grid" aria-label="November 2026 flatmates bills calendar"></div>
-
-                    <div class="paper-legend" aria-label="What the pen marks mean">
-                        <span class="paper-legend-title">Pen marks</span>
-                        <span class="legend-item"><i class="ink-swatch due" aria-hidden="true"></i>due date</span>
-                        <span class="legend-item"><i class="ink-swatch star" aria-hidden="true"></i>important</span>
-                        <span class="legend-item"><i class="ink-swatch highlight" aria-hidden="true"></i>today / payday</span>
-                        <span class="legend-item"><i class="ink-swatch crossed" aria-hidden="true"></i>crossed off</span>
-                        <span class="legend-item"><i class="ink-swatch unconfirmed" aria-hidden="true"></i>unconfirmed</span>
+                    <div class="paper-legend" role="group" aria-label="Calendar key">
+                        <span class="paper-legend-title">Key</span>
+                        <span class="legend-item"><i class="ink-swatch due" aria-hidden="true"></i>Due (circled date)</span>
+                        <span class="legend-item"><i class="ink-swatch estimated" aria-hidden="true"></i>Estimated (dashed circle)</span>
+                        <span class="legend-item"><i class="ink-swatch crossed" aria-hidden="true"></i>Paid (crossed off)</span>
+                        <span class="legend-item"><i class="ink-swatch unconfirmed" aria-hidden="true"></i>Marked paid, unconfirmed</span>
+                        <span class="legend-item"><i class="ink-swatch star" aria-hidden="true"></i>Important</span>
+                        <span class="legend-item"><i class="ink-swatch highlight" aria-hidden="true"></i>Today / payday</span>
                     </div>
+
+                    <div class="calendar-grid paper-grid" data-calendar-grid="screen-flatmates-calendar" role="grid" aria-label="November 2026 flatmates bills calendar"></div>
 
                     <div class="paper-curl" aria-hidden="true"></div>
                 </div>
@@ -1584,7 +1756,7 @@
         <!-- Screen 12: Reminder Settings -->
         <div id="screen-reminder" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-bill-detail')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-bill-detail')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Reminder settings</h1>
             </div>
 
@@ -1632,14 +1804,22 @@
         <!-- Screen 13: Voucher Details -->
         <div id="screen-voucher-details" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-my-bills')">←</button>
-                <h1>Reward Details</h1>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-my-bills')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
+                <h1>Voucher Details</h1>
             </div>
 
             <div class="voucher-card-large">
-                <div class="voucher-icon-large">🎁</div>
-                <h2>Bill Payment Reward</h2>
-                <p class="voucher-subtitle">Illustrative reward</p>
+                <div class="voucher-icon-large" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                        <path d="M4 10.5h16V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19v-8.5Z"/>
+                        <path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5v3H3v-3Z"/>
+                        <path d="M12 6v14.5"/>
+                        <path d="M12 6S10.6 2.5 8.3 2.5a1.75 1.75 0 1 0 0 3.5H12Z"/>
+                        <path d="M12 6s1.4-3.5 3.7-3.5a1.75 1.75 0 1 1 0 3.5H12Z"/>
+                    </svg>
+                </div>
+                <h2>Bill Payment Voucher · Me</h2>
+                <p class="voucher-subtitle">Illustrative voucher · unlocks on your 3rd qualifying payment</p>
 
                 <div class="voucher-progress-large">
                     <div class="progress-label">Progress</div>
@@ -1647,6 +1827,7 @@
                         <div class="progress-fill-large" id="voucher-progress-fill" style="width: 33%"></div>
                     </div>
                     <p class="progress-text" id="voucher-progress-text">1 of 3 qualifying payments completed</p>
+                    <p class="voucher-scope">Me voucher only · each home tracks its own voucher separately</p>
                 </div>
 
                 <div class="voucher-status-badge in-progress" id="voucher-status-badge">
@@ -1660,7 +1841,7 @@
                 <div class="transaction-item completed">
                     <div class="transaction-info">
                         <h4>Water</h4>
-                        <span class="transaction-date">28 Oct 2026</span>
+                        <span class="transaction-date">10 Nov 2026</span>
                     </div>
                     <div class="transaction-amount">₹450</div>
                     <span class="transaction-badge counted">Counted</span>
@@ -1699,39 +1880,40 @@
                 <ul class="terms-list">
                     <li>Complete 3 qualifying bill payments</li>
                     <li>Payments must be in different categories</li>
-                    <li>Minimum payment amount: ₹500</li>
+                    <li>Minimum payment amount: ₹450</li>
                     <li>Only successful Paytm transactions count</li>
-                    <li>Reward valid for 30 days after unlocking</li>
+                    <li>Redeemable against a future bill payment; this is not cashback</li>
+                    <li>Voucher valid for 30 days after unlocking</li>
                 </ul>
             </div>
 
             <div class="voucher-info-note">
-                <p><strong>Note:</strong> This is an illustrative reward for prototype demonstration. Actual rewards, eligibility, and terms are subject to validation.</p>
+                <p><strong>Note:</strong> This is an illustrative voucher for prototype demonstration. Actual voucher value, eligibility, and terms are subject to validation.</p>
             </div>
         </div>
 
         <!-- Screen 14b: Reward Chooser (pick one of up to 4 rewards) -->
         <div id="screen-reward-chooser" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-recharge-bills')">←</button>
-                <h1>Choose your reward</h1>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-recharge-bills')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
+                <h1>Choose your voucher</h1>
             </div>
 
             <div class="reward-chooser-hero">
-                <div class="reward-chooser-icon">🎉</div>
-                <h2>You earned a reward!</h2>
-                <p>You've completed 3 qualifying bill payments. Pick one reward to claim.</p>
+                <div class="reward-chooser-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h11A2.5 2.5 0 0 1 20 8.5v1a2.5 2.5 0 0 0 0 5v1a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 15.5v-1a2.5 2.5 0 0 0 0-5v-1Z"/><path d="M14.5 6.5v2M14.5 11v2M14.5 15.5v2"/></svg></div>
+                <h2>You earned a voucher!</h2>
+                <p>You've completed 3 qualifying bill payments. Pick one voucher to claim.</p>
             </div>
 
             <div class="reward-chooser-list" id="reward-chooser-list"></div>
 
-            <p class="reward-chooser-note">Rewards are illustrative for this prototype. Only one reward can be claimed per cycle.</p>
+            <p class="reward-chooser-note">Vouchers are illustrative for this prototype. Only one voucher can be claimed per cycle. Vouchers are applied to a future bill payment and are not cashback.</p>
         </div>
 
         <!-- Screen 15: Empty State - No Bills -->
         <div id="screen-empty-bills" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-my-bills')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-my-bills')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>My Bills</h1>
             </div>
 
@@ -1746,7 +1928,7 @@
         <!-- Screen 16: Loading State - OCR Processing -->
         <div id="screen-ocr-loading" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-camera')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-camera')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Scanning bill</h1>
             </div>
 
@@ -1760,7 +1942,7 @@
         <!-- Screen 17: Loading State - Bill Fetch -->
         <div id="screen-bill-loading" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-bill-detail')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-bill-detail')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Refreshing bill status</h1>
             </div>
 
@@ -1774,7 +1956,7 @@
         <!-- Screen 18: Error State - Bill Fetch Failed -->
         <div id="screen-bill-error" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-bill-detail')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-bill-detail')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Error</h1>
             </div>
 
@@ -1782,7 +1964,12 @@
                 <div class="error-icon">⚠️</div>
                 <h2>Unable to fetch bill status</h2>
                 <p>We couldn't connect to the biller. Please try again later.</p>
-                <button class="primary-btn" onclick="navigateTo('screen-bill-detail')">Retry</button>
+                <button type="button" class="meta-refresh-btn retry-icon-btn" onclick="navigateTo('screen-bill-detail')" aria-label="Retry fetching bill status" title="Retry">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <path d="M23 4v6h-6"/>
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                    </svg>
+                </button>
                 <button class="secondary-btn">Contact support</button>
             </div>
         </div>
@@ -1796,32 +1983,32 @@
                             <path d="M -6 16 L -13 14 M -4 8 L -11 4 M 3 4 L 1 -2" stroke="#00baf2" stroke-width="1.6" stroke-linecap="round" />
                             <path d="M 12 16 C 9 8 18 1 24 5 C 28 8 26 15 20 19 C 26 19 32 23 30 29 C 28 34 20 35 14 31 C 8 37 -1 35 -3 27 C -5 21 3 15 12 16 Z" fill="#ffffff" stroke="#00baf2" stroke-width="2" stroke-linejoin="round" />
                             <path d="M 6 20 C 8 14 14 12 18 14" fill="none" stroke="#00baf2" stroke-width="1.5" stroke-linecap="round" />
-                            <circle cx="23" cy="22" r="1.8" fill="#002970" />
+                            <circle cx="23" cy="22" r="1.8" fill="#0b4a9e" />
                             <path d="M 27 22 L 32 24 L 26 26 Z" fill="#f59e0b" stroke="#d97706" stroke-width="0.8" />
                         </g>
 
-                        <path d="M 123 44 L 118 36 M 132 40 L 132 31 M 142 42 L 148 35 M 153 46 L 160 42" stroke="#002970" stroke-width="1.8" stroke-linecap="round" />
-                        <path d="M 135 27 L 135 22 M 135 19 L 135 17" stroke="#002970" stroke-width="2" stroke-linecap="round" />
+                        <path d="M 123 44 L 118 36 M 132 40 L 132 31 M 142 42 L 148 35 M 153 46 L 160 42" stroke="#0b4a9e" stroke-width="1.8" stroke-linecap="round" />
+                        <path d="M 135 27 L 135 22 M 135 19 L 135 17" stroke="#0b4a9e" stroke-width="2" stroke-linecap="round" />
 
-                        <path d="M 80 84 L 80 73 L 64 73 L 78 48 L 84 48 L 84 67 L 90 67 L 90 73 L 84 73 L 84 84 Z M 70 67 L 80 67 L 80 52 Z" fill="#002970" />
+                        <path d="M 80 84 L 80 73 L 64 73 L 78 48 L 84 48 L 84 67 L 90 67 L 90 73 L 84 73 L 84 84 Z M 70 67 L 80 67 L 80 52 Z" fill="#0b4a9e" />
 
                         <g transform="translate(120, 50)">
                             <path d="M 2 24 C 2 9 10 1 18 1 C 26 1 34 9 34 24 Z" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" stroke-linejoin="round" />
                             <path d="M 6 16 L 12 21 L 18 15 L 24 22 L 30 17" fill="none" stroke="#d97706" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
                         </g>
 
-                        <path d="M 188 84 L 188 73 L 172 73 L 186 48 L 192 48 L 192 67 L 198 67 L 198 73 L 192 73 L 192 84 Z M 178 67 L 188 67 L 188 52 Z" fill="#002970" />
+                        <path d="M 188 84 L 188 73 L 172 73 L 186 48 L 192 48 L 192 67 L 198 67 L 198 73 L 192 73 L 192 84 Z M 178 67 L 188 67 L 188 52 Z" fill="#0b4a9e" />
 
                         <ellipse cx="134" cy="98" rx="66" ry="14" fill="#00baf2" stroke="#0284c7" stroke-width="2" />
                         <ellipse cx="134" cy="96" rx="58" ry="10" fill="#38bdf8" />
-                        <path d="M 80 98 C 92 108 178 108 190 98" fill="none" stroke="#002970" stroke-width="2.6" stroke-linecap="round" />
+                        <path d="M 80 98 C 92 108 178 108 190 98" fill="none" stroke="#0b4a9e" stroke-width="2.6" stroke-linecap="round" />
 
                         <path d="M 68 100 C 60 96 62 86 70 88 C 74 89 76 95 68 100 Z" fill="#22c55e" stroke="#16a34a" stroke-width="1.2" />
                         <path d="M 67 98 C 71 95 73 93 75 90" fill="none" stroke="#15803d" stroke-width="1" stroke-linecap="round" />
                         <path d="M 200 100 C 208 96 206 86 198 88 C 194 89 192 95 200 100 Z" fill="#22c55e" stroke="#16a34a" stroke-width="1.2" />
 
-                        <circle cx="58" cy="72" r="2.5" fill="#002970" />
-                        <circle cx="208" cy="75" r="2.5" fill="#002970" />
+                        <circle cx="58" cy="72" r="2.5" fill="#0b4a9e" />
+                        <circle cx="208" cy="75" r="2.5" fill="#0b4a9e" />
                         <circle cx="218" cy="67" r="1.8" fill="#00baf2" />
                         <circle cx="52" cy="80" r="1.5" fill="#00baf2" />
                     </svg>
@@ -1841,12 +2028,18 @@
             </div>
 
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-my-bills')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-my-bills')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>My Bills</h1>
             </div>
 
             <div class="dashboard-summary offline-summary">
                 <span class="summary-count">Last synced: 2 hours ago</span>
+                <button type="button" class="meta-refresh-btn" onclick="attemptOfflineRefresh()" aria-label="Refresh bills" title="Refresh bills">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <path d="M23 4v6h-6"/>
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                    </svg>
+                </button>
             </div>
 
             <div class="bill-section">
@@ -1881,12 +2074,18 @@
             </div>
 
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-my-bills')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-my-bills')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>My Bills</h1>
             </div>
 
             <div class="dashboard-summary stale-summary">
                 <span class="summary-count">Data may be outdated</span>
+                <button type="button" class="meta-refresh-btn" onclick="navigateTo('screen-bill-loading')" aria-label="Refresh all bills" title="Refresh all bills">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <path d="M23 4v6h-6"/>
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                    </svg>
+                </button>
             </div>
 
             <div class="bill-section">
@@ -1923,10 +2122,6 @@
                 </div>
             </div>
 
-            <button class="primary-btn refresh-btn" onclick="navigateTo('screen-bill-loading')">
-                Refresh all bills
-            </button>
-
             <div class="stale-notice">
                 <p>Bill information is refreshed automatically when you're online. Some statuses may be outdated.</p>
             </div>
@@ -1935,7 +2130,7 @@
         <!-- Screen 20a: Email Discovery Consent -->
         <div id="screen-email-consent" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="backFromEmailConsent()">←</button>
+                <button type="button" class="back-btn" onclick="backFromEmailConsent()" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Connect email</h1>
             </div>
 
@@ -2045,7 +2240,7 @@
         <!-- Screen 21: Email Candidate Review -->
         <div id="screen-email-candidates" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-email-connected')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-email-connected')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Review bills</h1>
             </div>
 
@@ -2088,7 +2283,7 @@
         <!-- Screen 21b: Email Connection Management -->
         <div id="screen-email-connected" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-my-bills')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-my-bills')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Email connection</h1>
             </div>
 
@@ -2138,7 +2333,7 @@
         <!-- Screen 22: Widget Preview -->
         <div id="screen-widget-preview" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-my-bills')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-my-bills')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Widget Preview</h1>
             </div>
 
@@ -2147,7 +2342,7 @@
                 <div class="widget-card compact">
                     <div class="widget-header">
                         <span class="widget-title">Paytm Bills</span>
-                        <span class="widget-count">2 need attention</span>
+                        <span class="widget-count">3 need attention</span>
                     </div>
                     <div class="widget-item">
                         <span class="widget-name">Electricity</span>
@@ -2157,6 +2352,10 @@
                         <span class="widget-name">Credit Card</span>
                         <span class="widget-due">Due 21 Nov</span>
                     </div>
+                    <div class="widget-item">
+                        <span class="widget-name">Broadband</span>
+                        <span class="widget-due">Due 20 Nov</span>
+                    </div>
                 </div>
             </div>
 
@@ -2165,7 +2364,7 @@
                 <div class="widget-card expanded">
                     <div class="widget-header">
                         <span class="widget-title">Paytm Bills</span>
-                        <span class="widget-count">2 need attention</span>
+                        <span class="widget-count">3 need attention</span>
                     </div>
                     <div class="widget-item">
                         <div class="widget-item-info">
@@ -2194,7 +2393,7 @@
                         </div>
                         <div class="widget-item-right">
                             <span class="widget-amount">₹999</span>
-                            <span class="widget-due">Due 25 Nov</span>
+                            <span class="widget-due">Due 20 Nov</span>
                         </div>
                     </div>
                 </div>
@@ -2207,8 +2406,8 @@
                         <span class="widget-title">Paytm Bills</span>
                     </div>
                     <div class="widget-privacy-content">
-                        <span class="widget-count">2 bills need attention</span>
-                        <span class="widget-due">Next payment due tomorrow</span>
+                        <span class="widget-count">3 bills need attention</span>
+                        <span class="widget-due">Next bill due in 3 days · Electricity, 18 Nov</span>
                     </div>
                 </div>
             </div>
@@ -2221,7 +2420,7 @@
         <!-- Screen 23: Camera Permission Denied -->
         <div id="screen-camera-denied" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-camera')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-camera')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Camera access needed</h1>
             </div>
 
@@ -2244,7 +2443,7 @@
         <!-- Screen 24: Notification Permission Denied -->
         <div id="screen-notification-denied" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-reminder')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-reminder')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Notifications disabled</h1>
             </div>
 
@@ -2267,7 +2466,7 @@
         <!-- Screen 25: Email Disconnected -->
         <div id="screen-email-disconnected" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-my-bills')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-my-bills')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Email disconnected</h1>
             </div>
 
@@ -2290,7 +2489,7 @@
         <!-- Screen 26: Bill History -->
         <div id="screen-bill-history" class="screen">
             <div class="screen-header">
-                <button class="back-btn" onclick="navigateTo('screen-bill-detail')">←</button>
+                <button type="button" class="back-btn" onclick="navigateTo('screen-bill-detail')" aria-label="Go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
                 <h1>Bill History</h1>
             </div>
 
@@ -2310,7 +2509,7 @@
                     <span class="stat-label">Bills tracked</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-value">₹1,850</span>
+                    <span class="stat-value">₹1,300</span>
                     <span class="stat-label">Avg amount</span>
                 </div>
                 <div class="stat-item">
@@ -2327,8 +2526,8 @@
                         <span class="month-name">November</span>
                         <span class="month-year">2026</span>
                     </div>
-                    <div class="history-amount">₹3,150</div>
-                    <div class="history-status paid">Paid</div>
+                    <div class="history-amount">₹1,840</div>
+                    <div class="history-status pending">Due</div>
                 </div>
 
                 <div class="history-item" onclick="navigateTo('screen-smart-insight')">
@@ -2336,7 +2535,7 @@
                         <span class="month-name">October</span>
                         <span class="month-year">2026</span>
                     </div>
-                    <div class="history-amount">₹1,840</div>
+                    <div class="history-amount">₹1,080</div>
                     <div class="history-status paid">Paid</div>
                 </div>
 
@@ -2345,7 +2544,7 @@
                         <span class="month-name">September</span>
                         <span class="month-year">2026</span>
                     </div>
-                    <div class="history-amount">₹1,650</div>
+                    <div class="history-amount">₹1,120</div>
                     <div class="history-status paid">Paid</div>
                 </div>
 
@@ -2354,7 +2553,7 @@
                         <span class="month-name">August</span>
                         <span class="month-year">2026</span>
                     </div>
-                    <div class="history-amount">₹1,780</div>
+                    <div class="history-amount">₹1,150</div>
                     <div class="history-status paid">Paid</div>
                 </div>
             </div>
@@ -2558,9 +2757,9 @@
         <!-- Reward prompt modal (match quota) -->
         <div class="modal" id="reward-prompt-modal">
             <div class="modal-content reward-prompt-content">
-                <div class="reward-prompt-icon">🎯</div>
+                <div class="reward-prompt-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></div>
                 <h2>Match the bill payment quota</h2>
-                <p id="reward-prompt-text">Pay 2 more qualifying bills to unlock your reward.</p>
+                <p id="reward-prompt-text">Pay 2 more qualifying bills to unlock your voucher.</p>
                 <div class="reward-prompt-progress">
                     <div class="voucher-progress-bar">
                         <div class="progress-fill" id="reward-prompt-fill" style="width: 33%"></div>
@@ -2569,7 +2768,7 @@
                 </div>
                 <div class="modal-actions">
                     <button class="primary-btn" onclick="closeRewardPrompt(); navigateTo('screen-my-bills')">Pay a bill</button>
-                    <button class="secondary-btn" onclick="closeRewardPrompt(); navigateTo('screen-voucher-details')">View reward details</button>
+                    <button class="secondary-btn" onclick="closeRewardPrompt(); navigateTo('screen-voucher-details')">View voucher details</button>
                 </div>
             </div>
         </div>
@@ -2582,10 +2781,10 @@
                 <span></span><span></span><span></span><span></span><span></span>
             </div>
             <div class="reward-celebration-card">
-                <div class="reward-celebration-icon">🎁</div>
-                <h2>Reward unlocked!</h2>
+                <div class="reward-celebration-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10.5h16V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19v-8.5Z"/><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5v3H3v-3Z"/><path d="M12 6v14.5"/><path d="M12 6S10.6 2.5 8.3 2.5a1.75 1.75 0 1 0 0 3.5H12Z"/><path d="M12 6s1.4-3.5 3.7-3.5a1.75 1.75 0 1 1 0 3.5H12Z"/></svg></div>
+                <h2>Voucher unlocked!</h2>
                 <p>You've completed 3 qualifying bill payments. Your voucher is ready to claim.</p>
-                <button class="primary-btn" onclick="closeRewardCelebration(); navigateTo('screen-reward-chooser'); renderRewardChooser()">Claim reward</button>
+                <button class="primary-btn" onclick="closeRewardCelebration(); navigateTo('screen-reward-chooser'); renderRewardChooser()">Claim voucher</button>
             </div>
         </div>
 

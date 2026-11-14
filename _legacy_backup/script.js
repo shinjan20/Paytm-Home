@@ -115,6 +115,52 @@ function closeAllBillsSheet() {
     document.getElementById('all-bills-sheet').classList.remove('active');
 }
 
+// Landing bill-payment offers banner (two slides, each with a defined destination)
+const OFFER_SLIDES = [
+    {
+        title: 'Get up to ₹150 Off',
+        sub: 'using top bank cards',
+        action: 'all-bills',
+        aria: 'Get up to ₹150 Off using top bank cards. Opens all bill payments.'
+    },
+    {
+        title: 'Earn a bill voucher',
+        sub: 'on your 3rd bill payment',
+        action: 'reward',
+        aria: 'Earn a bill payment voucher on your 3rd qualifying bill payment. Opens voucher details.'
+    }
+];
+let offerSlideIndex = 0;
+
+function setOfferSlide(index) {
+    const slide = OFFER_SLIDES[index];
+    if (!slide) return;
+
+    offerSlideIndex = index;
+
+    const title = document.getElementById('offers-banner-title');
+    const sub = document.getElementById('offers-banner-sub');
+    const banner = document.getElementById('offers-banner-hit');
+
+    if (title) title.textContent = slide.title;
+    if (sub) sub.textContent = slide.sub;
+    if (banner) banner.setAttribute('aria-label', slide.aria);
+
+    document.querySelectorAll('.offers-dot').forEach(function(dot, i) {
+        dot.classList.toggle('active', i === index);
+        dot.setAttribute('aria-pressed', i === index ? 'true' : 'false');
+    });
+}
+
+function handleOfferBannerClick() {
+    const slide = OFFER_SLIDES[offerSlideIndex];
+    if (slide && slide.action === 'reward') {
+        navigateTo('screen-voucher-details');
+    } else {
+        showAllBillsSheet();
+    }
+}
+
 function openBillerSearch(category) {
     closeAllBillsSheet();
 
@@ -131,7 +177,7 @@ let landingMode = 'me';
 let activeHome = 'personal';
 
 const ME_BILL_DATA = {
-    attention: 2,
+    attention: 3,
     destination: 'screen-my-bills',
     bills: [
         { name: 'Electricity', amount: '₹1,840' },
@@ -144,7 +190,7 @@ const HOME_DATA = {
         name: 'Personal Home',
         destination: 'screen-personal-home',
         icon: 'house',
-        bills: [2150, 1299, 850]
+        bills: [1840, 999, 850]
     },
     flatmates: {
         name: 'Flatmates',
@@ -322,7 +368,7 @@ function renderPayVoucherHint() {
 
     if (copy) {
         copy.textContent = meVoucherStep >= 3
-            ? 'You have already completed 3 qualifying payments, so this payment will not add to the reward count.'
+            ? 'You have already completed 3 qualifying payments, so this payment will not add to your voucher progress.'
             : `This eligible payment takes you from ${meVoucherStep} of 3 to ${meVoucherStep + 1} of 3 qualifying payments.`;
     }
 
@@ -534,21 +580,28 @@ function updateSuccessCue() {
 
     if (text) {
         if (meVoucherStep >= 3) {
-            text.textContent = '3 of 3 qualifying payments completed. Your bill payment reward is unlocked.';
+            text.textContent = '3 of 3 qualifying payments completed. Your bill payment voucher is unlocked.';
         } else {
             const remaining = 3 - meVoucherStep;
-            text.textContent = `${meVoucherStep} of 3 qualifying payments completed. ${remaining} more to unlock your bill payment reward.`;
+            text.textContent = `${meVoucherStep} of 3 qualifying payments completed. ${remaining} more to unlock your bill payment voucher.`;
         }
     }
 }
 
 // Home reward card + celebration flow
-// Available rewards (max 4) that the user can choose from after unlocking
+const REWARD_ICON_ATTRS = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"';
+const REWARD_ICON_TICKET = `<svg ${REWARD_ICON_ATTRS}><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h11A2.5 2.5 0 0 1 20 8.5v1a2.5 2.5 0 0 0 0 5v1a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 15.5v-1a2.5 2.5 0 0 0 0-5v-1Z"/><path d="M14.5 6.5v2M14.5 11v2M14.5 15.5v2"/></svg>`;
+const REWARD_ICON_PERCENT = `<svg ${REWARD_ICON_ATTRS}><path d="M19 5 5 19"/><circle cx="7.5" cy="7.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>`;
+const REWARD_ICON_TV = `<svg ${REWARD_ICON_ATTRS}><rect x="3.5" y="6.5" width="17" height="11.5" rx="2"/><path d="m8 3.5 4 3 4-3"/></svg>`;
+const REWARD_ICON_WIFI = `<svg ${REWARD_ICON_ATTRS}><path d="M3.5 9.5a12 12 0 0 1 17 0"/><path d="M6.8 13a8 8 0 0 1 10.4 0"/><path d="M10 16.4a3.4 3.4 0 0 1 4 0"/><circle cx="12" cy="19.3" r="1"/></svg>`;
+
+// Voucher options (max 4) the user can choose from after the 3rd qualifying bill payment.
+// Rewards are always bill-payment vouchers - never cashback or a free bill payment.
 const AVAILABLE_REWARDS = [
-    { id: 'cashback-50', icon: '💸', name: '₹50 cashback', desc: 'Credited to your Paytm wallet' },
-    { id: 'bill-discount', icon: '🧾', name: '10% off next bill', desc: 'Up to ₹200 on any bill' },
-    { id: 'movie-ticket', icon: '🎬', name: 'Free movie ticket', desc: 'One ticket at partner cinemas' },
-    { id: 'wallet-credit', icon: '💳', name: '₹100 wallet credit', desc: 'Valid for 30 days' }
+    { id: 'voucher-100', icon: REWARD_ICON_TICKET, name: '₹100 bill voucher', desc: 'Redeem on any bill of ₹500 or more' },
+    { id: 'voucher-10pc', icon: REWARD_ICON_PERCENT, name: '10% off next bill', desc: 'Up to ₹200 on any bill payment' },
+    { id: 'voucher-dth', icon: REWARD_ICON_TV, name: '₹75 DTH voucher', desc: 'On your next DTH recharge' },
+    { id: 'voucher-broadband', icon: REWARD_ICON_WIFI, name: '₹50 broadband voucher', desc: 'On your next broadband bill' }
 ];
 let claimedRewardId = null;
 
@@ -598,7 +651,7 @@ function claimReward(rewardId) {
     claimedRewardId = rewardId;
     renderHomeRewards();
     renderRewardChooser();
-    showAppToast(`Reward claimed: ${reward.name}`);
+    showAppToast(`Voucher claimed: ${reward.name}`);
     navigateTo('screen-recharge-bills');
 }
 
@@ -614,6 +667,42 @@ function toggleRewardsExpand() {
     toggle.classList.toggle('expanded', expanded);
 }
 
+const REWARD_LOCK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>';
+const REWARD_CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>';
+
+function updateLandingRewardsCard() {
+    const step = meVoucherStep;
+    const remaining = Math.max(3 - step, 0);
+    const unlocked = step >= 3;
+
+    const number = document.getElementById('rewards-progress-number');
+    const ring = document.getElementById('rewards-ring-fill');
+    const title = document.getElementById('rewards-progress-title');
+    const desc = document.getElementById('rewards-progress-desc');
+    const nextStatus = document.getElementById('rewards-next-status');
+    const card = document.getElementById('rewards-voucher-card');
+    const subtitle = document.getElementById('rewards-voucher-subtitle');
+    const progress = document.getElementById('rewards-voucher-progress');
+    const lock = document.getElementById('rewards-voucher-lock');
+
+    if (number) number.textContent = String(step);
+    if (ring) ring.setAttribute('stroke-dashoffset', String(Math.round(220 * (1 - Math.min(step, 3) / 3))));
+    if (title) title.textContent = unlocked ? 'Voucher unlocked' : 'Almost there!';
+    if (desc) {
+        desc.textContent = unlocked
+            ? 'Tap to claim your voucher'
+            : `Pay ${remaining} more bill${remaining === 1 ? '' : 's'} to unlock your voucher`;
+    }
+    if (nextStatus) nextStatus.textContent = unlocked ? 'Ready to claim' : 'Unlocks on your 3rd bill payment';
+    if (card) card.classList.toggle('locked', !unlocked);
+    if (subtitle) subtitle.textContent = unlocked ? 'Unlocked · ready to claim' : 'Earned after 3 qualifying bill payments';
+    if (progress) progress.textContent = `${step}/3`;
+    if (lock) {
+        lock.innerHTML = unlocked ? REWARD_CHECK_SVG : REWARD_LOCK_SVG;
+        lock.classList.toggle('unlocked', unlocked);
+    }
+}
+
 function updateHomeReward() {
     const status = document.getElementById('home-rewards-status');
     const fill = document.getElementById('home-rewards-fill');
@@ -624,9 +713,10 @@ function updateHomeReward() {
     }
     if (status) {
         status.textContent = meVoucherStep >= 3
-            ? 'Unlocked · tap to claim your reward'
+            ? 'Unlocked · tap to claim your voucher'
             : `In progress · ${meVoucherStep} of 3 qualifying payments`;
     }
+    updateLandingRewardsCard();
     renderHomeRewards();
 }
 
@@ -643,7 +733,7 @@ function openHomeReward() {
     const promptMeta = document.getElementById('reward-prompt-meta');
 
     if (promptText) {
-        promptText.textContent = `Pay ${remaining} more qualifying bill${remaining > 1 ? 's' : ''} to unlock your reward. Only successful Paytm bill payments count.`;
+        promptText.textContent = `Pay ${remaining} more qualifying bill${remaining > 1 ? 's' : ''} to unlock your voucher. Only successful Paytm bill payments count.`;
     }
     if (promptFill) {
         promptFill.style.width = Math.round((meVoucherStep / 3) * 100) + '%';
@@ -707,9 +797,18 @@ function snoozeBillReminder() {
 }
 
 function refreshBillStatus() {
-    const refreshed = document.querySelector('#screen-bill-detail .meta-value');
-    if (refreshed) refreshed.textContent = 'Just now';
+    const btn = document.querySelector('#screen-bill-detail .meta-refresh-btn');
+    if (btn) {
+        btn.classList.remove('refreshing');
+        void btn.offsetWidth;
+        btn.classList.add('refreshing');
+        window.setTimeout(() => btn.classList.remove('refreshing'), 700);
+    }
     showAppToast('Bill status refreshed');
+}
+
+function startCreditScoreCheck() {
+    showAppToast('Credit score check is illustrative in this prototype');
 }
 
 function removeBill() {
@@ -717,6 +816,10 @@ function removeBill() {
     if (!confirmed) return;
     showAppToast('Bill removed from My Bills');
     navigateTo('screen-my-bills');
+}
+
+function attemptOfflineRefresh() {
+    showAppToast("You're offline · bills will refresh once you're back online");
 }
 
 function saveReminderPreferences() {
@@ -981,7 +1084,7 @@ const EMAIL_CANDIDATES = [
         id: 'electricity',
         biller: 'Electricity Board',
         icon: '⚡',
-        subject: 'Your electricity bill for October 2026',
+        subject: 'Your electricity bill for November 2026',
         sender: 'billing@electricityboard.in',
         received: '2 days ago',
         amount: 1840,
@@ -1011,7 +1114,7 @@ const EMAIL_CANDIDATES = [
         sender: 'accounts@fibernet.in',
         received: '3 days ago',
         amount: 999,
-        due: '25 Nov 2026',
+        due: '20 Nov 2026',
         kind: 'Bill email',
         checked: false,
         added: false
@@ -1389,7 +1492,7 @@ const PAPER_CALENDARS = {
         bills: {
             18: [{ key: 'electricity', name: 'Electricity', account: 'XXXX1234', amount: 1840, state: 'due', tag: 'elec ₹1.8k', note: 'Confirmed with biller · pay from UPI' }],
             21: [{ key: 'credit-card', name: 'Credit Card', account: 'XXXX5678', amount: 6250, state: 'unverified', tag: 'card', note: 'Marked paid on the HDFC app · not confirmed yet' }],
-            25: [{ key: 'broadband', name: 'Broadband', account: 'XXXX9012', amount: 999, state: 'estimated', tag: "b'band ~1k", note: 'Estimate from last month · updates when the bill is generated' }]
+            20: [{ key: 'broadband', name: 'Broadband', account: 'XXXX9012', amount: 999, state: 'due', tag: "b'band ₹1k", note: 'Confirmed with biller · renews this week' }]
         },
         marks: { 1: ['payday'], 18: ['starred'] }
     },
@@ -1401,8 +1504,8 @@ const PAPER_CALENDARS = {
         filter: 'all',
         bills: {
             10: [{ key: 'water', name: 'Water', account: 'XXXX3456', amount: 450, state: 'paid', tag: 'water', note: 'Paid from Paytm Wallet · verified' }],
-            18: [{ key: 'electricity', name: 'Electricity', account: 'XXXX1234', amount: 2150, state: 'due', tag: 'elec ₹2.2k', note: 'Confirmed with biller · pay from UPI' }],
-            20: [{ key: 'broadband', name: 'Broadband', account: 'XXXX5678', amount: 1299, state: 'due', tag: "b'band ₹1.3k", note: 'Confirmed with biller · renews this week' }],
+            18: [{ key: 'electricity', name: 'Electricity', account: 'XXXX1234', amount: 1840, state: 'due', tag: 'elec ₹1.8k', note: 'Confirmed with biller · pay from UPI' }],
+            20: [{ key: 'broadband', name: 'Broadband', account: 'XXXX9012', amount: 999, state: 'due', tag: "b'band ₹1k", note: 'Confirmed with biller · renews this week' }],
             22: [{ key: 'gas', name: 'Gas', account: 'XXXX9012', amount: 850, state: 'estimated', tag: 'gas ~₹850', note: 'Estimate from last month · meter reading pending' }]
         },
         marks: { 18: ['starred'] }
@@ -1943,6 +2046,111 @@ document.getElementById('all-bills-sheet')?.addEventListener('click', function(e
 });
 
 // Initialize
+// ---------------------------------------------------------------------------
+// Icon system: every emoji icon is swapped for the global icon treatment -
+// a navy (#0b4a9e) outline SVG with no solid chip.
+// ---------------------------------------------------------------------------
+const LEGACY_VECTOR_ICONS = {
+    '🏠': { label: 'Home', paths: '<path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h12V9.5"/><path d="M10 20v-4.5h4V20"/>' },
+    '👥': { label: 'People', paths: '<circle cx="9" cy="8" r="3"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><path d="M16 5.5a3 3 0 0 1 0 5.8"/><path d="M17 14.5a5 5 0 0 1 3.5 4.5"/>' },
+    '🫂': { label: 'Shared home', paths: '<circle cx="8" cy="8" r="2.5"/><circle cx="16" cy="8" r="2.5"/><path d="M3.5 19a4.5 4.5 0 0 1 9 0"/><path d="M11.5 19a4.5 4.5 0 0 1 9 0"/>' },
+    '⚡': { label: 'Electricity', paths: '<path d="M13 2.6 4.9 13.1h5.3L10.3 21.4 18.9 9.9h-5.4L13 2.6Z"/>' },
+    '💳': { label: 'Card', paths: '<rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18"/><path d="M7 14.5h3"/>' },
+    '🌐': { label: 'Internet', paths: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17"/><path d="M12 3.5c2.4 2.3 3.6 5.2 3.6 8.5s-1.2 6.2-3.6 8.5c-2.4-2.3-3.6-5.2-3.6-8.5S9.6 5.8 12 3.5Z"/>' },
+    '🛡️': { label: 'Protected', paths: '<path d="M12 3.5 19 6v5.5c0 4.4-2.9 7.6-7 9-4.1-1.4-7-4.6-7-9V6l7-2.5Z"/><path d="m9 12 2.2 2.2L15.5 10"/>' },
+    '💧': { label: 'Water', paths: '<path d="M12 3.5s6 6.2 6 10.2a6 6 0 0 1-12 0C6 9.7 12 3.5 12 3.5Z"/>' },
+    '📺': { label: 'TV', paths: '<rect x="3.5" y="6.5" width="17" height="11.5" rx="2"/><path d="m8 3.5 4 3 4-3"/>' },
+    '🔥': { label: 'Gas', paths: '<path d="M12 3.5c3 3.4 5.5 6.2 5.5 9.5a5.5 5.5 0 0 1-11 0c0-1.6.8-3 1.9-4.4.5 1.2 1.3 2 2.4 2.4-.5-2.7-.1-5 1.2-7.5Z"/>' },
+    '📱': { label: 'Mobile', paths: '<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M10.5 18.5h3"/>' },
+    '📡': { label: 'DTH', paths: '<rect x="3.5" y="6.5" width="17" height="11.5" rx="2"/><path d="m8 3.5 4 3 4-3"/><path d="M7.5 14.5h2M14.5 14.5h2"/>' },
+    '🏦': { label: 'Bank', paths: '<path d="M3.5 9.5 12 4l8.5 5.5"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8"/><path d="M3.5 20.5h17"/>' },
+    '🚗': { label: 'Vehicle', paths: '<path d="M4 16.5v2.2a.8.8 0 0 1-.8.8H3a.8.8 0 0 1-.8-.8v-4l2-5.2a1.5 1.5 0 0 1 1.4-1h12.8a1.5 1.5 0 0 1 1.4 1l2 5.2v4a.8.8 0 0 1-.8.8h-.2a.8.8 0 0 1-.8-.8v-2.2"/><path d="M2.7 12.5h18.6"/><circle cx="7" cy="16" r="1.4"/><circle cx="17" cy="16" r="1.4"/>' },
+    '🏛️': { label: 'Government', paths: '<path d="M3 9.5 12 4l9 5.5"/><path d="M5 10.5v8M10 10.5v8M14 10.5v8M19 10.5v8"/><path d="M3 20.5h18"/>' },
+    '📷': { label: 'Camera', paths: '<path d="M4 8.5h3l1.5-2h7L17 8.5h3a1.5 1.5 0 0 1 1.5 1.5v8A1.5 1.5 0 0 1 20 19.5H4A1.5 1.5 0 0 1 2.5 18v-8A1.5 1.5 0 0 1 4 8.5Z"/><circle cx="12" cy="13.5" r="3.2"/>' },
+    '📁': { label: 'Files', paths: '<path d="M3.5 7.5A1.5 1.5 0 0 1 5 6h4l2 2h8a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 19 20H5a1.5 1.5 0 0 1-1.5-1.5v-11Z"/>' },
+    '🔍': { label: 'Search', paths: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/>' },
+    '🔎': { label: 'Search', paths: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/><path d="m8 10.5 1.8 1.8 3.2-3.2"/>' },
+    '📧': { label: 'Email', paths: '<rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="m3.8 7 8.2 6 8.2-6"/>' },
+    '📬': { label: 'Inbox', paths: '<rect x="3" y="8.5" width="18" height="11" rx="2"/><path d="m3.8 10 8.2 6 8.2-6"/><path d="M12 2.5v4.5"/><path d="m9.8 4.7 2.2-2.2 2.2 2.2"/>' },
+    '📭': { label: 'No messages', paths: '<rect x="3" y="6.5" width="18" height="13" rx="2"/><path d="m3.8 8 8.2 6 8.2-6"/>' },
+    '📄': { label: 'Bill document', paths: '<path d="M6 3.5h8l4 4V20a.5.5 0 0 1-.5.5h-11A.5.5 0 0 1 6 20V3.5Z"/><path d="M14 3.5V8h4"/><path d="M9 12h6M9 16h6"/>' },
+    '📊': { label: 'Chart', paths: '<path d="M4 4v16h16"/><path d="M8 16v-4M12.5 16V9M17 16v-6.5"/>' },
+    '⚖️': { label: 'Compare', paths: '<path d="M12 3.5v17"/><path d="M5 6.5h14"/><path d="M8 6.5 5 13h6L8 6.5Z"/><path d="M16 6.5 13 13h6l-3-6.5Z"/><path d="M8.5 20.5h7"/>' },
+    '📈': { label: 'Trend', paths: '<path d="M3.5 17.5 9 12l3.5 3.5 8-8"/><path d="M15 7.5h5.5V13"/>' },
+    '🧾': { label: 'Receipt', paths: '<path d="M6 3.5h12v17l-2.4-1.6-2.4 1.6-2.4-1.6-2.4 1.6L6 20.5v-17Z"/><path d="M9 8h6M9 11.5h6M9 15h4"/>' },
+    '⚠️': { label: 'Warning', paths: '<path d="M12 4 21 20H3L12 4Z"/><path d="M12 10v4"/><path d="M12 17.2v.2"/>' },
+    '📶': { label: 'Signal', paths: '<path d="M5 19v-3M9.5 19v-6M14 19v-9M18.5 19V7"/>' },
+    '✅': { label: 'Verified', paths: '<circle cx="12" cy="12" r="8.5"/><path d="m8 12.2 2.6 2.6L16.2 9"/>' },
+    '🔔': { label: 'Notifications', paths: '<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15L6 16.5Z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>' },
+    '🎁': { label: 'Voucher', paths: '<path d="M4 10.5h16V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19v-8.5Z"/><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5v3H3v-3Z"/><path d="M12 6v14.5"/><path d="M12 6S10.6 2.5 8.3 2.5a1.75 1.75 0 1 0 0 3.5H12Z"/><path d="M12 6s1.4-3.5 3.7-3.5a1.75 1.75 0 1 1 0 3.5H12Z"/>' },
+    '⌨️': { label: 'Typing', paths: '<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6.5 9.5h.5M10 9.5h.5M13.5 9.5h.5M17 9.5h.5M6.5 12.5h.5M10 12.5h.5M13.5 12.5h.5M17 12.5h.5"/><path d="M8 15.5h8"/>' },
+    '⌨': { label: 'Typing', paths: '<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6.5 9.5h.5M10 9.5h.5M13.5 9.5h.5M17 9.5h.5M6.5 12.5h.5M10 12.5h.5M13.5 12.5h.5M17 12.5h.5"/><path d="M8 15.5h8"/>' },
+    '⏳': { label: 'Waiting', paths: '<path d="M7 3.5h10M7 20.5h10"/><path d="M8.5 3.5c0 4 7 4.5 7 8.5s-7 4.5-7 8.5"/><path d="M15.5 3.5c0 4-7 4.5-7 8.5s7 4.5 7 8.5"/>' },
+    '⏰': { label: 'Reminder', paths: '<circle cx="12" cy="13.5" r="6.5"/><path d="M12 10v3.5l2.5 1.5"/><path d="m4.5 5 2.5 2.5M19.5 5 17 7.5"/><path d="m4 20 2.5-2.5M20 20l-2.5-2.5"/>' }
+};
+const LEGACY_ICON_REGEX = new RegExp('(' + Object.keys(LEGACY_VECTOR_ICONS).join('|') + ')', 'g');
+
+function legacyIconSvg(key) {
+    const icon = LEGACY_VECTOR_ICONS[key];
+    return `<span class="vec-icon" role="img" aria-label="${icon.label}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${icon.paths}</svg></span>`;
+}
+
+function vectorizeLegacyTextNode(node) {
+    if (!node || !node.nodeValue || !LEGACY_ICON_REGEX.test(node.nodeValue)) return;
+    LEGACY_ICON_REGEX.lastIndex = 0;
+    const parent = node.parentElement;
+    if (!parent || parent.closest('script, style, .vec-icon, textarea, [data-vec-skip]')) return;
+
+    const parts = node.nodeValue.split(LEGACY_ICON_REGEX);
+    const template = document.createElement('template');
+    let html = '';
+    parts.forEach((part, index) => {
+        if (!part) return;
+        if (Object.prototype.hasOwnProperty.call(LEGACY_VECTOR_ICONS, part)) {
+            html += legacyIconSvg(part);
+        } else {
+            html += part.replace(/[&<>]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[ch]));
+        }
+    });
+    template.innerHTML = html;
+    node.replaceWith(template.content);
+}
+
+function vectorizeLegacyIcons(root) {
+    const scope = root || document.getElementById('app');
+    if (!scope) return;
+    const walker = document.createTreeWalker(scope, NodeFilter.SHOW_TEXT);
+    const textNodes = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode);
+    textNodes.forEach(vectorizeLegacyTextNode);
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => vectorizeLegacyIcons());
+} else {
+    vectorizeLegacyIcons();
+}
+
+const legacyIconObserver = new MutationObserver(mutations => {
+    mutations.forEach(mutation => {
+        if (mutation.type === 'characterData') {
+            vectorizeLegacyTextNode(mutation.target);
+            return;
+        }
+        mutation.addedNodes.forEach(node => {
+            if (node.nodeType === Node.TEXT_NODE) {
+                vectorizeLegacyTextNode(node);
+            } else if (node.nodeType === Node.ELEMENT_NODE && !node.classList.contains('vec-icon')) {
+                vectorizeLegacyIcons(node);
+            }
+        });
+    });
+});
+const legacyIconRoot = document.getElementById('app');
+if (legacyIconRoot) {
+    legacyIconObserver.observe(legacyIconRoot, { childList: true, characterData: true, subtree: true });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     renderLandingOverview();
     renderPaperCalendars();

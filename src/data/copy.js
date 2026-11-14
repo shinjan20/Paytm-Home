@@ -16,7 +16,7 @@ export const APP_COPY = {
     failedTitle: 'Payment could not be completed',
     failedSubtitle: 'Transaction failed',
     refundAssurance: 'If any money was debited from your account, it will be automatically reversed to your bank account within 2 to 3 business days.',
-    voucherSafeguard: 'Failed transactions do not count toward your bill payment reward milestone.',
+    voucherSafeguard: 'Failed transactions do not count toward your bill payment voucher milestone.',
   },
   home: {
     allPaid: 'All tracked bills paid',
@@ -25,6 +25,6 @@ export const APP_COPY = {
   },
   voucher: {
     quotaText: (step, target = 3) => `${step} of ${target} qualifying bill payments completed`,
-    unlockedMessage: 'Reward unlocked! You have completed 3 qualifying payments.',
+    unlockedMessage: 'Voucher unlocked! You have completed 3 qualifying payments.',
   }
 };
