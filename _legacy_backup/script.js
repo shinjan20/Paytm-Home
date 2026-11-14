@@ -26,8 +26,42 @@ function navigateTo(screenId) {
         }
     }
 
+    // Camera control: turn on for OCR/scan QR cases
+    handleCameraForScreen(screenId);
+
     // Scroll to top
     window.scrollTo(0, 0);
+}
+
+let __cameraStream = null;
+function handleCameraForScreen(screenId) {
+    const video = document.getElementById('camera-preview');
+    if (screenId === 'screen-camera') {
+        if (video && !__cameraStream) {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+                    .then(stream => {
+                        __cameraStream = stream;
+                        video.srcObject = stream;
+                        video.play().catch(() => {});
+                    })
+                    .catch(err => {
+                        console.warn('Camera access denied or unavailable:', err);
+                        // Fall back to static placeholder
+                        const denied = document.getElementById('screen-camera-denied');
+                        // keep on camera screen; show hint
+                    });
+            } else {
+                console.warn('getUserMedia not supported');
+            }
+        }
+    } else {
+        if (__cameraStream) {
+            __cameraStream.getTracks().forEach(t => t.stop());
+            __cameraStream = null;
+            if (video) video.srcObject = null;
+        }
+    }
 }
 
 // Return from Add bill to wherever it was opened from
@@ -745,8 +779,15 @@ function acceptHomeInvite(homeName) {
     updateHomeCardAfterAccept(name);
     updateHomePendingInvite();
     updateHomeInviteBadge();
-    showAppToast(`Welcome to ${name}! You can now view and pay its bills.`);
-    navigateTo('screen-home-selection');
+    // Take the user to that group's bill details page and prompt to pay off remaining bills
+    const groupNameEl = document.querySelector('#screen-flatmates-home .home-name');
+    if (groupNameEl) groupNameEl.textContent = '👥 ' + name;
+    const banner = document.getElementById('pay-remaining-banner');
+    if (banner) banner.hidden = false;
+    navigateTo('screen-flatmates-home');
+    setTimeout(() => {
+        showAppToast(`Welcome to ${name}! Pay off the remaining bills.`);
+    }, 300);
 }
 
 function declineHomeInvite(homeName) {
@@ -1801,8 +1842,12 @@ document.addEventListener('keydown', function(event) {
 // Category item selection
 document.querySelectorAll('.category-item').forEach(item => {
     item.addEventListener('click', function() {
-        // In a real app, this would navigate to biller-specific form
-        console.log('Selected category:', this.textContent.trim());
+        const name = this.textContent.trim();
+        console.log('Selected category:', name);
+        const searchInput = document.getElementById('biller-search-input');
+        if (searchInput) searchInput.value = name;
+        // Keep dummy values in frontend; flow continues to verification
+        navigateTo('screen-verification');
     });
 });
 
@@ -1823,10 +1868,29 @@ document.querySelector('.camera-btn')?.addEventListener('click', function() {
 });
 
 // File upload
-document.querySelector('.upload-area')?.addEventListener('click', function() {
-    // In a real app, this would open file picker
-    console.log('File upload clicked');
-});
+(function setupUpload() {
+    const area = document.getElementById('upload-area');
+    const input = document.getElementById('upload-file-input');
+    const chooseBtn = document.getElementById('choose-file-btn');
+    function openPicker(e) {
+        if (e) e.stopPropagation();
+        if (input) input.click();
+    }
+    if (area) area.addEventListener('click', openPicker);
+    if (chooseBtn) chooseBtn.addEventListener('click', openPicker);
+    if (input) {
+        input.addEventListener('change', function() {
+            const file = this.files && this.files[0];
+            if (!file) return;
+            console.log('Selected file:', file.name);
+            const hint = area ? area.querySelector('p') : null;
+            if (hint) hint.textContent = file.name;
+            // Simulate OCR processing then review
+            setTimeout(() => navigateTo('screen-ocr-loading'), 300);
+            setTimeout(() => navigateTo('screen-ocr-review'), 1800);
+        });
+    }
+})();
 
 // Form field editing
 document.querySelectorAll('.form-field input.editable').forEach(input => {
