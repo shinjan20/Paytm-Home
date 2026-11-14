@@ -18,6 +18,8 @@ const SCREEN_TO_PATH = {
   'screen-bill-detail': '/bill-detail',
   'screen-pay-bill': '/pay-bill',
   'screen-payment-success': '/payment-success',
+  'screen-payment-pending': '/payment-pending',
+  'screen-payment-failed': '/payment-failed',
   'screen-smart-insight': '/insight',
   'screen-calendar': '/calendar',
   'screen-personal-calendar': '/calendar/personal',

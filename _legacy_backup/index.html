@@ -978,6 +978,16 @@
                 </div>
             </div>
 
+            <!-- Transaction simulator mode (Prototype controls) -->
+            <div class="simulation-mode-container">
+                <span class="simulation-title">Transaction State Simulator:</span>
+                <div class="simulation-chips">
+                    <button type="button" class="sim-mode-chip active" data-mode="auto" onclick="setPaymentSimulationMode('auto')">Auto (Pending → Success)</button>
+                    <button type="button" class="sim-mode-chip" data-mode="pending" onclick="setPaymentSimulationMode('pending')">Simulate Pending</button>
+                    <button type="button" class="sim-mode-chip" data-mode="failed" onclick="setPaymentSimulationMode('failed')">Simulate Failed</button>
+                </div>
+            </div>
+
             <button class="primary-btn large" onclick="payBill()">Pay ₹1,840</button>
             <p class="pay-note">Only successful Paytm payments count toward the reward. Payments marked paid offline or on another app do not qualify.</p>
         </div>
@@ -1004,6 +1014,160 @@
                 <div class="success-actions">
                     <button class="primary-btn" onclick="navigateTo('screen-my-bills')">Back to My Bills</button>
                     <button class="secondary-btn" onclick="navigateTo('screen-voucher-details')">View reward</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 10d: Payment Pending / Processing -->
+        <div id="screen-payment-pending" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-my-bills')">✕</button>
+                <h1>Payment Processing</h1>
+            </div>
+
+            <div class="payment-pending-container">
+                <div class="pending-icon-wrapper">
+                    <div class="pending-spinner"></div>
+                    <div class="pending-icon">⏳</div>
+                </div>
+
+                <h2>Payment is being processed</h2>
+                <p class="pending-amount">₹1,840 · Electricity (BSES Rajdhani)</p>
+                <span class="status-chip in-progress">Awaiting biller confirmation</span>
+
+                <!-- Transaction Steps Timeline -->
+                <div class="payment-timeline">
+                    <div class="timeline-step completed" id="pending-step-1">
+                        <div class="step-dot">✓</div>
+                        <div class="step-content">
+                            <h4>Payment initiated</h4>
+                            <p>₹1,840 debited via Paytm UPI</p>
+                            <span class="step-time">Just now</span>
+                        </div>
+                    </div>
+                    <div class="timeline-step active" id="pending-step-2">
+                        <div class="step-dot pulse">⏳</div>
+                        <div class="step-content">
+                            <h4>BBPS / Biller clearance</h4>
+                            <p>Awaiting confirmation from BSES Rajdhani</p>
+                            <span class="step-meta">Usually takes 2–5 minutes</span>
+                        </div>
+                    </div>
+                    <div class="timeline-step upcoming" id="pending-step-3">
+                        <div class="step-dot">○</div>
+                        <div class="step-content">
+                            <h4>Bill status update</h4>
+                            <p>Marked as Paid in My Bills & receipt generated</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guidance & Trust Callout -->
+                <div class="payment-reassurance-card">
+                    <div class="reassurance-icon">🛡️</div>
+                    <div class="reassurance-text">
+                        <h4>Do not pay again</h4>
+                        <p>Your payment is safely in progress. If money was debited, your bill will be updated automatically. Reminders are paused.</p>
+                    </div>
+                </div>
+
+                <!-- Order Details Table -->
+                <div class="payment-details-card">
+                    <div class="payment-detail-row">
+                        <span class="detail-label">Order ID</span>
+                        <span class="detail-value">PTM-BBPS-8924019</span>
+                    </div>
+                    <div class="payment-detail-row">
+                        <span class="detail-label">Consumer No.</span>
+                        <span class="detail-value">XXXX1234</span>
+                    </div>
+                    <div class="payment-detail-row">
+                        <span class="detail-label">Payment Mode</span>
+                        <span class="detail-value">Paytm UPI (State Bank of India)</span>
+                    </div>
+                    <div class="payment-detail-row">
+                        <span class="detail-label">Date & Time</span>
+                        <span class="detail-value" id="pending-time-display">14 Nov 2026, 10:05 PM</span>
+                    </div>
+                </div>
+
+                <!-- Simulation bar / prototype helper -->
+                <div class="demo-state-box">
+                    <span class="demo-label">Simulate Transaction Outcome:</span>
+                    <div class="demo-btn-group">
+                        <button type="button" class="demo-chip success" onclick="resolvePayment('success')">Simulate Success ✓</button>
+                        <button type="button" class="demo-chip failed" onclick="resolvePayment('failed')">Simulate Failed ✕</button>
+                    </div>
+                </div>
+
+                <div class="pending-actions">
+                    <button class="primary-btn" onclick="checkPendingStatus()">Check status</button>
+                    <button class="secondary-btn" onclick="navigateTo('screen-my-bills')">Back to My Bills</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 10e: Payment Failed -->
+        <div id="screen-payment-failed" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('screen-pay-bill')">←</button>
+                <h1>Payment Failed</h1>
+            </div>
+
+            <div class="payment-failed-container">
+                <div class="failed-icon-wrapper">
+                    <div class="failed-icon">✕</div>
+                </div>
+
+                <h2>Payment could not be completed</h2>
+                <p class="failed-amount">₹1,840 to Electricity (BSES Rajdhani)</p>
+                <span class="status-chip overdue">Transaction failed</span>
+
+                <!-- Error description box -->
+                <div class="payment-error-card">
+                    <div class="error-header">
+                        <span class="error-badge">Bank Server Timeout</span>
+                        <span class="error-code">ERR_BBPS_082</span>
+                    </div>
+                    <p class="error-desc">Your bank's UPI switch did not respond in time. The payment could not be cleared by the biller.</p>
+                </div>
+
+                <!-- Refund assurance notice (PRD Compliance) -->
+                <div class="refund-assurance-card">
+                    <div class="refund-icon">💳</div>
+                    <div class="refund-text">
+                        <h4>100% Refund Assurance</h4>
+                        <p>If any money was debited from your account, it will be automatically reversed to your bank account within <strong>2 to 3 business days</strong>.</p>
+                        <span class="refund-ref">Reversal tracking: <strong>PTM-REV-541902</strong></span>
+                    </div>
+                </div>
+
+                <!-- Voucher safeguard note (PRD requirement) -->
+                <div class="voucher-rule-disclaimer">
+                    <span class="rule-icon">ℹ️</span>
+                    <span>Failed transactions do not count toward your bill payment reward milestone.</span>
+                </div>
+
+                <!-- Transaction Details Card -->
+                <div class="payment-details-card">
+                    <div class="payment-detail-row">
+                        <span class="detail-label">Transaction Ref</span>
+                        <span class="detail-value">PTM-TXN-FAILED-7721</span>
+                    </div>
+                    <div class="payment-detail-row">
+                        <span class="detail-label">Attempted Method</span>
+                        <span class="detail-value">Paytm UPI</span>
+                    </div>
+                    <div class="payment-detail-row">
+                        <span class="detail-label">Attempted At</span>
+                        <span class="detail-value" id="failed-time-display">14 Nov 2026, 10:06 PM</span>
+                    </div>
+                </div>
+
+                <div class="failed-actions">
+                    <button class="primary-btn" onclick="retryPayment()">Retry with another payment method</button>
+                    <button class="secondary-btn" onclick="contactPaymentSupport()">Contact 24x7 Support</button>
+                    <button class="text-btn" onclick="navigateTo('screen-my-bills')">Back to My Bills</button>
                 </div>
             </div>
         </div>

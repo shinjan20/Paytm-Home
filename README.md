@@ -19,7 +19,11 @@ This prototype demonstrates the core user journey for managing recurring bills w
 9. **Biller Search** - Category-based biller discovery
 10. **OCR Review** - Editable extracted bill fields
 11. **Bill Details** - Payment and mark-paid options
-12. **Bills Calendar (Me)** - Paper wall-calendar view of all bills with pen marks and a day agenda
+12. **Pay Bill & Simulator** - Payment method selection with prototype transaction outcome simulation (Auto, Pending, Failed)
+13. **Payment Processing / Pending** - In-flight transaction state with 3-step animated timeline, BBPS clearance polling, duplicate payment protection notice, and manual status check
+14. **Payment Failed** - Transaction failure state with bank timeout error code, 100% automatic refund assurance within 2-3 business days, voucher safeguard disclaimer, and retry with alternate payment methods
+15. **Payment Success** - Confirmation with post-success voucher milestone cue
+16. **Bills Calendar (Me)** - Paper wall-calendar view of all bills with pen marks and a day agenda
 13. **Calendar (Personal Home)** - Paper calendar with personal home bills
 14. **Calendar (Flatmates Home)** - Paper calendar with flatmate bills
 15. **Reminder Settings** - Notification preferences

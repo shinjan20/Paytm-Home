@@ -292,15 +292,143 @@ function renderPayVoucherHint() {
     }
 }
 
+// Payment transaction state machine
+let paymentSimulationMode = 'auto'; // 'auto' | 'pending' | 'failed'
+let pendingTimer = null;
+
+function setPaymentSimulationMode(mode) {
+    paymentSimulationMode = mode;
+    document.querySelectorAll('.sim-mode-chip').forEach(chip => {
+        chip.classList.toggle('active', chip.getAttribute('data-mode') === mode);
+    });
+    if (mode === 'failed') {
+        showAppToast('Simulator set to: Bank Timeout / Payment Failed');
+    } else if (mode === 'pending') {
+        showAppToast('Simulator set to: Processing / Pending with BBPS');
+    } else {
+        showAppToast('Simulator set to: Auto (Pending → Success)');
+    }
+}
+
 function payBill() {
-    if (meVoucherStep < 3) {
-        meVoucherStep += 1;
+    initiatePayment();
+}
+
+function initiatePayment() {
+    if (pendingTimer) {
+        clearTimeout(pendingTimer);
+        pendingTimer = null;
     }
 
-    updateMeVoucher();
-    updateVoucherDetails();
-    updateSuccessCue();
-    navigateTo('screen-payment-success');
+    const now = new Date();
+    const formattedDate = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+    const formattedTime = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    const timestampStr = `${formattedDate}, ${formattedTime}`;
+
+    const pendingTime = document.getElementById('pending-time-display');
+    const failedTime = document.getElementById('failed-time-display');
+    if (pendingTime) pendingTime.textContent = timestampStr;
+    if (failedTime) failedTime.textContent = timestampStr;
+
+    navigateTo('screen-payment-pending');
+    resetPendingTimeline();
+
+    if (paymentSimulationMode === 'failed') {
+        // Direct simulation of timeout failure after a brief check
+        pendingTimer = setTimeout(() => {
+            resolvePayment('failed');
+        }, 1500);
+    } else if (paymentSimulationMode === 'pending') {
+        // Keeps user in pending state to examine reassurance, timeline & check status
+        showAppToast('Payment in progress · awaiting biller clearance');
+    } else {
+        // Auto resolve: pending with animated progression to success
+        setTimeout(() => {
+            const step2 = document.getElementById('pending-step-2');
+            if (step2) step2.classList.add('active');
+        }, 800);
+
+        pendingTimer = setTimeout(() => {
+            resolvePayment('success');
+        }, 2200);
+    }
+}
+
+function resetPendingTimeline() {
+    const step1 = document.getElementById('pending-step-1');
+    const step2 = document.getElementById('pending-step-2');
+    const step3 = document.getElementById('pending-step-3');
+    if (step1) {
+        step1.className = 'timeline-step completed';
+    }
+    if (step2) {
+        step2.className = 'timeline-step active';
+    }
+    if (step3) {
+        step3.className = 'timeline-step upcoming';
+    }
+}
+
+function resolvePayment(outcome) {
+    if (pendingTimer) {
+        clearTimeout(pendingTimer);
+        pendingTimer = null;
+    }
+
+    if (outcome === 'success') {
+        if (meVoucherStep < 3) {
+            meVoucherStep += 1;
+        }
+
+        updateMeVoucher();
+        updateVoucherDetails();
+        updateSuccessCue();
+
+        // Mark electricity bill visually paid
+        const elecStatus = document.querySelector('#screen-my-bills .bill-card:first-child .bill-status');
+        if (elecStatus) {
+            elecStatus.className = 'bill-status paid';
+            elecStatus.textContent = 'Paid · Verified';
+        }
+
+        showAppToast('Payment confirmed by biller ✓');
+        navigateTo('screen-payment-success');
+    } else if (outcome === 'failed') {
+        showAppToast('Payment failed · Bank switch timeout');
+        navigateTo('screen-payment-failed');
+    }
+}
+
+function checkPendingStatus() {
+    showAppToast('Checking status with BSES Rajdhani & BBPS...');
+    const btn = document.querySelector('#screen-payment-pending .primary-btn');
+    if (btn) {
+        btn.textContent = 'Checking...';
+        btn.disabled = true;
+    }
+
+    setTimeout(() => {
+        if (btn) {
+            btn.textContent = 'Check status';
+            btn.disabled = false;
+        }
+        if (paymentSimulationMode === 'failed') {
+            resolvePayment('failed');
+        } else {
+            resolvePayment('success');
+        }
+    }, 1200);
+}
+
+function retryPayment() {
+    const walletRadio = document.querySelector('input[name="pay-method"][value="wallet"]');
+    if (walletRadio) walletRadio.checked = true;
+    showAppToast('Selected Paytm Wallet for retry');
+    navigateTo('screen-pay-bill');
+}
+
+function contactPaymentSupport() {
+    showAppToast('Support Ticket #PTM-98421 opened · Ref: PTM-FAIL-582910');
 }
 
 function updateVoucherDetails() {
@@ -417,8 +545,8 @@ function renderRewardChooser() {
                 <h3>${reward.name}</h3>
                 <p>${reward.desc}</p>
             </div>
-            <button class="primary-btn reward-chooser-claim" ${claimed ? 'disabled' : ''} onclick="claimReward('${reward.id}')">
-                ${claimed ? 'Claimed' : 'Claim'}
+            <button class="primary-btn reward-chooser-claim${claimed ? ' claimed' : ''}" ${claimed ? 'disabled' : ''} onclick="claimReward('${reward.id}')">
+                ${claimed ? '✓ Claimed' : 'Claim'}
             </button>
         </div>`;
     }).join('');
