@@ -43,6 +43,7 @@ export const SCREEN_TO_PATH = {
   'screen-bill-history': '/bill-history',
   'screen-home-details': '/home-details',
   'screen-reward-chooser': '/reward-chooser',
+  'screen-404': '/404',
 };
 const PATH_TO_SCREEN = Object.fromEntries(Object.entries(SCREEN_TO_PATH).map(([k, v]) => [v, k]));
 

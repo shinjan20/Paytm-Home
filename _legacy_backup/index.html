@@ -1719,6 +1719,52 @@
             </div>
         </div>
 
+        <!-- Screen 18b: 404 Not Found Page -->
+        <div id="screen-404" class="screen not-found-screen">
+            <div class="not-found-card">
+                <div class="not-found-art">
+                    <svg width="260" height="140" viewBox="0 0 280 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g transform="translate(68, 12)">
+                            <path d="M -6 16 L -13 14 M -4 8 L -11 4 M 3 4 L 1 -2" stroke="#00baf2" stroke-width="1.6" stroke-linecap="round" />
+                            <path d="M 12 16 C 9 8 18 1 24 5 C 28 8 26 15 20 19 C 26 19 32 23 30 29 C 28 34 20 35 14 31 C 8 37 -1 35 -3 27 C -5 21 3 15 12 16 Z" fill="#ffffff" stroke="#00baf2" stroke-width="2" stroke-linejoin="round" />
+                            <path d="M 6 20 C 8 14 14 12 18 14" fill="none" stroke="#00baf2" stroke-width="1.5" stroke-linecap="round" />
+                            <circle cx="23" cy="22" r="1.8" fill="#002970" />
+                            <path d="M 27 22 L 32 24 L 26 26 Z" fill="#f59e0b" stroke="#d97706" stroke-width="0.8" />
+                        </g>
+
+                        <path d="M 123 44 L 118 36 M 132 40 L 132 31 M 142 42 L 148 35 M 153 46 L 160 42" stroke="#002970" stroke-width="1.8" stroke-linecap="round" />
+                        <path d="M 135 27 L 135 22 M 135 19 L 135 17" stroke="#002970" stroke-width="2" stroke-linecap="round" />
+
+                        <path d="M 80 84 L 80 73 L 64 73 L 78 48 L 84 48 L 84 67 L 90 67 L 90 73 L 84 73 L 84 84 Z M 70 67 L 80 67 L 80 52 Z" fill="#002970" />
+
+                        <g transform="translate(120, 50)">
+                            <path d="M 2 24 C 2 9 10 1 18 1 C 26 1 34 9 34 24 Z" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" stroke-linejoin="round" />
+                            <path d="M 6 16 L 12 21 L 18 15 L 24 22 L 30 17" fill="none" stroke="#d97706" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                        </g>
+
+                        <path d="M 188 84 L 188 73 L 172 73 L 186 48 L 192 48 L 192 67 L 198 67 L 198 73 L 192 73 L 192 84 Z M 178 67 L 188 67 L 188 52 Z" fill="#002970" />
+
+                        <ellipse cx="134" cy="98" rx="66" ry="14" fill="#00baf2" stroke="#0284c7" stroke-width="2" />
+                        <ellipse cx="134" cy="96" rx="58" ry="10" fill="#38bdf8" />
+                        <path d="M 80 98 C 92 108 178 108 190 98" fill="none" stroke="#002970" stroke-width="2.6" stroke-linecap="round" />
+
+                        <path d="M 68 100 C 60 96 62 86 70 88 C 74 89 76 95 68 100 Z" fill="#22c55e" stroke="#16a34a" stroke-width="1.2" />
+                        <path d="M 67 98 C 71 95 73 93 75 90" fill="none" stroke="#15803d" stroke-width="1" stroke-linecap="round" />
+                        <path d="M 200 100 C 208 96 206 86 198 88 C 194 89 192 95 200 100 Z" fill="#22c55e" stroke="#16a34a" stroke-width="1.2" />
+
+                        <circle cx="58" cy="72" r="2.5" fill="#002970" />
+                        <circle cx="208" cy="75" r="2.5" fill="#002970" />
+                        <circle cx="218" cy="67" r="1.8" fill="#00baf2" />
+                        <circle cx="52" cy="80" r="1.5" fill="#00baf2" />
+                    </svg>
+                </div>
+                <h1 class="not-found-title">Oops!</h1>
+                <p class="not-found-desc">You've found a page that doesn't exist. You can go back or open it in our app</p>
+                <button class="primary-btn not-found-home-btn" onclick="navigateTo('screen-recharge-bills')">Go to Homepage</button>
+                <button class="text-btn not-found-back-btn" onclick="window.history.length > 1 ? window.history.back() : navigateTo('screen-recharge-bills')">Go Back</button>
+            </div>
+        </div>
+
         <!-- Screen 19: Offline State -->
         <div id="screen-offline" class="screen">
             <div class="offline-banner">

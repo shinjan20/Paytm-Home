@@ -6174,3 +6174,52 @@ body {
 .home-rename-btn:hover {
     background: #eef4ff;
 }
+
+/* 404 Not Found Screen */
+.not-found-screen {
+    padding-top: 36px;
+    padding-bottom: 40px;
+    text-align: center;
+}
+.not-found-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 440px;
+    margin: 0 auto;
+}
+.not-found-art {
+    margin-bottom: 12px;
+}
+.not-found-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #00baf2;
+    margin: 12px 0 8px 0;
+}
+.not-found-desc {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #334155;
+    max-width: 340px;
+    margin: 0 auto 24px auto;
+}
+.not-found-home-btn {
+    border-radius: 24px !important;
+    padding: 12px 36px !important;
+    width: auto !important;
+    min-width: 200px;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 10px rgba(0, 186, 242, 0.28);
+}
+.not-found-back-btn {
+    color: #00baf2 !important;
+    font-size: 13.5px !important;
+    font-weight: 500 !important;
+    cursor: pointer;
+}
+.not-found-back-btn:hover {
+    text-decoration: underline;
+}

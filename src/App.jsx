@@ -7,9 +7,11 @@ const KNOWN_PATHS = new Set(Object.values(SCREEN_TO_PATH));
 
 export default function App() {
   const location = useLocation();
-  const isKnown = KNOWN_PATHS.has(location.pathname);
+  const rawPath = location.pathname;
+  const normalizedPath = rawPath.length > 1 && rawPath.endsWith('/') ? rawPath.slice(0, -1) : rawPath;
+  const isKnown = KNOWN_PATHS.has(normalizedPath);
 
-  if (!isKnown) {
+  if (!isKnown || normalizedPath === '/404') {
     return <NotFound />;
   }
 

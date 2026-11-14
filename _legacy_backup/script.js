@@ -19,6 +19,11 @@ function navigateTo(screenId) {
     const targetScreen = document.getElementById(screenId);
     if (targetScreen) {
         targetScreen.classList.add('active');
+    } else {
+        const notFoundScreen = document.getElementById('screen-404');
+        if (notFoundScreen) {
+            notFoundScreen.classList.add('active');
+        }
     }
 
     // Scroll to top
