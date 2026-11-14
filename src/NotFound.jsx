@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { APP_COPY } from './data/copy.js';
 
 export default function NotFound() {
   const navigate = useNavigate();
@@ -60,7 +61,7 @@ export default function NotFound() {
             </svg>
             <input
               type="text"
-              placeholder="Search for Mutual Funds"
+              placeholder={APP_COPY.notFound.searchPlaceholder}
               style={styles.searchInput}
               readOnly
             />
@@ -70,7 +71,7 @@ export default function NotFound() {
         {/* Sign In Button */}
         <div style={styles.headerRight}>
           <button type="button" style={styles.signInBtn} onClick={handleGoHome}>
-            Sign In
+            {APP_COPY.notFound.signIn}
           </button>
         </div>
       </header>
@@ -156,11 +157,11 @@ export default function NotFound() {
           </div>
 
           {/* Heading */}
-          <h1 style={styles.title}>Oops!</h1>
+          <h1 style={styles.title}>{APP_COPY.notFound.title}</h1>
 
           {/* Body message */}
           <p style={styles.description}>
-            You've found a page that doesn't exist. You can go back or open it in our app
+            {APP_COPY.notFound.description}
           </p>
 
           {/* Actions */}
@@ -178,7 +179,7 @@ export default function NotFound() {
                 e.currentTarget.style.transform = 'translateY(0)';
               }}
             >
-              Go to Homepage
+              {APP_COPY.notFound.homeCta}
             </button>
 
             <button
@@ -192,7 +193,7 @@ export default function NotFound() {
                 e.currentTarget.style.textDecoration = 'none';
               }}
             >
-              Go Back
+              {APP_COPY.notFound.backCta}
             </button>
           </div>
         </div>

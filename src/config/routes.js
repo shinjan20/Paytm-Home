@@ -1,0 +1,48 @@
+// Single Source of Truth for Route & Screen mapping
+
+export const APP_ROUTES = [
+  { id: 'screen-recharge-bills', path: '/', title: 'Recharge & Bills' },
+  { id: 'screen-my-bills', path: '/bills', title: 'My Bills' },
+  { id: 'screen-home-selection', path: '/homes', title: 'Select Home' },
+  { id: 'screen-personal-home', path: '/home/personal', title: 'Personal Home' },
+  { id: 'screen-flatmates-home', path: '/home/flatmates', title: 'Flatmates' },
+  { id: 'screen-add-bill', path: '/add-bill', title: 'Add Bill' },
+  { id: 'screen-camera', path: '/camera', title: 'Scan Paper Bill' },
+  { id: 'screen-upload', path: '/upload', title: 'Upload Bill' },
+  { id: 'screen-biller-search', path: '/biller-search', title: 'Search Biller' },
+  { id: 'screen-verification', path: '/verification', title: 'Biller Verification' },
+  { id: 'screen-ocr-review', path: '/ocr-review', title: 'Review Bill' },
+  { id: 'screen-bill-detail', path: '/bill-detail', title: 'Bill Details' },
+  { id: 'screen-pay-bill', path: '/pay-bill', title: 'Pay Bill' },
+  { id: 'screen-payment-success', path: '/payment-success', title: 'Payment Successful' },
+  { id: 'screen-payment-pending', path: '/payment-pending', title: 'Payment Processing' },
+  { id: 'screen-payment-failed', path: '/payment-failed', title: 'Payment Failed' },
+  { id: 'screen-smart-insight', path: '/insight', title: 'Bill Insight' },
+  { id: 'screen-calendar', path: '/calendar', title: 'Bills Calendar' },
+  { id: 'screen-personal-calendar', path: '/calendar/personal', title: 'Personal Calendar' },
+  { id: 'screen-flatmates-calendar', path: '/calendar/flatmates', title: 'Flatmates Calendar' },
+  { id: 'screen-reminder', path: '/reminders', title: 'Reminder Settings' },
+  { id: 'screen-voucher-details', path: '/voucher', title: 'Reward Details' },
+  { id: 'screen-empty-bills', path: '/empty-bills', title: 'No Bills' },
+  { id: 'screen-ocr-loading', path: '/ocr-loading', title: 'Scanning...' },
+  { id: 'screen-bill-loading', path: '/bill-loading', title: 'Loading Bill...' },
+  { id: 'screen-bill-error', path: '/bill-error', title: 'Bill Error' },
+  { id: 'screen-offline', path: '/offline', title: 'Offline Mode' },
+  { id: 'screen-stale-data', path: '/stale', title: 'Stale Data' },
+  { id: 'screen-email-consent', path: '/email/consent', title: 'Connect Email' },
+  { id: 'screen-email-scanning', path: '/email/scanning', title: 'Scanning Inbox...' },
+  { id: 'email-candidates', path: '/email/candidates', title: 'Candidate Bills' },
+  { id: 'screen-email-connected', path: '/email/connected', title: 'Email Connected' },
+  { id: 'screen-widget-preview', path: '/widget', title: 'Widget Preview' },
+  { id: 'screen-camera-denied', path: '/camera-denied', title: 'Camera Permission' },
+  { id: 'screen-notification-denied', path: '/notifications-denied', title: 'Notification Permission' },
+  { id: 'screen-email-disconnected', path: '/email/disconnected', title: 'Email Disconnected' },
+  { id: 'screen-bill-history', path: '/bill-history', title: 'Bill History' },
+  { id: 'screen-home-details', path: '/home-details', title: 'Home Details' },
+  { id: 'screen-reward-chooser', path: '/reward-chooser', title: 'Choose Reward' },
+  { id: 'screen-404', path: '/404', title: 'Page Not Found' },
+];
+
+export const SCREEN_TO_PATH = Object.fromEntries(APP_ROUTES.map(r => [r.id, r.path]));
+export const PATH_TO_SCREEN = Object.fromEntries(APP_ROUTES.map(r => [r.path, r.id]));
+export const KNOWN_PATHS = new Set(APP_ROUTES.map(r => r.path));
