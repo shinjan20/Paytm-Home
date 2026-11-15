@@ -45,4 +45,3 @@ export const APP_ROUTES = [
 
 export const SCREEN_TO_PATH = Object.fromEntries(APP_ROUTES.map(r => [r.id, r.path]));
 export const PATH_TO_SCREEN = Object.fromEntries(APP_ROUTES.map(r => [r.path, r.id]));
-export const KNOWN_PATHS = new Set(APP_ROUTES.map(r => r.path));

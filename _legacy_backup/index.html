@@ -435,7 +435,7 @@
             <div class="bill-section">
                 <h3 class="bill-section-title">Recently paid</h3>
 
-                <div class="bill-card paid" onclick="navigateTo('screen-bill-detail')">
+                <div class="bill-card paid" data-bill-icon="🛡️" data-bill-label="Insurance" data-bill-biller="Policybazaar" data-bill-amount="₹2,400" data-bill-account="XXXX3456" data-bill-due="28 Oct 2026" data-bill-period="Oct 2026" data-bill-key="insurance" data-bill-paid="true" onclick="openStaticBill(this)">
                     <div class="bill-card-header">
                         <div class="bill-icon">🛡️</div>
                         <div class="bill-info">
@@ -654,7 +654,7 @@
             <div class="bill-section">
                 <h3 class="bill-section-title">Needs attention</h3>
 
-                <div class="bill-card" onclick="navigateTo('screen-bill-detail')">
+                <div class="bill-card" data-bill-icon="⚡" data-bill-label="Electricity" data-bill-biller="Electricity Board" data-bill-amount="₹1,840" data-bill-account="XXXX1234" data-bill-due="18 Nov 2026" data-bill-period="Oct 2026" data-bill-key="electricity" onclick="openStaticBill(this)">
                     <div class="bill-card-header">
                         <div class="bill-icon">⚡</div>
                         <div class="bill-info">
@@ -669,7 +669,7 @@
                     </div>
                 </div>
 
-                <div class="bill-card" onclick="navigateTo('screen-bill-detail')">
+                <div class="bill-card" data-bill-icon="🌐" data-bill-label="Broadband" data-bill-biller="JioFiber" data-bill-amount="₹999" data-bill-account="XXXX9012" data-bill-due="20 Nov 2026" data-bill-period="Nov 2026" data-bill-key="broadband" onclick="openStaticBill(this)">
                     <div class="bill-card-header">
                         <div class="bill-icon">🌐</div>
                         <div class="bill-info">
@@ -684,7 +684,7 @@
                     </div>
                 </div>
 
-                <div class="bill-card" onclick="navigateTo('screen-bill-detail')">
+                <div class="bill-card" data-bill-icon="🏠" data-bill-label="Gas" data-bill-biller="Indane Gas" data-bill-amount="₹850" data-bill-account="XXXX9012" data-bill-due="22 Nov 2026" data-bill-period="Nov 2026" data-bill-key="gas" data-bill-status="estimated" onclick="openStaticBill(this)">
                     <div class="bill-card-header">
                         <div class="bill-icon">🏠</div>
                         <div class="bill-info">
@@ -703,14 +703,14 @@
             <div class="bill-section">
                 <h3 class="bill-section-title">Recently paid</h3>
 
-                <div class="bill-card paid" onclick="navigateTo('screen-bill-detail')">
+                <div class="bill-card paid" data-bill-icon="💧" data-bill-label="Water" data-bill-biller="Delhi Jal Board" data-bill-amount="₹520" data-bill-account="XXXX3456" data-bill-due="10 Nov 2026" data-bill-period="Nov 2026" data-bill-key="water" data-bill-paid="true" onclick="openStaticBill(this)">
                     <div class="bill-card-header">
                         <div class="bill-icon">💧</div>
                         <div class="bill-info">
                             <h4 class="strike-through">Water</h4>
                             <span class="bill-account">XXXX3456</span>
                         </div>
-                        <div class="bill-amount strike-through">₹450</div>
+                        <div class="bill-amount strike-through">₹520</div>
                     </div>
                     <div class="bill-card-footer">
                         <span class="bill-due">Paid 10 Nov</span>
@@ -783,7 +783,7 @@
             <div class="bill-section">
                 <h3 class="bill-section-title">Needs attention</h3>
 
-                <div class="bill-card" onclick="navigateTo('screen-bill-detail')">
+                <div class="bill-card" data-bill-icon="🌐" data-bill-label="Shared Broadband" data-bill-biller="JioFiber" data-bill-amount="₹2,499" data-bill-account="XXXX7890" data-bill-due="19 Nov 2026" data-bill-period="Nov 2026" data-bill-key="broadband" onclick="openStaticBill(this)">
                     <div class="bill-card-header">
                         <div class="bill-icon">🌐</div>
                         <div class="bill-info">
@@ -798,7 +798,7 @@
                     </div>
                 </div>
 
-                <div class="bill-card" onclick="navigateTo('screen-bill-detail')">
+                <div class="bill-card" data-bill-icon="📺" data-bill-label="Netflix (Shared)" data-bill-biller="Netflix" data-bill-amount="₹649" data-bill-account="Family Plan" data-bill-due="25 Nov 2026" data-bill-period="Nov 2026" data-bill-key="entertainment" data-bill-status="estimated" onclick="openStaticBill(this)">
                     <div class="bill-card-header">
                         <div class="bill-icon">📺</div>
                         <div class="bill-info">
@@ -817,7 +817,7 @@
             <div class="bill-section">
                 <h3 class="bill-section-title">Recently paid</h3>
 
-                <div class="bill-card paid" onclick="navigateTo('screen-bill-detail')">
+                <div class="bill-card paid" data-bill-icon="🏠" data-bill-label="Rent (Nov)" data-bill-biller="Apartment 4B" data-bill-amount="₹25,000" data-bill-account="Apartment 4B" data-bill-due="1 Nov 2026" data-bill-period="Nov 2026" data-bill-key="rent" data-bill-paid="true" onclick="openStaticBill(this)">
                     <div class="bill-card-header">
                         <div class="bill-icon">🏠</div>
                         <div class="bill-info">
@@ -1197,7 +1197,7 @@
                 </div>
             </div>
 
-            <button class="primary-btn large" onclick="payBill()">Pay ₹1,840</button>
+            <button class="primary-btn large" id="pay-bill-submit" onclick="payBill()">Pay ₹1,840</button>
             <p class="pay-note">Only successful Paytm payments count toward the voucher. Payments marked paid offline or on another app do not qualify.</p>
         </div>
 
@@ -1206,7 +1206,7 @@
             <div class="payment-success">
                 <div class="success-icon">✓</div>
                 <h1>Payment successful</h1>
-                <p class="success-amount">₹1,840 paid to Electricity</p>
+                <p class="success-amount"><span id="success-paid-amount">₹1,840</span> paid to <span id="success-paid-to">Electricity</span></p>
 
                 <!-- Post-success voucher progress cue -->
                 <div class="voucher-hint-card success">
@@ -1242,7 +1242,7 @@
                 </div>
 
                 <h2>Payment is being processed</h2>
-                <p class="pending-amount">₹1,840 · Electricity (BSES Rajdhani)</p>
+                <p class="pending-amount" id="pending-amount">₹1,840 · Electricity (BSES Rajdhani)</p>
                 <span class="status-chip in-progress">Awaiting biller confirmation</span>
 
                 <!-- Transaction Steps Timeline -->
@@ -1251,7 +1251,7 @@
                         <div class="step-dot">✓</div>
                         <div class="step-content">
                             <h3>Payment initiated</h3>
-                            <p>₹1,840 debited via Paytm UPI</p>
+                            <p id="pending-debit">₹1,840 debited via Paytm UPI</p>
                             <span class="step-time">Just now</span>
                         </div>
                     </div>
@@ -1259,7 +1259,7 @@
                         <div class="step-dot pulse">⏳</div>
                         <div class="step-content">
                             <h3>BBPS / Biller clearance</h3>
-                            <p>Awaiting confirmation from BSES Rajdhani</p>
+                            <p id="pending-payee">Awaiting confirmation from BSES Rajdhani</p>
                             <span class="step-meta">Usually takes 2–5 minutes</span>
                         </div>
                     </div>
@@ -1289,11 +1289,11 @@
                     </div>
                     <div class="payment-detail-row">
                         <span class="detail-label">Consumer No.</span>
-                        <span class="detail-value">XXXX1234</span>
+                        <span class="detail-value" id="pending-consumer">XXXX1234</span>
                     </div>
                     <div class="payment-detail-row">
                         <span class="detail-label">Payment Mode</span>
-                        <span class="detail-value">Paytm UPI (State Bank of India)</span>
+                        <span class="detail-value" id="pending-mode">Paytm UPI (State Bank of India)</span>
                     </div>
                     <div class="payment-detail-row">
                         <span class="detail-label">Date & Time</span>
@@ -1330,7 +1330,7 @@
                 </div>
 
                 <h2>Payment could not be completed</h2>
-                <p class="failed-amount">₹1,840 to Electricity (BSES Rajdhani)</p>
+                <p class="failed-amount" id="failed-amount">₹1,840 to Electricity (BSES Rajdhani)</p>
                 <span class="status-chip overdue">Transaction failed</span>
 
                 <!-- Error description box -->
@@ -1478,14 +1478,14 @@
 
             <div class="insight-actions">
                 <button class="primary-btn" onclick="navigateTo('screen-bill-detail')">View current bill</button>
-                <button class="secondary-btn">Compare previous bill</button>
+                <button class="secondary-btn" onclick="comparePreviousBill()">Compare previous bill</button>
                 <button class="secondary-btn" onclick="openPayBill()">Pay bill</button>
-                <button class="secondary-btn">Contact biller</button>
+                <button class="secondary-btn" onclick="contactBiller()">Contact biller</button>
             </div>
 
             <div class="insight-footer">
                 <button class="text-btn" onclick="navigateTo('screen-bill-detail')">This looks normal</button>
-                <button class="text-btn">Notification settings</button>
+                <button class="text-btn" onclick="navigateTo('screen-reminder')">Notification settings</button>
             </div>
             </div>
 
@@ -1748,47 +1748,60 @@
 
             <div class="voucher-details-section">
                 <h3>Qualifying transactions</h3>
+                <p class="voucher-choice-hint">Bills of ₹500 or more count towards the voucher. Tap a pending bill to choose what you pay next.</p>
 
                 <div class="transaction-item completed">
                     <div class="transaction-info">
                         <h4>Water</h4>
                         <span class="transaction-date">10 Nov 2026</span>
                     </div>
-                    <div class="transaction-amount">₹450</div>
+                    <div class="transaction-amount">₹520</div>
                     <span class="transaction-badge counted">Counted</span>
                 </div>
 
-                <div class="transaction-item pending" id="voucher-electricity-item">
-                    <div class="transaction-info">
-                        <h4>Electricity</h4>
-                        <span class="transaction-date" id="voucher-electricity-date">Due 18 Nov 2026</span>
-                    </div>
-                    <div class="transaction-amount">₹1,840</div>
-                    <span class="transaction-badge pending" id="voucher-electricity-badge">Pending</span>
+                <div class="voucher-bill-options" role="radiogroup" aria-label="Choose the next bill to pay">
+                    <label class="transaction-item selectable selected" id="voucher-electricity-item">
+                        <input type="radio" class="voucher-bill-radio" name="voucher-next-bill" value="electricity" checked onchange="selectVoucherBill('electricity')">
+                        <div class="transaction-info">
+                            <h4>Electricity</h4>
+                            <span class="transaction-date" id="voucher-electricity-date">Due 18 Nov 2026</span>
+                        </div>
+                        <div class="transaction-amount">₹1,840</div>
+                        <span class="transaction-badge selected" id="voucher-electricity-badge">Selected</span>
+                    </label>
+
+                    <label class="transaction-item selectable" id="voucher-creditcard-item">
+                        <input type="radio" class="voucher-bill-radio" name="voucher-next-bill" value="creditcard" onchange="selectVoucherBill('creditcard')">
+                        <div class="transaction-info">
+                            <h4>Credit Card</h4>
+                            <span class="transaction-date" id="voucher-creditcard-date">Due 24 Nov 2026</span>
+                        </div>
+                        <div class="transaction-amount">₹6,250</div>
+                        <span class="transaction-badge pending" id="voucher-creditcard-badge">Pending</span>
+                    </label>
+
+                    <label class="transaction-item selectable" id="voucher-broadband-item">
+                        <input type="radio" class="voucher-bill-radio" name="voucher-next-bill" value="broadband" onchange="selectVoucherBill('broadband')">
+                        <div class="transaction-info">
+                            <h4>Broadband</h4>
+                            <span class="transaction-date" id="voucher-broadband-date">Due 20 Nov 2026</span>
+                        </div>
+                        <div class="transaction-amount">₹999</div>
+                        <span class="transaction-badge pending" id="voucher-broadband-badge">Pending</span>
+                    </label>
                 </div>
 
-                <div class="transaction-item pending">
-                    <div class="transaction-info">
-                        <h4>Credit Card</h4>
-                        <span class="transaction-date">Not yet paid</span>
-                    </div>
-                    <div class="transaction-amount">₹6,250</div>
-                    <span class="transaction-badge pending">Pending</span>
+                <div class="voucher-cta-block" id="voucher-pay-block">
+                    <button type="button" class="primary-btn" id="voucher-next-bill-cta" onclick="openVoucherBill()">Pay Electricity · ₹1,840</button>
+                    <p class="voucher-cta-note" id="voucher-next-bill-note" aria-live="polite">This bill is due 18 Nov 2026. Paying it counts as your 2nd qualifying payment.</p>
                 </div>
 
-                <div class="transaction-item pending">
-                    <div class="transaction-info">
-                        <h4>Broadband</h4>
-                        <span class="transaction-date">Not yet paid</span>
-                    </div>
-                    <div class="transaction-amount">₹999</div>
-                    <span class="transaction-badge pending">Pending</span>
+                <div class="voucher-claim-block" id="voucher-claim-block" hidden>
+                    <button type="button" class="primary-btn" id="voucher-claim-btn" onclick="showRewardCelebration()">Choose your voucher</button>
+                    <p class="voucher-cta-note">3 of 3 qualifying payments done · pick one voucher for this cycle</p>
                 </div>
 
-                <div class="voucher-cta-block">
-                    <button type="button" class="primary-btn" onclick="openPayBill()">Pay Electricity · ₹1,840</button>
-                    <p class="voucher-cta-note">This bill is due 18 Nov. Paying it counts as your 2nd qualifying payment.</p>
-                </div>
+                <p class="voucher-claimed-note" id="voucher-claimed-note" hidden>Voucher claimed · it will be applied on your next eligible bill payment.</p>
             </div>
 
             <div class="voucher-terms">
@@ -1796,7 +1809,7 @@
                 <ul class="terms-list">
                     <li>Complete 3 qualifying bill payments</li>
                     <li>Payments must be in different categories</li>
-                    <li>Minimum payment amount: ₹450</li>
+                    <li>Minimum payment amount: ₹500</li>
                     <li>Only successful Paytm transactions count</li>
                     <li>Redeemable against a future bill payment; this is not cashback</li>
                     <li>Voucher valid for 30 days after unlocking</li>
@@ -1886,7 +1899,7 @@
                         <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
                     </svg>
                 </button>
-                <button class="secondary-btn">Contact support</button>
+                <button class="secondary-btn" onclick="contactBillSupport()">Contact support</button>
             </div>
         </div>
 
@@ -1894,7 +1907,7 @@
         <div id="screen-404" class="screen not-found-screen">
             <div class="not-found-card">
                 <div class="not-found-art">
-                    <svg width="260" height="140" viewBox="0 0 280 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="280" height="150" viewBox="0 0 280 150" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g transform="translate(68, 12)">
                             <path d="M -6 16 L -13 14 M -4 8 L -11 4 M 3 4 L 1 -2" stroke="#00baf2" stroke-width="1.6" stroke-linecap="round" />
                             <path d="M 12 16 C 9 8 18 1 24 5 C 28 8 26 15 20 19 C 26 19 32 23 30 29 C 28 34 20 35 14 31 C 8 37 -1 35 -3 27 C -5 21 3 15 12 16 Z" fill="#ffffff" stroke="#00baf2" stroke-width="2" stroke-linejoin="round" />
@@ -1932,7 +1945,7 @@
                 <h1 class="not-found-title">Oops!</h1>
                 <p class="not-found-desc">You've found a page that doesn't exist. You can go back or open it in our app</p>
                 <button class="primary-btn not-found-home-btn" onclick="navigateTo('screen-recharge-bills')">Go to Homepage</button>
-                <button class="text-btn not-found-back-btn" onclick="window.history.length > 1 ? window.history.back() : navigateTo('screen-recharge-bills')">Go Back</button>
+                <button type="button" class="text-btn not-found-back-btn" onclick="goBackFromNotFound()">Go Back</button>
             </div>
         </div>
 
@@ -1996,7 +2009,7 @@
 
             <div class="dashboard-summary stale-summary">
                 <span class="summary-count">Data may be outdated</span>
-                <button type="button" class="meta-refresh-btn" onclick="navigateTo('screen-bill-loading')" aria-label="Refresh all bills" title="Refresh all bills">
+                <button type="button" class="meta-refresh-btn" onclick="refreshAllBills()" aria-label="Refresh all bills" title="Refresh all bills">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
                         <path d="M23 4v6h-6"/>
                         <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
@@ -2346,7 +2359,7 @@
                 <p>To scan bills, Paytm needs access to your camera. You can enable camera access in your device settings.</p>
 
                 <div class="permission-actions">
-                    <button class="primary-btn" onclick="alert('Open device settings (prototype)')">Enable camera access</button>
+                    <button class="primary-btn" onclick="grantPrototypePermission('camera')">Enable camera access</button>
                     <button class="secondary-btn" onclick="navigateTo('screen-add-bill')">Use upload instead</button>
                 </div>
 
@@ -2369,7 +2382,7 @@
                 <p>Bill reminders won't work without notification permission. You can enable notifications in your device settings.</p>
 
                 <div class="permission-actions">
-                    <button class="primary-btn" onclick="alert('Open device settings (prototype)')">Enable notifications</button>
+                    <button class="primary-btn" onclick="grantPrototypePermission('notifications')">Enable notifications</button>
                     <button class="secondary-btn" onclick="navigateTo('screen-reminder')">Continue without reminders</button>
                 </div>
 

@@ -11,6 +11,15 @@ function extractAppMarkup(html) {
   return match[1].replace(/<script[\s\S]*?<\/script>\s*$/i, '').trim();
 }
 
+// Treat "/bills/" and "/bills" as the same screen. Anything else is unknown
+// and resolves to the in-app 404, which is the only 404 implementation.
+function screenFromPath(pathname) {
+  const normalized = pathname.length > 1 && pathname.endsWith('/')
+    ? pathname.slice(0, -1)
+    : pathname;
+  return PATH_TO_SCREEN[normalized];
+}
+
 export default function LegacyApp() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,7 +41,8 @@ export default function LegacyApp() {
         const result = original ? original(screenId) : undefined;
         const path = SCREEN_TO_PATH[screenId];
         if (path && window.location.pathname !== path) {
-          window.history.pushState({ screenId }, '', path);
+          const method = window.__legacyHistoryMode === 'replace' ? 'replaceState' : 'pushState';
+          window.history[method]({ screenId }, '', path);
         }
         // A screen should always open at its top. Without this, returning to
         // the long landing page from a deeper screen kept the old scroll
@@ -43,15 +53,19 @@ export default function LegacyApp() {
       };
     }
 
-    const initialScreen = PATH_TO_SCREEN[location.pathname];
-    if (initialScreen && typeof window.navigateTo === 'function') {
-      try { window.navigateTo(initialScreen); } catch (e) {}
+    const initialScreen = screenFromPath(location.pathname) || 'screen-404';
+    if (typeof window.navigateTo === 'function') {
+      // Resolve the first URL in place so an unknown path does not leave an
+      // extra history entry that a browser Back would return to.
+      window.__legacyHistoryMode = 'replace';
+      try { window.navigateTo(initialScreen); } catch (e) {} finally { delete window.__legacyHistoryMode; }
     }
 
     const onPop = (e) => {
-      const screenId = (e.state && e.state.screenId) || PATH_TO_SCREEN[window.location.pathname];
-      if (screenId && typeof window.navigateTo === 'function') {
-        try { window.navigateTo(screenId); } catch (err) {}
+      const screenId = (e.state && e.state.screenId) || screenFromPath(window.location.pathname) || 'screen-404';
+      if (typeof window.navigateTo === 'function') {
+        window.__legacyHistoryMode = 'replace';
+        try { window.navigateTo(screenId); } catch (err) {} finally { delete window.__legacyHistoryMode; }
       }
       window.scrollTo(0, 0);
       window.requestAnimationFrame(() => window.scrollTo(0, 0));

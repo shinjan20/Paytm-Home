@@ -35,6 +35,14 @@ function navigateTo(screenId) {
     window.scrollTo(0, 0);
 }
 
+function goBackFromNotFound() {
+    if (window.history.length > 1) {
+        window.history.back();
+        return;
+    }
+    navigateTo('screen-recharge-bills');
+}
+
 let __cameraStream = null;
 function handleCameraForScreen(screenId) {
     const video = document.getElementById('camera-preview');
@@ -286,7 +294,7 @@ function selectBillerOption(key, origin) {
 }
 
 function billFromVerification() {
-    return Object.assign({}, pendingBill || BILLER_CATALOG[selectedBillerKey]);
+    return Object.assign({}, pendingBill || BILLER_CATALOG[selectedBillerKey], { status: 'confirmed' });
 }
 
 function billFromOcrReview() {
@@ -308,7 +316,8 @@ function billFromOcrReview() {
         accountDigits: accountDigits,
         amount: amount,
         due: due,
-        period: period
+        period: period,
+        status: 'unverified'
     });
 }
 
@@ -362,13 +371,46 @@ function renderAddedBills() {
 }
 
 function updateBillScreens(bill) {
+    const paid = Boolean(bill.paid);
     const detail = document.getElementById('screen-bill-detail');
     if (detail) {
         setText('.bill-icon-large', bill.icon, detail);
         setText('.bill-detail-title-row h2', bill.biller, detail);
         setText('.bill-amount-large', bill.amount, detail);
         setText('.bill-subline .bill-account', bill.account, detail);
-        setText('.bill-due-large', 'Due ' + bill.due, detail);
+        setText('.bill-due-large', (paid ? 'Paid ' : 'Due ') + bill.due, detail);
+
+        const status = paid ? 'paid' : (bill.status || 'confirmed');
+        const statusCopy = {
+            paid: { label: 'Paid', icon: '✓', aria: 'Bill paid' },
+            confirmed: { label: 'Confirmed', icon: '✓', aria: 'Confirmed with biller, payment pending' },
+            estimated: { label: 'Estimated', icon: '≈', aria: 'Estimated amount, not yet confirmed by biller' },
+            unverified: { label: 'Unverified', icon: '?', aria: 'Not yet verified with biller' }
+        }[status] || { label: 'Confirmed', icon: '✓', aria: 'Confirmed with biller, payment pending' };
+
+        const badge = detail.querySelector('.bill-subline .status-badge');
+        if (badge) {
+            badge.className = 'status-badge ' + (status === 'paid' ? 'confirmed' : status);
+            badge.setAttribute('aria-label', statusCopy.aria);
+            badge.innerHTML = '<span class="status-icon" aria-hidden="true">' + statusCopy.icon + '</span>' + statusCopy.label;
+        }
+
+        const sourceValue = detail.querySelector('.bill-meta .meta-value');
+        if (sourceValue) {
+            sourceValue.textContent = status === 'paid' || status === 'confirmed'
+                ? 'Verified with biller'
+                : status === 'estimated'
+                    ? 'Estimated · not yet confirmed'
+                    : 'Not yet verified';
+        }
+
+        // A paid bill should not offer another payment; secondary actions that
+        // only make sense before payment are hidden with it.
+        detail.querySelectorAll('.action-buttons > .primary-btn, .action-buttons > .action-grid').forEach(function(button) {
+            button.hidden = paid;
+        });
+        const voucherHint = detail.querySelector('.voucher-hint-card');
+        if (voucherHint) voucherHint.hidden = paid;
     }
 
     const pay = document.getElementById('screen-pay-bill');
@@ -379,6 +421,17 @@ function updateBillScreens(bill) {
         setText('.bill-account', bill.account + ' · Due ' + bill.due, summary || pay);
         setText('.pay-bill-amount', bill.amount, pay);
     }
+
+    // Keep the payment button and outcome screens in step with the chosen bill.
+    const payee = bill.payee || bill.biller;
+    setText('#pay-bill-submit', 'Pay ' + bill.amount);
+    setText('#success-paid-amount', bill.amount);
+    setText('#success-paid-to', bill.label || bill.biller);
+    setText('#pending-amount', bill.amount + ' · ' + (bill.label || bill.biller) + ' (' + payee + ')');
+    setText('#pending-debit', bill.amount + ' debited via Paytm UPI');
+    setText('#pending-payee', 'Awaiting confirmation from ' + payee);
+    setText('#pending-consumer', bill.account);
+    setText('#failed-amount', bill.amount + ' to ' + (bill.label || bill.biller) + ' (' + payee + ')');
 }
 
 function openAddedBill(id) {
@@ -386,6 +439,29 @@ function openAddedBill(id) {
     if (!bill) return;
     pendingBill = Object.assign({}, bill);
     selectedBillerKey = bill.key || selectedBillerKey;
+    updateBillScreens(bill);
+    navigateTo('screen-bill-detail');
+}
+
+// Dashboard cards carry their own bill data so the detail screen always shows
+// the card that was tapped rather than a single hard-coded electricity bill.
+function openStaticBill(card) {
+    if (!card) return;
+    const data = card.dataset;
+    const bill = {
+        key: data.billKey || 'electricity',
+        label: data.billLabel || 'Bill',
+        biller: data.billBiller || data.billLabel || 'Biller',
+        icon: data.billIcon || '⚡',
+        amount: data.billAmount || '₹0',
+        account: data.billAccount || '',
+        due: data.billDue || '',
+        period: data.billPeriod || 'Nov 2026',
+        paid: data.billPaid === 'true',
+        status: data.billPaid === 'true' ? 'paid' : (data.billStatus || 'confirmed')
+    };
+    pendingBill = Object.assign({}, bill);
+    selectedBillerKey = bill.key;
     updateBillScreens(bill);
     navigateTo('screen-bill-detail');
 }
@@ -439,24 +515,8 @@ function formatRupees(amount) {
 }
 
 function homeIconSvg(type) {
-    if (type === 'apartment') {
-        return '<svg viewBox="0 0 48 48" aria-hidden="true">' +
-            '<rect x="11" y="8" width="26" height="32" rx="4" fill="#8b7bf7"/>' +
-            '<rect x="15" y="13" width="7" height="7" rx="1.5" fill="#fff"/>' +
-            '<rect x="26" y="13" width="7" height="7" rx="1.5" fill="#fff"/>' +
-            '<rect x="15" y="23" width="7" height="7" rx="1.5" fill="#fff"/>' +
-            '<rect x="26" y="23" width="7" height="7" rx="1.5" fill="#fff"/>' +
-            '<path d="M19 40v-5a5 5 0 0 1 10 0v5z" fill="#fff"/>' +
-            '</svg>';
-    }
-
-    return '<svg viewBox="0 0 48 48" aria-hidden="true">' +
-        '<path d="M8 24 L24 10 L40 24" fill="none" stroke="#0f9fd0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>' +
-        '<path d="M12 22v18h24V22" fill="#3ec6f0"/>' +
-        '<rect x="21" y="29" width="6" height="11" rx="1" fill="#fff"/>' +
-        '<rect x="15" y="25.5" width="4.5" height="4.5" rx="1" fill="#e6f7ff"/>' +
-        '<rect x="28.5" y="25.5" width="4.5" height="4.5" rx="1" fill="#e6f7ff"/>' +
-        '</svg>';
+    // Use the same navy outline icon set as the rest of the prototype.
+    return legacyIconSvg(type === 'apartment' ? '🏢' : '🏠');
 }
 
 function createHomeTile(key, home) {
@@ -579,9 +639,96 @@ function openLandingBills() {
 // Bill payment flow and voucher progress
 let meVoucherStep = 1;
 
-function openPayBill() {
+// The voucher's "next payment" is a choice, not a fixed electricity bill.
+// Electricity stays the default until the user picks another pending bill.
+const VOUCHER_BILL_OPTIONS = {
+    electricity: Object.assign({}, BILLER_CATALOG.electricity, { payee: 'BSES Rajdhani' }),
+    creditcard: Object.assign({}, BILLER_CATALOG.creditcard, { payee: 'HDFC Bank' }),
+    broadband: Object.assign({}, BILLER_CATALOG.broadband, { payee: 'JioFiber' })
+};
+const VOUCHER_BILL_KEYS = ['electricity', 'creditcard', 'broadband'];
+let selectedVoucherBillKey = 'electricity';
+let voucherFlowBillKey = null;
+const voucherPaidBillKeys = {};
+
+function ordinalPayment(step) {
+    if (step === 2) return '2nd';
+    if (step === 3) return '3rd';
+    return step + 'th';
+}
+
+function selectVoucherBill(key) {
+    if (!VOUCHER_BILL_OPTIONS[key] || voucherPaidBillKeys[key]) return;
+    selectedVoucherBillKey = key;
+    pendingBill = Object.assign({}, VOUCHER_BILL_OPTIONS[key]);
+    selectedBillerKey = key;
+    renderVoucherBillChoice();
+}
+
+function renderVoucherBillChoice() {
+    const option = VOUCHER_BILL_OPTIONS[selectedVoucherBillKey] || VOUCHER_BILL_OPTIONS.electricity;
+
+    document.querySelectorAll('input[name="voucher-next-bill"]').forEach(function(input) {
+        const paid = Boolean(voucherPaidBillKeys[input.value]);
+        const selected = !paid && input.value === selectedVoucherBillKey;
+        input.checked = selected;
+        input.disabled = paid;
+
+        const row = input.closest('.transaction-item');
+        if (!row) return;
+        row.classList.toggle('selected', selected);
+        row.classList.toggle('completed', paid);
+        if (paid) return;
+
+        const badge = row.querySelector('.transaction-badge');
+        if (badge) {
+            badge.className = 'transaction-badge ' + (selected ? 'selected' : 'pending');
+            badge.textContent = selected ? 'Selected' : 'Pending';
+        }
+    });
+
+    setText('#voucher-next-bill-cta', 'Pay ' + option.label + ' · ' + option.amount);
+    setText(
+        '#voucher-next-bill-note',
+        meVoucherStep >= 3
+            ? 'Voucher already unlocked. This payment still records against the bill.'
+            : 'This bill is due ' + option.due + '. Paying it counts as your ' + ordinalPayment(meVoucherStep + 1) + ' qualifying payment.'
+    );
+}
+
+function openVoucherBill() {
+    const option = VOUCHER_BILL_OPTIONS[selectedVoucherBillKey] || VOUCHER_BILL_OPTIONS.electricity;
+    if (voucherPaidBillKeys[option.key]) return;
+
+    pendingBill = Object.assign({}, option);
+    selectedBillerKey = option.key;
+    voucherFlowBillKey = option.key;
+    updateBillScreens(option);
+
+    const back = document.querySelector('#screen-pay-bill .back-btn');
+    if (back) back.onclick = function() { navigateTo('screen-voucher-details'); };
+
     renderPayVoucherHint();
     navigateTo('screen-pay-bill');
+}
+
+function initVoucherBillChoice() {
+    if (!document.querySelector('input[name="voucher-next-bill"]')) return;
+    renderVoucherBillChoice();
+}
+
+function openPayBill() {
+    voucherFlowBillKey = null;
+    const back = document.querySelector('#screen-pay-bill .back-btn');
+    if (back) back.onclick = function() { navigateTo('screen-bill-detail'); };
+    renderPayVoucherHint();
+    navigateTo('screen-pay-bill');
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initVoucherBillChoice);
+} else {
+    initVoucherBillChoice();
 }
 
 function renderPayVoucherHint() {
@@ -642,6 +789,23 @@ function initiatePayment() {
     if (pendingTime) pendingTime.textContent = timestampStr;
     if (failedTime) failedTime.textContent = timestampStr;
 
+    const method = document.querySelector('input[name="pay-method"]:checked');
+    const methodValue = (method && method.value) || 'upi';
+    const methodLabels = {
+        upi: 'Paytm UPI (State Bank of India)',
+        wallet: 'Paytm Wallet',
+        bank: 'Bank account (UPI)'
+    };
+    const debitLabels = {
+        upi: 'Paytm UPI',
+        wallet: 'Paytm Wallet',
+        bank: 'bank account'
+    };
+    setText('#pending-mode', methodLabels[methodValue]);
+    if (pendingBill) {
+        setText('#pending-debit', pendingBill.amount + ' debited via ' + debitLabels[methodValue]);
+    }
+
     navigateTo('screen-payment-pending');
     resetPendingTimeline();
 
@@ -692,6 +856,18 @@ function resolvePayment(outcome) {
             meVoucherStep += 1;
         }
 
+        // Mark the bill that was actually paid, then line up the next unpaid
+        // choice if the user is working through the voucher screen.
+        const paidKey = voucherFlowBillKey || (pendingBill && pendingBill.key);
+        if (paidKey && VOUCHER_BILL_KEYS.indexOf(paidKey) !== -1) {
+            voucherPaidBillKeys[paidKey] = true;
+        }
+        if (voucherPaidBillKeys[selectedVoucherBillKey]) {
+            const nextKey = VOUCHER_BILL_KEYS.find(function(key) { return !voucherPaidBillKeys[key]; });
+            if (nextKey) selectedVoucherBillKey = nextKey;
+        }
+        voucherFlowBillKey = null;
+
         updateMeVoucher();
         updateVoucherDetails();
         updateSuccessCue();
@@ -705,7 +881,8 @@ function resolvePayment(outcome) {
 }
 
 function checkPendingStatus() {
-    showAppToast('Checking status with BSES Rajdhani & BBPS...');
+    const payee = (pendingBill && (pendingBill.payee || pendingBill.biller)) || 'biller';
+    showAppToast('Checking status with ' + payee + ' & BBPS...');
     const btn = document.querySelector('#screen-payment-pending .primary-btn');
     if (btn) {
         btn.textContent = 'Checking...';
@@ -736,14 +913,35 @@ function contactPaymentSupport() {
     showAppToast('Support Ticket #PTM-98421 opened · Ref: PTM-FAIL-582910');
 }
 
+function contactBillSupport() {
+    showAppToast('Support ticket #PTM-88412 opened · Bill status issue');
+}
+
+function comparePreviousBill() {
+    showAppToast('Previous bill: ₹1,080 in Oct 2026 · ₹760 less than this month');
+}
+
+function contactBiller() {
+    showAppToast('Biller helpline: 19122 · Mon–Sat, 9am–6pm (prototype)');
+}
+
+let billRefreshTimer = null;
+function refreshAllBills() {
+    navigateTo('screen-bill-loading');
+    clearTimeout(billRefreshTimer);
+    billRefreshTimer = setTimeout(function() {
+        showAppToast('Bills refreshed just now');
+        navigateTo('screen-my-bills');
+    }, 1600);
+}
+
 function updateVoucherDetails() {
     const fill = document.getElementById('voucher-progress-fill');
     const text = document.getElementById('voucher-progress-text');
     const status = document.getElementById('voucher-status-badge');
-    const item = document.getElementById('voucher-electricity-item');
-    const date = document.getElementById('voucher-electricity-date');
-    const badge = document.getElementById('voucher-electricity-badge');
     const percent = Math.round((meVoucherStep / 3) * 100);
+    const unlocked = meVoucherStep >= 3;
+    const claimed = Boolean(claimedRewardId);
 
     if (fill) {
         fill.style.width = percent + '%';
@@ -752,23 +950,44 @@ function updateVoucherDetails() {
         text.textContent = `${meVoucherStep} of 3 qualifying payments`;
     }
     if (status) {
-        status.classList.toggle('in-progress', meVoucherStep < 3);
-        status.classList.toggle('unlocked', meVoucherStep >= 3);
-        status.textContent = meVoucherStep >= 3 ? 'Unlocked' : 'In progress';
+        status.classList.toggle('in-progress', !unlocked);
+        status.classList.toggle('unlocked', unlocked);
+        status.textContent = claimed ? 'Claimed' : (unlocked ? 'Unlocked' : 'In progress');
     }
 
-    if (item && meVoucherStep >= 2) {
-        item.classList.remove('pending');
-        item.classList.add('completed');
+    // Unlocking ends the "pay another bill" prompt: the next useful action is
+    // choosing the voucher. Once claimed, the card states that and offers no
+    // further claim control.
+    const payBlock = document.getElementById('voucher-pay-block');
+    const claimBlock = document.getElementById('voucher-claim-block');
+    const claimedNote = document.getElementById('voucher-claimed-note');
+    if (payBlock) payBlock.hidden = unlocked;
+    if (claimBlock) claimBlock.hidden = !unlocked || claimed;
+    if (claimedNote) {
+        claimedNote.hidden = !claimed;
+        if (claimed) {
+            const claimedReward = AVAILABLE_REWARDS.find(function(reward) { return reward.id === claimedRewardId; });
+            claimedNote.textContent = 'Voucher claimed: ' + (claimedReward ? claimedReward.name : 'bill payment voucher') + ' · it will be applied on your next eligible bill payment.';
+        }
     }
-    if (date && meVoucherStep >= 2) {
-        date.textContent = 'Paid today';
-    }
-    if (badge && meVoucherStep >= 2) {
-        badge.classList.remove('pending');
-        badge.classList.add('counted');
-        badge.textContent = 'Counted';
-    }
+
+    VOUCHER_BILL_KEYS.forEach(function(key) {
+        const item = document.getElementById('voucher-' + key + '-item');
+        if (!item) return;
+        const paid = Boolean(voucherPaidBillKeys[key]);
+        item.classList.toggle('completed', paid);
+        if (paid) item.classList.remove('selected');
+
+        const date = item.querySelector('.transaction-date');
+        if (date && paid) date.textContent = 'Paid today';
+        const badge = item.querySelector('.transaction-badge');
+        if (badge && paid) {
+            badge.className = 'transaction-badge counted';
+            badge.textContent = 'Counted';
+        }
+    });
+
+    renderVoucherBillChoice();
     updateHomeReward();
 }
 
@@ -782,10 +1001,12 @@ function updateMeVoucher() {
         fill.style.width = percent + '%';
     }
     if (text) {
-        text.textContent = `${meVoucherStep} of 3 qualifying bill payments completed`;
+        text.textContent = claimedRewardId
+            ? `${meVoucherStep} of 3 qualifying bill payments completed · voucher claimed`
+            : `${meVoucherStep} of 3 qualifying bill payments completed`;
     }
     if (status) {
-        status.textContent = meVoucherStep >= 3 ? 'Unlocked' : 'In progress';
+        status.textContent = claimedRewardId ? 'Claimed' : (meVoucherStep >= 3 ? 'Unlocked' : 'In progress');
     }
     updateHomeReward();
 }
@@ -800,7 +1021,9 @@ function updateSuccessCue() {
 
     if (text) {
         if (meVoucherStep >= 3) {
-            text.textContent = '3 of 3 qualifying payments completed. Your bill payment voucher is unlocked.';
+            text.textContent = claimedRewardId
+                ? '3 of 3 qualifying payments completed. Your bill payment voucher is already claimed.'
+                : '3 of 3 qualifying payments completed. Your bill payment voucher is unlocked.';
         } else {
             const remaining = 3 - meVoucherStep;
             text.textContent = `${meVoucherStep} of 3 qualifying payments completed. ${remaining} more to unlock your bill payment voucher.`;
@@ -851,14 +1074,16 @@ function renderRewardChooser() {
 
     list.innerHTML = AVAILABLE_REWARDS.map(reward => {
         const claimed = claimedRewardId === reward.id;
+        const locked = Boolean(claimedRewardId) && !claimed;
+        const label = claimed ? '✓ Claimed' : (locked ? 'One per cycle' : 'Claim');
         return `<div class="reward-chooser-item${claimed ? ' claimed' : ''}">
             <div class="reward-chooser-item-icon">${reward.icon}</div>
             <div class="reward-chooser-item-info">
                 <h3>${reward.name}</h3>
                 <p>${reward.desc}</p>
             </div>
-            <button class="primary-btn reward-chooser-claim${claimed ? ' claimed' : ''}" ${claimed ? 'disabled' : ''} onclick="claimReward('${reward.id}')">
-                ${claimed ? '✓ Claimed' : 'Claim'}
+            <button class="primary-btn reward-chooser-claim${claimed ? ' claimed' : ''}${locked ? ' cycle-locked' : ''}" ${claimed || locked ? 'disabled' : ''} onclick="claimReward('${reward.id}')">
+                ${label}
             </button>
         </div>`;
     }).join('');
@@ -871,6 +1096,9 @@ function claimReward(rewardId) {
     claimedRewardId = rewardId;
     renderHomeRewards();
     renderRewardChooser();
+    updateVoucherDetails();
+    updateMeVoucher();
+    updateSuccessCue();
     showAppToast(`Voucher claimed: ${reward.name}`);
     navigateTo('screen-recharge-bills');
 }
@@ -894,6 +1122,7 @@ function updateLandingRewardsCard() {
     const step = meVoucherStep;
     const remaining = Math.max(3 - step, 0);
     const unlocked = step >= 3;
+    const claimed = Boolean(claimedRewardId);
 
     const number = document.getElementById('rewards-progress-number');
     const ring = document.getElementById('rewards-ring-fill');
@@ -907,15 +1136,17 @@ function updateLandingRewardsCard() {
 
     if (number) number.textContent = String(step);
     if (ring) ring.setAttribute('stroke-dashoffset', String(Math.round(220 * (1 - Math.min(step, 3) / 3))));
-    if (title) title.textContent = unlocked ? 'Voucher unlocked' : 'Almost there!';
+    if (title) title.textContent = claimed ? 'Voucher claimed' : (unlocked ? 'Voucher unlocked' : 'Almost there!');
     if (desc) {
-        desc.textContent = unlocked
-            ? 'Tap to claim your voucher'
-            : `Pay ${remaining} more bill${remaining === 1 ? '' : 's'} to unlock your voucher`;
+        desc.textContent = claimed
+            ? 'Apply it on your next eligible bill'
+            : unlocked
+                ? 'Tap to claim your voucher'
+                : `Pay ${remaining} more bill${remaining === 1 ? '' : 's'} to unlock your voucher`;
     }
-    if (nextStatus) nextStatus.textContent = unlocked ? 'Ready to claim' : 'Unlocks on your 3rd bill payment';
+    if (nextStatus) nextStatus.textContent = claimed ? 'Claimed · one voucher per cycle' : (unlocked ? 'Ready to claim' : 'Unlocks on your 3rd bill payment');
     if (card) card.classList.toggle('locked', !unlocked);
-    if (subtitle) subtitle.textContent = unlocked ? 'Unlocked · ready to claim' : 'Earned after 3 qualifying bill payments';
+    if (subtitle) subtitle.textContent = claimed ? 'Claimed · use on your next bill' : (unlocked ? 'Unlocked · ready to claim' : 'Earned after 3 qualifying bill payments');
     if (progress) progress.textContent = `${step}/3`;
     if (lock) {
         lock.innerHTML = unlocked ? REWARD_CHECK_SVG : REWARD_LOCK_SVG;
@@ -942,6 +1173,11 @@ function updateHomeReward() {
 
 function openHomeReward() {
     const remaining = 3 - meVoucherStep;
+
+    if (claimedRewardId) {
+        showAppToast('Voucher already claimed this cycle');
+        return;
+    }
 
     if (meVoucherStep >= 3) {
         showRewardCelebration();
@@ -1127,6 +1363,13 @@ function declineHomeInvite(homeName) {
     updateHomePendingInvite();
     updateHomeInviteBadge();
     showAppToast('Invitation declined');
+
+    // The details screen belongs to the home that was just declined, so don't
+    // leave the user on a page for a home they no longer have access to.
+    const active = document.querySelector('.screen.active');
+    if (active && active.id === 'screen-home-details') {
+        navigateTo('screen-home-selection');
+    }
 }
 
 function updateHomeCardAfterAccept(homeName) {
@@ -1626,13 +1869,32 @@ function toggleAllCandidates(checked) {
     renderCandidates();
 }
 
+function billRecordFromEmailCandidate(candidate) {
+    const catalogKey = candidate.id === 'credit-card' ? 'creditcard' : candidate.id;
+    const catalog = BILLER_CATALOG[catalogKey] || {};
+    return Object.assign({}, catalog, {
+        id: 'added-' + (++addedBillSeq),
+        key: catalog.key || candidate.id,
+        label: catalog.label || candidate.biller,
+        biller: catalog.biller || candidate.biller,
+        icon: candidate.icon,
+        amount: formatINR(candidate.amount),
+        due: candidate.due,
+        period: catalog.period || 'Nov 2026',
+        source: 'Email',
+        status: 'unverified'
+    });
+}
+
 function addSelectedCandidates() {
     const selected = EMAIL_CANDIDATES.filter(candidate => !candidate.added && candidate.checked);
     if (!selected.length) return;
 
     selected.forEach(candidate => {
         candidate.added = true;
+        addedBills.unshift(billRecordFromEmailCandidate(candidate));
     });
+    renderAddedBills();
 
     emailLastScanLabel = 'Just now';
     renderEmailExperience();
@@ -1691,6 +1953,16 @@ function showAppToast(message) {
     }, 3200);
 }
 
+function grantPrototypePermission(kind) {
+    if (kind === 'camera') {
+        navigateTo('screen-camera');
+        showAppToast('Camera access enabled (prototype)');
+    } else {
+        navigateTo('screen-reminder');
+        showAppToast('Notifications enabled (prototype)');
+    }
+}
+
 function confirmMarkPaid() {
     closeMarkPaidModal();
 
@@ -1740,7 +2012,7 @@ const PAPER_CALENDARS = {
         selected: 18,
         filter: 'all',
         bills: {
-            10: [{ key: 'water', name: 'Water', account: 'XXXX3456', amount: 450, state: 'paid', tag: '₹450', note: 'Paid from Paytm Wallet · verified' }],
+            10: [{ key: 'water', name: 'Water', account: 'XXXX3456', amount: 520, state: 'paid', tag: '₹520', note: 'Paid from Paytm Wallet · verified' }],
             18: [{ key: 'electricity', name: 'Electricity', account: 'XXXX1234', amount: 1840, state: 'due', tag: '₹1.8k', note: 'Confirmed with biller · pay from UPI' }],
             20: [{ key: 'broadband', name: 'Broadband', account: 'XXXX9012', amount: 999, state: 'due', tag: '₹1k', note: 'Auto-pay is on · don’t pay twice' }],
             22: [{ key: 'gas', name: 'Gas', account: 'XXXX9012', amount: 850, state: 'estimated', tag: '₹850', note: 'Estimate from last month · meter reading pending' }]
@@ -1871,6 +2143,7 @@ function renderPaperGrid(screenId) {
     }
 
     grid.innerHTML = html;
+    grid.setAttribute('aria-label', MONTH_NAMES[cal.monthIndex] + ' ' + cal.year + ' bills calendar');
 }
 
 function nextBillDay(cal, fromDay) {
@@ -2281,6 +2554,7 @@ document.getElementById('all-bills-sheet')?.addEventListener('click', function(e
 // ---------------------------------------------------------------------------
 const LEGACY_VECTOR_ICONS = {
     '🏠': { label: 'Home', paths: '<path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h12V9.5"/><path d="M10 20v-4.5h4V20"/>' },
+    '🏢': { label: 'Apartment', paths: '<path d="M4 20V6.5A1.5 1.5 0 0 1 5.5 5h8A1.5 1.5 0 0 1 15 6.5V20"/><path d="M15 10h3.5A1.5 1.5 0 0 1 20 11.5V20"/><path d="M3 20h18"/><path d="M7.5 8.5h1M11 8.5h1M7.5 12h1M11 12h1M7.5 15.5h1M11 15.5h1"/><path d="M9 20v-2.5h2V20"/>' },
     '👥': { label: 'People', paths: '<circle cx="9" cy="8" r="3"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><path d="M16 5.5a3 3 0 0 1 0 5.8"/><path d="M17 14.5a5 5 0 0 1 3.5 4.5"/>' },
     '🫂': { label: 'Shared home', paths: '<circle cx="8" cy="8" r="2.5"/><circle cx="16" cy="8" r="2.5"/><path d="M3.5 19a4.5 4.5 0 0 1 9 0"/><path d="M11.5 19a4.5 4.5 0 0 1 9 0"/>' },
     '⚡': { label: 'Electricity', paths: '<path d="M13 2.6 4.9 13.1h5.3L10.3 21.4 18.9 9.9h-5.4L13 2.6Z"/>' },

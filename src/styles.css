@@ -279,9 +279,23 @@ svg text {
 }
 
 .home-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     font-size: 14px;
     font-weight: 500;
     color: #0b4a9e;
+}
+
+.home-name .vec-icon {
+    width: 18px;
+    height: 18px;
+    vertical-align: 0;
+}
+
+.home-name .vec-icon svg {
+    width: 100%;
+    height: 100%;
 }
 
 .home-indicator.clickable {
@@ -1048,6 +1062,21 @@ svg text {
     height: 34px;
 }
 
+/* Home tiles use the same navy outline icons as the rest of the prototype. */
+.home-tile-art {
+    color: #0b4a9e;
+}
+
+.home-tile-art .vec-icon {
+    width: 30px;
+    height: 30px;
+}
+
+.home-tile-art .vec-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
 .home-due-tooltip {
     position: absolute;
     top: -17px;
@@ -1635,6 +1664,17 @@ svg text {
     color: #2e7d32;
 }
 
+.status-badge.estimated {
+    background: #eef4ff;
+    color: #0b4a9e;
+}
+
+.status-badge.unverified {
+    background: #fff7e6;
+    color: #8f4e00;
+    box-shadow: inset 0 0 0 1px #f2d8a8;
+}
+
 .status-icon {
     font-size: 14px;
 }
@@ -1826,11 +1866,11 @@ svg text {
 
 /* Bill Detail — tighter page chrome so the bill fits without scrolling */
 #screen-bill-detail {
-    padding-bottom: 24px;
+    padding-bottom: 28px;
 }
 
 #screen-bill-detail .screen-header {
-    margin-bottom: 8px;
+    margin-bottom: 16px;
 }
 
 #screen-bill-detail .screen-header h1 {
@@ -1841,25 +1881,33 @@ svg text {
     margin-top: 4px;
 }
 
+/* The bill identity and its verification row form one summary card, matching
+   the card rhythm used on My Bills instead of sitting tight against the top. */
 #screen-bill-detail .bill-detail-header {
-    gap: 10px;
-    margin-bottom: 8px;
+    gap: 14px;
+    padding: 16px 14px;
+    margin-bottom: 0;
+    background: #fff;
+    border: 1px solid #e3ebf6;
+    border-bottom: 0;
+    border-radius: 16px 16px 0 0;
 }
 
 #screen-bill-detail .bill-icon-large {
-    width: 40px;
-    height: 40px;
-    font-size: 26px;
+    width: 44px;
+    height: 44px;
+    background: #eef4ff;
+    font-size: 27px;
 }
 
 #screen-bill-detail .bill-detail-title-row {
-    gap: 8px;
-    margin-bottom: 1px;
+    gap: 10px;
+    margin-bottom: 4px;
 }
 
 #screen-bill-detail .bill-detail-title-row h2 {
     font-size: 18px;
-    line-height: 1.2;
+    line-height: 1.25;
 }
 
 #screen-bill-detail .bill-amount-large {
@@ -1867,9 +1915,15 @@ svg text {
     line-height: 1.2;
 }
 
+#screen-bill-detail .bill-subline {
+    gap: 6px 8px;
+}
+
 #screen-bill-detail .bill-meta {
-    padding: 0 8px 0 10px;
-    margin-bottom: 8px;
+    padding: 9px 10px 9px 12px;
+    margin-bottom: 14px;
+    border-top: 1px solid #eef2f8;
+    border-radius: 0 0 16px 16px;
 }
 
 #screen-bill-detail .meta-source-icon {
@@ -1886,35 +1940,37 @@ svg text {
 
 #screen-bill-detail .voucher-hint-card {
     align-items: center;
-    gap: 10px;
-    padding: 10px 10px 10px 12px;
-    margin-bottom: 8px;
+    gap: 12px;
+    padding: 12px;
+    margin-bottom: 14px;
+    border-radius: 14px;
 }
 
 #screen-bill-detail .voucher-hint-icon {
-    flex: 0 0 32px;
-    width: 32px;
-    height: 32px;
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
 }
 
 #screen-bill-detail .voucher-hint-icon svg {
-    width: 18px;
-    height: 18px;
+    width: 19px;
+    height: 19px;
 }
 
 #screen-bill-detail .voucher-hint-body h3 {
     font-size: 13px;
-    line-height: 1.25;
-    margin-bottom: 1px;
+    line-height: 1.3;
+    margin-bottom: 2px;
 }
 
 #screen-bill-detail .voucher-hint-body p {
     font-size: 12px;
-    line-height: 1.35;
+    line-height: 1.4;
 }
 
 #screen-bill-detail .action-buttons {
-    margin-top: 10px;
+    gap: 10px;
+    margin-top: 16px;
 }
 
 .voucher-view-btn {
@@ -3504,6 +3560,58 @@ svg text {
     gap: 12px;
 }
 
+.voucher-choice-hint {
+    margin: -4px 0 10px;
+    font-size: 12px;
+    line-height: 1.45;
+    color: #5f6b7a;
+}
+
+.voucher-bill-options {
+    display: block;
+}
+
+.transaction-item.selectable {
+    position: relative;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.transaction-item.selectable:not(.completed):hover {
+    border-color: #bcd5f2;
+    background: #f8fbff;
+}
+
+.transaction-item.selectable.selected {
+    border-color: #0b4a9e;
+    background: #f3f8ff;
+    box-shadow: inset 0 0 0 1px #0b4a9e;
+}
+
+.transaction-item.selectable.completed {
+    cursor: default;
+    background: white;
+}
+
+.transaction-item.selectable:has(.voucher-bill-radio:focus-visible) {
+    outline: 2px solid #0b4a9e;
+    outline-offset: 2px;
+}
+
+.voucher-bill-radio {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.transaction-badge.selected {
+    background: #0b4a9e;
+    color: white;
+}
+
 .transaction-info {
     flex: 1;
 }
@@ -3775,6 +3883,17 @@ svg text {
 #home-selector-sheet .house-icon {
     font-size: 24px;
     line-height: 1;
+}
+
+#home-selector-sheet .house-icon .vec-icon {
+    width: 24px;
+    height: 24px;
+    vertical-align: 0;
+}
+
+#home-selector-sheet .house-icon .vec-icon svg {
+    width: 100%;
+    height: 100%;
 }
 
 #home-selector-sheet .house-icon.add {
@@ -5056,7 +5175,7 @@ svg text {
     margin-top: 1px;
     padding: 0 1px;
     overflow: hidden;
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 600;
     line-height: 1.2;
     letter-spacing: 0;
@@ -5066,7 +5185,8 @@ svg text {
     color: #0b4a9e;
 }
 .paper-grid .day-tag::before {
-    margin-right: 2px;
+    margin-right: 1px;
+    font-size: 8px;
     font-weight: 700;
 }
 .paper-grid .day-tag.due::before {
@@ -5095,6 +5215,41 @@ svg text {
 }
 .paper-grid .calendar-day.payday .day-tag {
     color: #1d6b45;
+}
+
+/* Keep amount-only tags readable on 360px and narrower screens */
+@media (max-width: 380px) {
+    .calendar-screen {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .calendar-screen .paper-sheet {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .paper-grid .day-tag {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 340px) {
+    .paper-grid .day-tag::before {
+        display: none;
+    }
+
+    .paper-grid .day-tag.due {
+        text-decoration: underline;
+    }
+
+    .paper-grid .day-tag.estimated {
+        text-decoration: underline dotted;
+    }
+
+    .paper-grid .day-tag.payday {
+        font-style: italic;
+    }
 }
 
 /* Filters */
@@ -7249,10 +7404,17 @@ svg text {
     padding-bottom: 40px;
     text-align: center;
 }
+.not-found-screen.active {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+}
 .not-found-card {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
     max-width: 440px;
     margin: 0 auto;
 }
@@ -8028,6 +8190,31 @@ svg text {
     font-size: 12px;
     line-height: 1.45;
     color: #5f6b7a;
+}
+
+.voucher-claim-block {
+    margin-top: 14px;
+}
+
+.voucher-claim-block .primary-btn {
+    width: 100%;
+}
+
+.voucher-claimed-note {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: #e8f5e9;
+    color: #166534;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.reward-chooser-claim.cycle-locked:disabled {
+    background: #f1f5f9 !important;
+    color: #64748b !important;
+    border: 1px solid #e2e8f0 !important;
+    font-weight: 600 !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

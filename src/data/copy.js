@@ -1,14 +1,6 @@
 // Centralized UX copy and microcopy strings
 
 export const APP_COPY = {
-  notFound: {
-    title: 'Oops!',
-    description: "You've found a page that doesn't exist. You can go back or open it in our app",
-    homeCta: 'Go to Homepage',
-    backCta: 'Go Back',
-    searchPlaceholder: 'Search for Mutual Funds',
-    signIn: 'Sign In',
-  },
   payment: {
     pendingTitle: 'Payment is being processed',
     pendingSubtitle: 'Awaiting biller confirmation',
