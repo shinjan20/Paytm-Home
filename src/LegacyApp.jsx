@@ -17,6 +17,10 @@ export default function LegacyApp() {
   const containerRef = useRef(null);
 
   useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+
     if (!window.__legacyScriptInjected) {
       const script = document.createElement('script');
       script.textContent = legacyScript;
@@ -30,6 +34,11 @@ export default function LegacyApp() {
         if (path && window.location.pathname !== path) {
           window.history.pushState({ screenId }, '', path);
         }
+        // A screen should always open at its top. Without this, returning to
+        // the long landing page from a deeper screen kept the old scroll
+        // offset and looked like navigation had failed.
+        window.scrollTo(0, 0);
+        window.requestAnimationFrame(() => window.scrollTo(0, 0));
         return result;
       };
     }
@@ -44,6 +53,8 @@ export default function LegacyApp() {
       if (screenId && typeof window.navigateTo === 'function') {
         try { window.navigateTo(screenId); } catch (err) {}
       }
+      window.scrollTo(0, 0);
+      window.requestAnimationFrame(() => window.scrollTo(0, 0));
     };
     window.addEventListener('popstate', onPop);
 

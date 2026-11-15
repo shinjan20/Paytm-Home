@@ -2360,6 +2360,37 @@ if (document.readyState === 'loading') {
     vectorizeLegacyIcons();
 }
 
+// Every sub-screen gets a direct way back to the landing page, independent of
+// the back chain. This keeps deep screens (email scanning, calendars, etc.)
+// from becoming dead ends.
+function ensureHomeShortcuts() {
+    document.querySelectorAll('.screen:not(#screen-recharge-bills) .screen-header').forEach(function(header) {
+        if (header.querySelector('.home-shortcut-btn')) return;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'home-shortcut-btn';
+        button.setAttribute('aria-label', 'Go to homepage');
+        button.title = 'Home';
+        button.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10.5 12 4l8 6.5"/><path d="M6 9.5V20h12V9.5"/><path d="M10 20v-5.5h4V20"/></svg>';
+        button.addEventListener('click', function() {
+            navigateTo('screen-recharge-bills');
+        });
+        if (!header.querySelector('.back-btn') && !header.querySelector('.header-spacer')) {
+            const spacer = document.createElement('span');
+            spacer.className = 'header-spacer';
+            spacer.setAttribute('aria-hidden', 'true');
+            header.insertBefore(spacer, header.firstChild);
+        }
+        header.appendChild(button);
+    });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', ensureHomeShortcuts);
+} else {
+    ensureHomeShortcuts();
+}
+
 const legacyIconObserver = new MutationObserver(mutations => {
     mutations.forEach(mutation => {
         if (mutation.type === 'characterData') {

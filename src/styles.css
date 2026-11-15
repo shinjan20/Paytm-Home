@@ -100,6 +100,113 @@ svg text {
     font-size: 14px;
 }
 
+/* Landing header: avatar, centered Paytm UPI lockup, header actions */
+.landing-header {
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.paytm-home-btn {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 4px;
+    margin: 0;
+    background: none;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.paytm-home-btn img {
+    display: block;
+    width: min(181px, 100%);
+    height: auto;
+}
+
+.paytm-home-btn:hover {
+    background: #f2f6fd;
+}
+
+.paytm-home-btn:focus-visible {
+    outline: 2px solid #0b4a9e;
+    outline-offset: 2px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.header-icon-btn {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    color: #1f2937;
+    cursor: pointer;
+}
+
+.header-icon-btn svg {
+    width: 23px;
+    height: 23px;
+}
+
+.header-icon-btn:hover {
+    background: #eef3fa;
+}
+
+.header-icon-btn:focus-visible {
+    outline: 2px solid #0b4a9e;
+    outline-offset: 2px;
+}
+
+/* Global home shortcut added to every sub-screen header */
+.header-spacer {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+}
+
+.home-shortcut-btn {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    margin-left: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    color: #1f2937;
+    cursor: pointer;
+}
+
+.home-shortcut-btn svg {
+    width: 21px;
+    height: 21px;
+}
+
+.home-shortcut-btn:hover {
+    background: #f2f6fd;
+}
+
+.home-shortcut-btn:focus-visible {
+    outline: 2px solid #0b4a9e;
+    outline-offset: 2px;
+}
+
 .search-input {
     background: #f0f0f0;
     border-radius: 8px;
@@ -2278,6 +2385,15 @@ svg text {
     flex-direction: column;
     gap: 10px;
     margin-top: 24px;
+}
+
+.success-actions .success-home-link {
+    align-self: center;
+    min-height: 44px;
+    margin-top: 0;
+    color: #0b4a9e;
+    font-size: 14px;
+    font-weight: 600;
 }
 
 /* ==========================================================

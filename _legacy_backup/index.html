@@ -13,16 +13,24 @@
     <div id="app">
         <!-- Screen 01: Recharge & Bills Landing -->
         <div id="screen-recharge-bills" class="screen active">
-            <div class="header">
+            <div class="header landing-header">
                 <div class="profile-icon">SP</div>
-                <div class="search-bar">
-                    <span class="search-icon">
+                <button type="button" class="paytm-home-btn" onclick="navigateTo('screen-recharge-bills')" aria-label="Paytm UPI home">
+                    <img src="/brand/paytm-logo.svg" alt="Paytm UPI" width="143" height="19">
+                </button>
+                <div class="header-actions">
+                    <button type="button" class="header-icon-btn" onclick="navigateTo('screen-biller-search')" aria-label="Search bills">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
                             <circle cx="11" cy="11" r="6.5" />
                             <path d="M16 16l4 4" />
                         </svg>
-                    </span>
-                    <span class="search-text">Search for contacts to pay</span>
+                    </button>
+                    <button type="button" class="header-icon-btn" onclick="showAppToast('No new notifications')" aria-label="Notifications">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6" />
+                            <path d="M10 18a2 2 0 0 0 4 0" />
+                        </svg>
+                    </button>
                 </div>
             </div>
 
@@ -1215,6 +1223,7 @@
                 <div class="success-actions">
                     <button class="primary-btn" onclick="navigateTo('screen-my-bills')">Back to My Bills</button>
                     <button class="secondary-btn" onclick="navigateTo('screen-voucher-details')">View voucher</button>
+                    <button type="button" class="text-btn success-home-link" onclick="navigateTo('screen-recharge-bills')">Go to homepage</button>
                 </div>
             </div>
         </div>
