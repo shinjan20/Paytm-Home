@@ -478,40 +478,44 @@ Please change the parent <Route path="${e}"> to <Route path="${e===`/`?`*`:`${e}
             </div>
 
             <div class="home-list" id="home-list-homes">
-                <div class="home-card" onclick="navigateTo('screen-personal-home')">
+                <div class="home-card has-rename" onclick="navigateTo('screen-personal-home')">
                     <div class="home-icon">🏠</div>
                     <div class="home-info">
-                        <h2>Personal Home</h2>
+                        <div class="home-title-row">
+                            <h2>Personal Home</h2>
+                            <button type="button" class="home-rename-btn" onclick="event.stopPropagation(); openRenameHome('Personal Home')" aria-label="Rename Personal Home">Rename</button>
+                        </div>
                         <p>Your personal bills</p>
                         <div class="home-meta-row">
                             <span class="home-badge">3 bills need attention</span>
-                            <button type="button" class="home-rename-btn" onclick="event.stopPropagation(); openRenameHome('Personal Home')" aria-label="Rename Personal Home">Rename</button>
                         </div>
                     </div>
-                    <div class="home-arrow" aria-hidden="true">→</div>
                 </div>
 
-                <div class="home-card" onclick="navigateTo('screen-flatmates-home')">
+                <div class="home-card has-rename" onclick="navigateTo('screen-flatmates-home')">
                     <div class="home-icon">👥</div>
                     <div class="home-info">
-                        <h2>Flatmates</h2>
+                        <div class="home-title-row">
+                            <h2>Flatmates</h2>
+                            <button type="button" class="home-rename-btn" onclick="event.stopPropagation(); openRenameHome('Flatmates')" aria-label="Rename Flatmates">Rename</button>
+                        </div>
                         <p>Shared household bills</p>
                         <div class="home-meta-row">
                             <span class="home-badge">2 bills need attention</span>
-                            <button type="button" class="home-rename-btn" onclick="event.stopPropagation(); openRenameHome('Flatmates')" aria-label="Rename Flatmates">Rename</button>
                         </div>
                     </div>
-                    <div class="home-arrow" aria-hidden="true">→</div>
                 </div>
 
                 <div class="home-card invite-open" onclick="navigateTo('screen-home-details')">
                     <div class="home-icon">🫂</div>
                     <div class="home-info">
-                        <h2>Friends apartment</h2>
+                        <div class="home-title-row">
+                            <h2>Friends apartment</h2>
+                            <button type="button" class="home-rename-btn" onclick="event.stopPropagation(); openRenameHome('Friends apartment')" aria-label="Rename Friends apartment">Rename</button>
+                        </div>
                         <p>Shared rent &amp; utilities</p>
                         <div class="home-meta-row">
                             <span class="home-badge home-badge-invite"><span class="home-badge-dot" aria-hidden="true"></span>Invite open · 2 members</span>
-                            <button type="button" class="home-rename-btn" onclick="event.stopPropagation(); openRenameHome('Friends apartment')" aria-label="Rename Friends apartment">Rename</button>
                         </div>
                     </div>
                     <div class="home-arrow" aria-hidden="true">→</div>
@@ -3652,7 +3656,7 @@ function updateHomeCardAfterAccept(homeName) {
                 badge.textContent = 'Joined · invite closed';
             }
             card.classList.remove('invite-open');
-            card.classList.add('joined');
+            card.classList.add('joined', 'has-rename');
         }
     });
 }

@@ -917,7 +917,7 @@ function updateHomeCardAfterAccept(homeName) {
                 badge.textContent = 'Joined · invite closed';
             }
             card.classList.remove('invite-open');
-            card.classList.add('joined');
+            card.classList.add('joined', 'has-rename');
         }
     });
 }

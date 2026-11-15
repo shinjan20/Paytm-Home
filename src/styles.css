@@ -237,6 +237,10 @@ svg text {
     display: none;
 }
 
+.home-card.has-rename .home-arrow {
+    display: none;
+}
+
 .home-icon {
     width: 48px;
     height: 48px;
@@ -257,6 +261,23 @@ svg text {
 .home-info {
     flex: 1;
     min-width: 0;
+}
+
+.home-title-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 32px;
+}
+
+.home-info .home-title-row h2 {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin-bottom: 0;
+}
+
+.home-title-row .home-rename-btn {
+    margin-left: auto;
 }
 
 .home-info h2,
@@ -7010,7 +7031,7 @@ svg text {
     align-items: center;
     justify-content: center;
     min-height: 32px;
-    padding: 0 10px;
+    padding: 0 8px;
     border: 1px solid #cfe0f2;
     border-radius: 8px;
     background: #fff;
