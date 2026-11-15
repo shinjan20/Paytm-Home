@@ -183,6 +183,230 @@ function openBillerSearch(category) {
     navigateTo('screen-biller-search');
 }
 
+// Per-biller mock data keeps every add-bill path internally consistent.
+const BILLER_CATALOG = {
+    electricity: {
+        key: 'electricity', label: 'Electricity', biller: 'Electricity Board',
+        account: 'XXXX1234', accountDigits: '1234567890', amount: '₹1,840',
+        due: '18 Nov 2026', period: 'Oct 2026', icon: '⚡'
+    },
+    mobile: {
+        key: 'mobile', label: 'Mobile Postpaid', biller: 'Airtel Postpaid',
+        account: 'XXXX8842', accountDigits: '9845018842', amount: '₹799',
+        due: '22 Nov 2026', period: 'Nov 2026', icon: '📱'
+    },
+    broadband: {
+        key: 'broadband', label: 'Broadband', biller: 'JioFiber',
+        account: 'XXXX5521', accountDigits: '5521005521', amount: '₹999',
+        due: '20 Nov 2026', period: 'Nov 2026', icon: '🌐'
+    },
+    dth: {
+        key: 'dth', label: 'DTH', biller: 'Tata Play',
+        account: 'XXXX7710', accountDigits: '7710007710', amount: '₹449',
+        due: '19 Nov 2026', period: 'Nov 2026', icon: '📡'
+    },
+    fastag: {
+        key: 'fastag', label: 'FASTag', biller: 'HDFC FASTag',
+        account: 'XXXX3098', accountDigits: '3098003098', amount: '₹500',
+        due: '25 Nov 2026', period: 'Nov 2026', icon: '🚗'
+    },
+    creditcard: {
+        key: 'creditcard', label: 'Credit Card', biller: 'HDFC Credit Card',
+        account: 'XXXX4456', accountDigits: '4456004456', amount: '₹6,250',
+        due: '24 Nov 2026', period: 'Nov 2026', icon: '💳'
+    },
+    gas: {
+        key: 'gas', label: 'Gas', biller: 'Indane Gas',
+        account: 'XXXX6620', accountDigits: '6620006620', amount: '₹1,103',
+        due: '21 Nov 2026', period: 'Nov 2026', icon: '🔥'
+    },
+    water: {
+        key: 'water', label: 'Water', biller: 'Delhi Jal Board',
+        account: 'XXXX2211', accountDigits: '2211002211', amount: '₹640',
+        due: '23 Nov 2026', period: 'Nov 2026', icon: '💧'
+    }
+};
+
+let selectedBillerKey = 'electricity';
+let pendingBill = Object.assign({}, BILLER_CATALOG.electricity);
+let billFlowOrigin = 'screen-add-bill';
+let addedBills = [];
+let addedBillSeq = 0;
+
+function setText(selector, value, root) {
+    const el = (root || document).querySelector(selector);
+    if (el) el.textContent = value;
+}
+
+function formatBillAmount(value, fallback) {
+    const raw = String(value == null ? '' : value).trim() || fallback;
+    if (!raw) return '';
+    return raw.charAt(0) === '₹' ? raw : '₹' + raw;
+}
+
+function maskBillAccount(value, fallback) {
+    const raw = String(value == null ? '' : value).trim() || fallback || '';
+    if (!raw || /^X{2,}/i.test(raw)) return raw;
+    const digits = raw.replace(/\s+/g, '');
+    return digits.length > 4 ? 'XXXX' + digits.slice(-4) : digits;
+}
+
+function applyBillToFlow(bill) {
+    setText('#verify-biller', bill.biller);
+    setText('#verify-account', bill.account);
+    setText('#verify-amount', bill.amount);
+    setText('#verify-due', bill.due);
+    setText('#verify-source', 'Biller (BBPS)');
+
+    const ocrBiller = document.getElementById('ocr-biller');
+    const ocrAccount = document.getElementById('ocr-account');
+    const ocrAmount = document.getElementById('ocr-amount');
+    const ocrDue = document.getElementById('ocr-due');
+    const ocrPeriod = document.getElementById('ocr-period');
+    if (ocrBiller) ocrBiller.value = bill.biller;
+    if (ocrAccount) ocrAccount.value = bill.accountDigits || bill.account;
+    if (ocrAmount) ocrAmount.value = bill.amount;
+    if (ocrDue) ocrDue.value = bill.due;
+    if (ocrPeriod) ocrPeriod.value = bill.period;
+
+    // Back arrows follow the entry point instead of always assuming the camera.
+    const verificationBack = document.querySelector('#screen-verification .screen-header .back-btn');
+    const ocrBack = document.querySelector('#screen-ocr-review .screen-header .back-btn');
+    if (verificationBack) verificationBack.onclick = function() { navigateTo(billFlowOrigin); };
+    if (ocrBack) ocrBack.onclick = function() { navigateTo(billFlowOrigin); };
+}
+
+function selectBillerOption(key, origin) {
+    const bill = BILLER_CATALOG[key] || BILLER_CATALOG.electricity;
+    selectedBillerKey = bill.key;
+    pendingBill = Object.assign({}, bill);
+    billFlowOrigin = origin || 'screen-biller-search';
+    applyBillToFlow(pendingBill);
+    return pendingBill;
+}
+
+function billFromVerification() {
+    return Object.assign({}, pendingBill || BILLER_CATALOG[selectedBillerKey]);
+}
+
+function billFromOcrReview() {
+    const base = Object.assign({}, pendingBill || BILLER_CATALOG[selectedBillerKey]);
+    const value = id => {
+        const el = document.getElementById(id);
+        return el ? el.value : '';
+    };
+
+    const biller = value('ocr-biller').trim() || base.biller;
+    const accountDigits = value('ocr-account').trim() || base.accountDigits || base.account;
+    const amount = formatBillAmount(value('ocr-amount'), base.amount);
+    const due = value('ocr-due').trim() || base.due;
+    const period = value('ocr-period').trim() || base.period;
+
+    return Object.assign({}, base, {
+        biller: biller,
+        account: maskBillAccount(accountDigits, base.account),
+        accountDigits: accountDigits,
+        amount: amount,
+        due: due,
+        period: period
+    });
+}
+
+function escapeBillHtml(value) {
+    return String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[ch]));
+}
+
+function renderAddedBills() {
+    const section = document.getElementById('my-bills-added-section');
+    const list = document.getElementById('my-bills-added-list');
+    if (!section || !list) return;
+
+    if (!addedBills.length) {
+        section.hidden = true;
+        list.innerHTML = '';
+        return;
+    }
+
+    section.hidden = false;
+    list.innerHTML = addedBills.map(function(bill) {
+        const id = escapeBillHtml(bill.id);
+        return '<div class="bill-card added-bill" data-added-bill-id="' + id + '" role="button" tabindex="0"'
+            + ' aria-label="' + escapeBillHtml(bill.label + ' bill, ' + bill.amount + ', due ' + bill.due) + '">'
+            + '<div class="bill-card-header">'
+            + '<div class="bill-icon">' + escapeBillHtml(bill.icon) + '</div>'
+            + '<div class="bill-info">'
+            + '<h4>' + escapeBillHtml(bill.label) + '</h4>'
+            + '<span class="bill-account">' + escapeBillHtml(bill.biller) + '</span>'
+            + '</div>'
+            + '<div class="bill-amount">' + escapeBillHtml(bill.amount) + '</div>'
+            + '</div>'
+            + '<div class="bill-card-footer">'
+            + '<span class="bill-due">Due ' + escapeBillHtml(bill.due) + '</span>'
+            + '<span class="bill-status estimated">Upcoming</span>'
+            + '</div>'
+            + '</div>';
+    }).join('');
+
+    Array.prototype.forEach.call(list.querySelectorAll('[data-added-bill-id]'), function(card) {
+        card.addEventListener('click', function() {
+            openAddedBill(card.dataset.addedBillId);
+        });
+        card.addEventListener('keydown', function(event) {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            event.preventDefault();
+            openAddedBill(card.dataset.addedBillId);
+        });
+    });
+}
+
+function updateBillScreens(bill) {
+    const detail = document.getElementById('screen-bill-detail');
+    if (detail) {
+        setText('.bill-icon-large', bill.icon, detail);
+        setText('.bill-detail-title-row h2', bill.biller, detail);
+        setText('.bill-amount-large', bill.amount, detail);
+        setText('.bill-subline .bill-account', bill.account, detail);
+        setText('.bill-due-large', 'Due ' + bill.due, detail);
+    }
+
+    const pay = document.getElementById('screen-pay-bill');
+    if (pay) {
+        const summary = pay.querySelector('.pay-bill-summary');
+        setText('.bill-icon-large', bill.icon, pay);
+        setText('h2', bill.biller, summary || pay);
+        setText('.bill-account', bill.account + ' · Due ' + bill.due, summary || pay);
+        setText('.pay-bill-amount', bill.amount, pay);
+    }
+}
+
+function openAddedBill(id) {
+    const bill = addedBills.find(function(item) { return item.id === id; });
+    if (!bill) return;
+    pendingBill = Object.assign({}, bill);
+    selectedBillerKey = bill.key || selectedBillerKey;
+    updateBillScreens(bill);
+    navigateTo('screen-bill-detail');
+}
+
+function commitBill(bill) {
+    const record = Object.assign({}, bill, { id: 'added-' + (++addedBillSeq) });
+    addedBills.unshift(record);
+    renderAddedBills();
+    updateBillScreens(record);
+    showAppToast(record.label + ' bill added to My Bills');
+    navigateTo('screen-my-bills');
+}
+
+function addVerifiedBill() {
+    commitBill(billFromVerification());
+}
+
+function confirmOcrBill() {
+    commitBill(billFromOcrReview());
+}
+
 // Landing "My Bills" overview (Me / Home modes)
 let landingMode = 'me';
 let activeHome = 'personal';
@@ -1948,11 +2172,10 @@ document.addEventListener('keydown', function(event) {
 // Category item selection
 document.querySelectorAll('.category-item').forEach(item => {
     item.addEventListener('click', function() {
-        const name = this.textContent.trim();
-        console.log('Selected category:', name);
+        const key = this.dataset.billerKey || 'electricity';
+        const bill = selectBillerOption(key, 'screen-biller-search');
         const searchInput = document.getElementById('biller-search-input');
-        if (searchInput) searchInput.value = name;
-        // Keep dummy values in frontend; flow continues to verification
+        if (searchInput) searchInput.value = bill.label;
         navigateTo('screen-verification');
     });
 });
@@ -1967,7 +2190,8 @@ document.querySelectorAll('.add-bill-option').forEach(option => {
 
 // Camera capture button
 document.querySelector('.camera-btn')?.addEventListener('click', function() {
-    // Simulate capture and navigate to OCR review
+    // A photographed paper bill resolves to a gas bill in this prototype.
+    selectBillerOption('gas', 'screen-camera');
     setTimeout(() => {
         navigateTo('screen-ocr-review');
     }, 500);
@@ -1991,6 +2215,8 @@ document.querySelector('.camera-btn')?.addEventListener('click', function() {
             console.log('Selected file:', file.name);
             const hint = area ? area.querySelector('p') : null;
             if (hint) hint.textContent = file.name;
+            // An uploaded broadband bill resolves to JioFiber in this prototype.
+            selectBillerOption('broadband', 'screen-upload');
             // Simulate OCR processing then review
             setTimeout(() => navigateTo('screen-ocr-loading'), 300);
             setTimeout(() => navigateTo('screen-ocr-review'), 1800);

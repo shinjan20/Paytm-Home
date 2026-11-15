@@ -287,9 +287,8 @@ svg text {
     line-height: 1.3;
     color: #1c2f4a;
     margin-bottom: 2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    overflow-wrap: break-word;
 }
 
 .home-info p {
@@ -1286,46 +1285,80 @@ svg text {
 .add-bill-options {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-bottom: 14px;
+    gap: 6px;
+    margin-bottom: 12px;
 }
 
 .add-bill-option {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+    column-gap: 10px;
     background: white;
-    border: 1px solid #e0e0e0;
+    border: 1px solid #e3ebf6;
     border-radius: 12px;
-    padding: 14px;
-    text-align: center;
+    padding: 8px 10px;
+    text-align: left;
     cursor: pointer;
-    transition: box-shadow 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .add-bill-option:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-color: #cfe3f6;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .option-icon {
-    font-size: 32px;
-    margin-bottom: 6px;
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    width: 32px;
+    height: 32px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: #eaf7fe;
+    font-size: 22px;
 }
 
 .add-bill-option h2 {
-    font-size: 16px;
+    grid-column: 2;
+    grid-row: 1;
+    align-self: end;
+    font-size: 15px;
     font-weight: 600;
-    margin-bottom: 2px;
+    line-height: 1.25;
+    color: #1c2f4a;
+    margin: 0;
 }
 
 .add-bill-option p {
-    font-size: 13px;
-    color: #666;
+    grid-column: 2;
+    grid-row: 2;
+    align-self: start;
+    font-size: 12px;
+    line-height: 1.3;
+    color: #5f6b7a;
+    margin: 0;
+}
+
+.option-chevron {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    color: #5f6b7a;
+    font-size: 20px;
+    line-height: 1;
 }
 
 /* Camera View */
 .camera-view {
-    height: 400px;
+    height: min(52vh, 400px);
+    min-height: 300px;
     background: #000;
     border-radius: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1343,6 +1376,8 @@ svg text {
 }
 
 .frame-guide {
+    max-width: 100%;
+    padding: 0 14px;
     text-align: center;
     color: white;
 }
@@ -1350,63 +1385,95 @@ svg text {
 .frame-instruction {
     font-size: 16px;
     font-weight: 600;
-    margin-bottom: 8px;
+    line-height: 1.3;
+    margin-bottom: 6px;
 }
 
 .frame-detail {
     font-size: 13px;
+    line-height: 1.4;
     opacity: 0.8;
 }
 
 .camera-controls {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    align-items: center;
+    gap: 10px;
+    align-items: stretch;
 }
 
 .camera-btn {
-    width: 72px;
-    height: 72px;
-    background: white;
-    border: 4px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
+    width: 100%;
+    min-height: 52px;
+    background: #0b4a9e;
+    color: #fff;
+    border: 0;
+    border-radius: 12px;
     cursor: pointer;
-    font-size: 24px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.camera-btn:hover {
+    background: #093d85;
 }
 
 .privacy-note {
     text-align: center;
     font-size: 12px;
-    color: #666;
-    margin-top: 16px;
+    color: #5f6b7a;
+    margin-top: 14px;
 }
 
 /* Upload Area */
 .upload-area {
-    background: #f9f9f9;
-    border: 2px dashed #e0e0e0;
-    border-radius: 12px;
-    padding: 60px 20px;
+    background: #f6fbff;
+    border: 2px dashed #bfe3f6;
+    border-radius: 14px;
+    padding: 34px 20px;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     cursor: pointer;
 }
 
 .upload-icon {
-    font-size: 48px;
-    margin-bottom: 12px;
+    width: 44px;
+    height: 44px;
+    margin: 0 auto 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
 }
 
 .upload-area p {
     font-size: 14px;
-    color: #333;
-    margin-bottom: 4px;
+    font-weight: 500;
+    color: #1c2f4a;
+    margin-bottom: 2px;
 }
 
 .upload-hint {
     font-size: 12px;
-    color: #666;
+    font-weight: 400;
+    color: #5f6b7a;
+}
+
+.upload-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.upload-actions .primary-btn,
+.upload-actions .secondary-btn {
+    width: 100%;
+    margin: 0;
 }
 
 /* Biller Categories */
@@ -3608,12 +3675,18 @@ svg text {
     font-size: 11px;
 }
 
+#home-selector-sheet .home-selector-info {
+    flex: 1;
+    min-width: 0;
+}
+
 #home-selector-sheet .home-selector-info h2,
 #home-selector-sheet .home-selector-info h3 {
     margin-bottom: 2px;
     font-size: 15px;
     line-height: 1.25;
     color: #1c2f4a;
+    overflow-wrap: break-word;
 }
 
 #home-selector-sheet .home-selector-info p {

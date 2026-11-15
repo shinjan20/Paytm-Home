@@ -419,6 +419,11 @@
                 <p class="voucher-scope">Me progress only · each home counts its own voucher separately</p>
             </div>
 
+            <div class="bill-section" id="my-bills-added-section" hidden>
+                <h3 class="bill-section-title">Upcoming bills</h3>
+                <div id="my-bills-added-list"></div>
+            </div>
+
             <div class="bill-section">
                 <h3 class="bill-section-title">Recently paid</h3>
 
@@ -838,18 +843,21 @@
                     <div class="option-icon">📷</div>
                     <h2>Take a photo</h2>
                     <p>Capture a paper bill</p>
+                    <span class="option-chevron" aria-hidden="true">›</span>
                 </div>
 
                 <div class="add-bill-option" onclick="navigateTo('screen-upload')">
                     <div class="option-icon">📁</div>
                     <h2>Upload a bill</h2>
                     <p>Choose an image or PDF</p>
+                    <span class="option-chevron" aria-hidden="true">›</span>
                 </div>
 
                 <div class="add-bill-option" onclick="navigateTo('screen-biller-search')">
                     <div class="option-icon">🔍</div>
                     <h2>Find biller</h2>
                     <p>Search and enter account details</p>
+                    <span class="option-chevron" aria-hidden="true">›</span>
                 </div>
             </div>
 
@@ -915,10 +923,11 @@
                 <div class="upload-icon">📄</div>
                 <p>Tap to select an image or PDF</p>
                 <p class="upload-hint">Supported: JPG, PNG, PDF (max 5MB)</p>
-                <div class="upload-actions">
-                    <label class="primary-btn" id="choose-file-btn" for="upload-file-input">Choose file</label>
-                    <button class="secondary-btn" onclick="event.stopPropagation(); navigateTo('screen-add-bill')">Cancel</button>
-                </div>
+            </div>
+
+            <div class="upload-actions">
+                <button type="button" class="primary-btn" id="choose-file-btn">Choose file</button>
+                <button class="secondary-btn" onclick="navigateTo('screen-add-bill')">Cancel</button>
             </div>
 
             <input type="file" id="upload-file-input" accept="image/*,.pdf" aria-label="Choose a bill image or PDF" style="display:none;" />
@@ -940,14 +949,14 @@
             <div class="biller-categories">
                 <h2>Popular categories</h2>
                 <div class="category-list">
-                    <div class="category-item">⚡ Electricity</div>
-                    <div class="category-item">📱 Mobile Postpaid</div>
-                    <div class="category-item">🌐 Broadband</div>
-                    <div class="category-item">📡 DTH</div>
-                    <div class="category-item">🚗 FASTag</div>
-                    <div class="category-item">💳 Credit Card</div>
-                    <div class="category-item">🏠 Gas</div>
-                    <div class="category-item">💧 Water</div>
+                    <div class="category-item" data-biller-key="electricity">⚡ Electricity</div>
+                    <div class="category-item" data-biller-key="mobile">📱 Mobile Postpaid</div>
+                    <div class="category-item" data-biller-key="broadband">🌐 Broadband</div>
+                    <div class="category-item" data-biller-key="dth">📡 DTH</div>
+                    <div class="category-item" data-biller-key="fastag">🚗 FASTag</div>
+                    <div class="category-item" data-biller-key="creditcard">💳 Credit Card</div>
+                    <div class="category-item" data-biller-key="gas">🏠 Gas</div>
+                    <div class="category-item" data-biller-key="water">💧 Water</div>
                 </div>
             </div>
         </div>
@@ -969,26 +978,26 @@
                 <div class="verification-details">
                     <div class="verification-row">
                         <span class="v-label">Biller</span>
-                        <span class="v-value">Electricity Board</span>
+                        <span class="v-value" id="verify-biller">Electricity Board</span>
                     </div>
                     <div class="verification-row">
                         <span class="v-label">Account number</span>
-                        <span class="v-value">XXXX1234</span>
+                        <span class="v-value" id="verify-account">XXXX1234</span>
                     </div>
                     <div class="verification-row">
                         <span class="v-label">Amount</span>
-                        <span class="v-value">₹1,840</span>
+                        <span class="v-value" id="verify-amount">₹1,840</span>
                     </div>
                     <div class="verification-row">
                         <span class="v-label">Due date</span>
-                        <span class="v-value">18 Nov 2026</span>
+                        <span class="v-value" id="verify-due">18 Nov 2026</span>
                     </div>
                 </div>
 
                 <div class="verification-meta">
                     <div class="meta-row">
                         <span class="meta-label">Verified with</span>
-                        <span class="meta-value">Biller (BBPS)</span>
+                        <span class="meta-value" id="verify-source">Biller (BBPS)</span>
                     </div>
                     <div class="meta-row">
                         <span class="meta-label">Last updated</span>
@@ -998,7 +1007,7 @@
             </div>
 
             <div class="verification-actions">
-                <button class="primary-btn" onclick="navigateTo('screen-my-bills')">Add to My Bills</button>
+                <button class="primary-btn" onclick="addVerifiedBill()">Add to My Bills</button>
                 <button class="secondary-btn" onclick="navigateTo('screen-ocr-review')">Edit details</button>
             </div>
         </div>
@@ -1042,7 +1051,7 @@
             </div>
 
             <div class="form-actions">
-                <button class="primary-btn" onclick="navigateTo('screen-my-bills')">Confirm & add bill</button>
+                <button class="primary-btn" onclick="confirmOcrBill()">Confirm & add bill</button>
                 <button class="secondary-btn" onclick="navigateTo('screen-biller-search')">Edit manually</button>
             </div>
         </div>
